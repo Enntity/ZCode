@@ -63,8 +63,8 @@ export interface ICodingPlanSubscriptionService {
   /** 闲时任务灰度配置：forceRefresh 供入口打开时补拉（绕过 1h 快照缓存）。 */
   getOffPeakClientConfig(options?: { forceRefresh?: boolean }): Promise<OffPeakClientConfig>;
   /**
-   * 动态工作流灰度快照：远端 `configs.dynamicWorkflow.mode`
-   * 与本地覆盖折叠后的结果；forceRefresh 绕过 1h 快照缓存。请求失败 fail-closed（disabled/default）。
+   * Upstream resolves remote `configs.dynamicWorkflow.mode` with the local override;
+   * Enntity uses its local `alwaysOn` default and the same override without a vendor read.
    */
   getDynamicWorkflowClientConfig(options?: {
     forceRefresh?: boolean;

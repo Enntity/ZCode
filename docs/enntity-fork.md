@@ -11,6 +11,11 @@ The desktop starts directly into the local workspace rather than requiring a
 ZCode account. Z.ai/BigModel login entry points are hidden in the Enntity UI;
 custom providers remain available from Model Providers settings. The sidebar
 guest entry is labeled “Local models” and keeps its normal preferences menu.
+Dynamic workflows are enabled locally by default and honor the existing
+`ZCODE_DYNAMIC_WORKFLOW_MODE` override; no vendor rollout or subscription state
+is consulted. Other vendor client metadata remains absent, including coding
+plan catalogs, purchase previews, and update-rollout metadata; the fork does not
+invent billing or entitlement state.
 
 The default model provider is local LLooM's OpenAI-compatible API at
 `http://127.0.0.1:8100/v1`, which passes requests through to OpenRouter's

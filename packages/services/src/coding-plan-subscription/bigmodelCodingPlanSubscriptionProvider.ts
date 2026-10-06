@@ -66,6 +66,7 @@ import {
   DEFAULT_ZCODE_MODEL_CONTEXT_BUDGET_STRATEGY,
   createDynamicWorkflowClientConfig,
   normalizeDynamicWorkflowMode,
+  ZCODE_PRODUCT_FLAVOR,
   resolveDynamicWorkflowClientConfig,
   DEFAULT_DYNAMIC_WORKFLOW_MODE,
   ZCODE_DYNAMIC_WORKFLOW_MODE_ENV,
@@ -246,6 +247,16 @@ export class BigModelCodingPlanSubscriptionProvider {
   async getDynamicWorkflowClientConfig(options?: {
     forceRefresh?: boolean;
   }): Promise<DynamicWorkflowClientConfig> {
+    if (ZCODE_PRODUCT_FLAVOR === "enntity") {
+      // Dynamic workflows are a local capability in this fork, not a vendor rollout.
+      const localOverride = normalizeDynamicWorkflowMode(
+        process.env[ZCODE_DYNAMIC_WORKFLOW_MODE_ENV],
+      );
+      return createDynamicWorkflowClientConfig(
+        localOverride ?? "alwaysOn",
+        localOverride ? "override" : "default",
+      );
+    }
     // 覆盖合法即短路：判据（normalize）与快照构造（resolve）都留在 shared，这里不复述取值域。
     if (normalizeDynamicWorkflowMode(process.env[ZCODE_DYNAMIC_WORKFLOW_MODE_ENV])) {
       return resolveDynamicWorkflowClientConfig({ remote: undefined, env: process.env });
@@ -597,6 +608,11 @@ export class BigModelCodingPlanSubscriptionProvider {
   }
 
   private async getClientConfigs(): Promise<ZCodeClientConfigEnvelope> {
+    if (ZCODE_PRODUCT_FLAVOR === "enntity") {
+      // The shared BigModel/Z.ai provider is also the owner for these platform metadata
+      // reads. Enntity has no vendor catalog, subscription, or rollout metadata.
+      return { code: 0, data: { configs: {} } };
+    }
     if (this.clientConfigSnapshot && this.clientConfigSnapshotExpiresAt > Date.now()) {
       return this.clientConfigSnapshot;
     }
