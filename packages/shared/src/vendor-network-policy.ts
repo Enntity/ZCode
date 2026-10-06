@@ -1,4 +1,4 @@
-const BLOCKED_VENDOR_DOMAIN_SUFFIXES = [
+export const BLOCKED_VENDOR_DOMAIN_SUFFIXES = [
   "z.ai",
   "bigmodel.cn",
   "bigmodel.com",

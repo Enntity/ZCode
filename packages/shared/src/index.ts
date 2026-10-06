@@ -72,7 +72,11 @@ export {
   normalizeZCodeEnv,
   normalizeZCodeProductFlavor,
 } from "./env.js";
-export { isBlockedVendorHost, isBlockedVendorUrl } from "./vendor-network-policy.js";
+export {
+  BLOCKED_VENDOR_DOMAIN_SUFFIXES,
+  isBlockedVendorHost,
+  isBlockedVendorUrl,
+} from "./vendor-network-policy.js";
 export * from "./errors.js";
 export type { SessionCreateSource } from "./sessionCreateSource.js";
 export { resolveSafeEndpointHostname } from "./endpointHostname.js";

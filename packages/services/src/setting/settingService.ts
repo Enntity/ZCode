@@ -14,7 +14,7 @@ import {
 } from "@zcode/shared";
 import type { ISettingService } from "./setting.js";
 import { normalizeSettingsPatch } from "#src/setting/normalizeSettingsPatch.js";
-import { copyDataDirectory, getDataBaseDir, validateDataBaseDirTarget } from "../paths.js";
+import { copyDataDirectory, getDataBaseDir, getZCodeDataRootDir, validateDataBaseDirTarget } from "../paths.js";
 import { isEffectiveDevelopmentNodeEnv } from "../runtime-tools/nodeEnv.js";
 import { maybeThrowInjectedFsFault } from "../fs/fsFaultInjection.js";
 import { atomicWriteText } from "../fs/atomicFileUtils.js";
@@ -42,18 +42,10 @@ const debugLog = (...args: unknown[]) => {
   console.debug(formatLogPrefix("settingService", process.pid), ...args);
 };
 
-function resolveUserHomeDir() {
-  // 独立桌面 Dev 实例已设置自己的 home，设置服务却仍写真实 HOME，
-  // 导致启动迁移和外观操作污染其他实例。与 Electron 的显式 home 覆盖保持一致。
-  const envHome =
-    process.env.ZCODE_DESKTOP_HOME_DIR?.trim() ||
-    process.env.HOME?.trim() ||
-    process.env.USERPROFILE?.trim();
-  return envHome && envHome.length > 0 ? envHome : homedir();
-}
-
 function getSettingsDir() {
-  return join(resolveUserHomeDir(), ".zcode", "v2");
+  const desktopHome = process.env.ZCODE_DESKTOP_HOME_DIR?.trim();
+  const root = desktopHome ? join(desktopHome, ".enntity-zcode") : getZCodeDataRootDir();
+  return join(root, "v2");
 }
 
 function getSettingsFile() {

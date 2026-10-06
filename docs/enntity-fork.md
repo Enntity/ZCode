@@ -7,6 +7,9 @@ and remote-workspace features. Its product identity is Enntity ZCode, and all
 managed application data, CLI configuration, provider configuration, and
 credentials use an Enntity-specific root by default. Existing upstream ZCode
 settings and credentials are never imported automatically.
+The desktop starts directly into the local workspace rather than requiring a
+ZCode account. Z.ai/BigModel login entry points are hidden in the Enntity UI;
+custom providers remain available from Model Providers settings.
 
 The default model provider is local LLooM's OpenAI-compatible API at
 `http://127.0.0.1:8100/v1`, which passes requests through to OpenRouter's
@@ -18,10 +21,16 @@ LLooM.
 The fork sends no managed requests to Z.ai, BigModel, Zhipu, ChatGLM, or Aminer
 hosts. A centralized, early outbound guard blocks those vendor host suffixes
 across application-managed desktop and Node networking, including explicit
-endpoint overrides and redirects. Loopback LLooM and unrelated or
-user-selected destinations remain available. The application cannot act as an
-OS firewall for arbitrary commands, MCP servers, plugins, or user-launched
-programs; that limitation is surfaced here rather than hidden.
+endpoint overrides and redirects. Managed CLI Chromium uses direct networking
+with host-resolver rules that deny the known vendor suffixes, including
+redirects; HTTP and WebSocket route handlers also block direct vendor requests.
+It does not inherit system proxy settings, because a proxy could resolve those
+hosts outside Chromium's resolver policy. The desktop embedded browser and API
+proxy configuration remain supported independently. Loopback LLooM and
+unrelated or user-selected destinations remain available. This is a known-host
+policy, not an OS firewall: unlisted IP literals, DNS aliases, arbitrary
+commands, MCP servers, plugins, and user-launched programs remain outside its
+coverage.
 
 The fork retains local coding, bundled skills, browser automation, NodeREPL,
 MCP, and remote-workspace support. The public CUA package is only a stub in this
@@ -53,7 +62,7 @@ provider-selection flow.
 ## Acceptance cases
 
 - Production and preview build identity cannot bypass the Enntity fork flavor;
-  its app ID, display name, deep link, CLI config, and runtime data paths are
+  its app ID, display name, deep link scheme (`enntity-zcode`), CLI config, and runtime data paths are
   distinct from upstream.
 - A vendor URL is denied case-insensitively for the exact host and all
   subdomains, including a trailing dot. Redirects are re-evaluated. Loopback

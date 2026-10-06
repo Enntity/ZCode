@@ -12,6 +12,7 @@ import {
 import {
   extractWorkspaceOpenPath,
   extractShareImportCode,
+  DEEP_LINK_SCHEME,
   isOAuthCallbackUrl,
   isPaymentCallbackUrl,
   isWorkspaceOpenUrl,
@@ -402,7 +403,7 @@ export function registerDeepLinkProtocol(
   },
   options: { iconPath?: string } = {},
 ) {
-  const scheme = "zcode";
+  const scheme = DEEP_LINK_SCHEME;
 
   if (process.defaultApp && process.argv.length >= 2) {
     const entry = resolve(process.argv[1]!);
@@ -435,6 +436,7 @@ export function registerDeepLinkProtocol(
       executablePath: process.execPath,
       homeDir: app.getPath("home"),
       productName: app.name,
+      scheme,
       iconSourcePath: options.iconPath,
       env: process.env,
       argv: process.argv,

@@ -40,8 +40,12 @@ export function shouldShowRootStartupLoading(state: RootStartupLoadingVisibility
   return Boolean(state.isDesktop) && !state.welcomeScreenOpen && shouldBlockRootRender(state);
 }
 
-export function shouldEnableProviderAvailabilityLoginEntryGuard(): boolean {
-  return true;
+export function shouldEnableProviderAvailabilityLoginEntryGuard(
+  productFlavor: "production" | "preview" | "enntity",
+): boolean {
+  // The Enntity fork has a local built-in LLooM provider, so an unset vendor
+  // OAuth family is not evidence that the user must sign into ZCode.
+  return productFlavor !== "enntity";
 }
 
 export function shouldResolveProviderStartupState(state: ProviderStartupResolutionState): boolean {

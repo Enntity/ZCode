@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { rootCertificates } from "node:tls";
 import { Agent, ProxyAgent, fetch as undiciFetch, type Dispatcher } from "undici";
+import { isBlockedVendorUrl } from "@zcode/shared";
 
 export interface HostApiNetworkOptions {
   httpProxy?: string;
@@ -18,6 +19,29 @@ type HostProxyRoute =
   | { kind: "direct"; noProxyMatched?: boolean }
   | { kind: "proxy"; proxyUrl: string }
   | { kind: "invalid"; reason: string };
+
+function guardUndiciDispatcher(dispatcher: Dispatcher): Dispatcher {
+  return new Proxy(dispatcher, {
+    get(target, property) {
+      if (property === "dispatch") {
+        return (options: Dispatcher.DispatchOptions, handler: Dispatcher.DispatchHandlers) => {
+          let url: URL;
+          try {
+            url = new URL(options.path, options.origin);
+          } catch {
+            throw new TypeError("Enntity ZCode blocks malformed managed request destinations.");
+          }
+          if (isBlockedVendorUrl(url)) {
+            throw new TypeError("Enntity ZCode blocks managed requests to this vendor host.");
+          }
+          return target.dispatch(options, handler);
+        };
+      }
+      const value = Reflect.get(target, property, target) as unknown;
+      return typeof value === "function" ? value.bind(target) : value;
+    },
+  });
+}
 
 function mergeHostApiCaCertificates(
   customCa: string,
@@ -131,6 +155,9 @@ export function createHostApiNetworkTransport(
       throw new Error("Host API network transport has been disposed");
     }
     const requestUrl = input instanceof Request ? input.url : String(input);
+    if (isBlockedVendorUrl(requestUrl)) {
+      throw new TypeError("Enntity ZCode blocks managed requests to this vendor host.");
+    }
     const route = resolveHostProxyForUrl(requestUrl, options);
     if (route.kind === "invalid") {
       throw new Error(route.reason);
@@ -147,7 +174,7 @@ export function createHostApiNetworkTransport(
       }
       const dispatcherGeneration = generation;
       pendingDispatcherCreations += 1;
-      dispatcherPromise = dispatcherFactory(route, options.caCertPath);
+      dispatcherPromise = dispatcherFactory(route, options.caCertPath).then(guardUndiciDispatcher);
       dispatcherPromises.set(dispatcherKey, dispatcherPromise);
       void dispatcherPromise
         .then((dispatcher) => {

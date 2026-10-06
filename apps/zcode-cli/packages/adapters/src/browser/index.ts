@@ -20,6 +20,10 @@ import {
 import { executeManagedPageCommand } from "./page-command.js";
 import { abortError, classifyError, hasSideEffects, raceWithAbort } from "./request.js";
 import { ManagedCdpSession } from "./session.js";
+import {
+  buildManagedBrowserVendorResolverRules,
+  installManagedBrowserVendorPolicy,
+} from "./vendor-network-policy.js";
 
 export interface ManagedCdpBrowserRuntimeOptions extends BrowserExecutableResolutionOptions {
   closeTimeoutMs?: number;
@@ -202,7 +206,12 @@ class ManagedCdpBrowserControlPort implements BrowserControlPort {
         browser = await playwright.chromium.launch({
           executablePath,
           headless: true,
-          args: ["--no-first-run", "--no-default-browser-check"],
+          args: [
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--no-proxy-server",
+            `--host-resolver-rules=${buildManagedBrowserVendorResolverRules().join(",")}`,
+          ],
         });
       } catch (error) {
         // 底层 Playwright 错误可能包含临时 profile/CDP endpoint；对外只保留可操作分类，cause 供调试。
@@ -253,6 +262,12 @@ class ManagedCdpBrowserControlPort implements BrowserControlPort {
         acceptDownloads: false,
         viewport: { width: 1280, height: 720 },
       });
+      try {
+        await installManagedBrowserVendorPolicy(context);
+      } catch (error) {
+        await waitForPromise(context.close(), this.#closeTimeoutMs);
+        throw error;
+      }
       if (
         this.#disposed ||
         this.#closingSessionIds.has(sessionId) ||

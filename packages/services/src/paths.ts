@@ -230,8 +230,9 @@ export function getLegacyDeletedTaskSessionSnapshotPath(
  * state must only live at the default homedir location.
  */
 export async function copyDataDirectory(oldBaseDir: string, newBaseDir: string): Promise<void> {
-  const oldDir = join(oldBaseDir, ".zcode", "v2");
-  const newDir = join(newBaseDir, ".zcode", "v2");
+  const productDataDir = ZCODE_PRODUCT_FLAVOR === "enntity" ? ".enntity-zcode" : ".zcode";
+  const oldDir = join(oldBaseDir, productDataDir, "v2");
+  const newDir = join(newBaseDir, productDataDir, "v2");
   await cp(oldDir, newDir, {
     recursive: true,
     force: false,

@@ -8,11 +8,6 @@ import {
   type LinuxDeepLinkRegistrationLogger,
 } from "./desktopLinuxXdg.js";
 
-const LINUX_DEEP_LINK_DESKTOP_FILE = "zcode.desktop";
-const LINUX_DEEP_LINK_MIME_TYPE = "x-scheme-handler/zcode";
-// 归属标记：用于识别用户级 zcode.desktop 是否由本应用写入（历史所有版本都带这行 Comment）。
-const LINUX_DESKTOP_ENTRY_OWNERSHIP_MARKER = "Comment=ZCode Desktop App";
-
 type LinuxDesktopEnv = {
   APPIMAGE?: string;
   XDG_DATA_HOME?: string;
@@ -23,6 +18,7 @@ interface RegisterLinuxDeepLinkProtocolOptions {
   executablePath: string;
   homeDir: string;
   productName?: string;
+  scheme?: string;
   iconSourcePath?: string;
   env?: LinuxDesktopEnv;
   argv?: string[];
@@ -108,6 +104,7 @@ function createLinuxDeepLinkDesktopEntry(params: {
   args?: string[];
   productName?: string;
   iconName?: string;
+  scheme: string;
 }): string {
   const productName = params.productName ?? "ZCode";
   const iconName = params.iconName ?? "zcode";
@@ -118,13 +115,13 @@ function createLinuxDeepLinkDesktopEntry(params: {
   return [
     "[Desktop Entry]",
     `Name=${productName}`,
-    LINUX_DESKTOP_ENTRY_OWNERSHIP_MARKER,
+    `Comment=${params.productName ?? "Enntity ZCode"} App`,
     `Exec=${formatDesktopExec(command)}`,
     "Terminal=false",
     "Type=Application",
     `Icon=${iconName}`,
     "Categories=Development;",
-    `MimeType=${LINUX_DEEP_LINK_MIME_TYPE};`,
+    `MimeType=x-scheme-handler/${params.scheme};`,
     `StartupWMClass=${productName}`,
     "",
   ].join("\n");
@@ -151,9 +148,12 @@ function resolveLinuxSystemApplicationDirs(env?: { XDG_DATA_DIRS?: string }): st
   return dataDirs.map((dir) => join(dir, "applications"));
 }
 
-function findSystemLevelDesktopEntryPath(systemApplicationDirs: string[]): string | undefined {
+function findSystemLevelDesktopEntryPath(
+  systemApplicationDirs: string[],
+  desktopFileName: string,
+): string | undefined {
   for (const dir of systemApplicationDirs) {
-    const candidate = join(dir, LINUX_DEEP_LINK_DESKTOP_FILE);
+    const candidate = join(dir, desktopFileName);
     // 边界：目录或损坏的路径不应被当成有效系统级条目，否则纯 AppImage 用户
     // 的用户级注册会被病态路径误抑制。只有普通文件才参与遮蔽判断。
     try {
@@ -167,14 +167,14 @@ function findSystemLevelDesktopEntryPath(systemApplicationDirs: string[]): strin
   return undefined;
 }
 
-function isOwnedDesktopEntry(path: string): boolean {
+function isOwnedDesktopEntry(path: string, productName: string): boolean {
   try {
     const content = readFileSync(path, "utf8");
     // 去掉 \r 与行首尾空白，兼容 CRLF 行尾或手工编辑器引入的额外空白，
     // 避免可清理的遗留条目被误判为用户自定义条目而永久残留。
     return content
       .split("\n")
-      .some((line) => line.replaceAll("\r", "").trim() === LINUX_DESKTOP_ENTRY_OWNERSHIP_MARKER);
+      .some((line) => line.replaceAll("\r", "").trim() === `Comment=${productName} App`);
   } catch {
     return false;
   }
@@ -182,12 +182,13 @@ function isOwnedDesktopEntry(path: string): boolean {
 
 function removeOwnedUserDesktopEntry(
   desktopFilePath: string,
+  productName: string,
   logger: LinuxDeepLinkRegistrationLogger,
 ): void {
   if (!existsSync(desktopFilePath)) {
     return;
   }
-  if (!isOwnedDesktopEntry(desktopFilePath)) {
+  if (!isOwnedDesktopEntry(desktopFilePath, productName)) {
     logger.warn("[deep-link] Linux 用户级 zcode.desktop 非本应用写入，保留不清理", {
       desktopFilePath,
     });
@@ -203,8 +204,8 @@ function removeOwnedUserDesktopEntry(
   }
 }
 
-function resolveLinuxDeepLinkDesktopFilePath(dataDir: string): string {
-  return join(dataDir, "applications", LINUX_DEEP_LINK_DESKTOP_FILE);
+function resolveLinuxDeepLinkDesktopFilePath(dataDir: string, scheme = "zcode"): string {
+  return join(dataDir, "applications", `${scheme}.desktop`);
 }
 
 function writeFileIfChanged(path: string, content: string): boolean {
@@ -218,17 +219,22 @@ function writeFileIfChanged(path: string, content: string): boolean {
 }
 
 export function registerLinuxDeepLinkProtocol(options: RegisterLinuxDeepLinkProtocolOptions): void {
+  const scheme = options.scheme ?? "zcode";
+  const productName =
+    options.productName ?? (scheme === "enntity-zcode" ? "Enntity ZCode" : "ZCode");
+  const desktopFileName = `${scheme}.desktop`;
   const command = resolveLinuxDeepLinkCommand({
     env: options.env,
     executablePath: options.executablePath,
     argv: options.argv,
   });
   const dataDir = resolveLinuxUserDataDir({ env: options.env, homeDir: options.homeDir });
-  const desktopFilePath = resolveLinuxDeepLinkDesktopFilePath(dataDir);
+  const desktopFilePath = resolveLinuxDeepLinkDesktopFilePath(dataDir, scheme);
   const applicationsDir = dirname(desktopFilePath);
   const desktopEntry = createLinuxDeepLinkDesktopEntry({
     ...command,
     productName: options.productName,
+    scheme,
   });
   let protocolRegistered = false;
   const runCommand = options.runCommand ?? runXdgCommand;
@@ -243,6 +249,7 @@ export function registerLinuxDeepLinkProtocol(options: RegisterLinuxDeepLinkProt
   // 用户手写的自定义 zcode.desktop（无归属标记）不受影响，保留不清理。
   const systemDesktopEntryPath = findSystemLevelDesktopEntryPath(
     options.systemApplicationDirs ?? resolveLinuxSystemApplicationDirs(options.env),
+    desktopFileName,
   );
 
   try {
@@ -252,7 +259,7 @@ export function registerLinuxDeepLinkProtocol(options: RegisterLinuxDeepLinkProt
         systemDesktopEntryPath,
         desktopFilePath,
       });
-      removeOwnedUserDesktopEntry(desktopFilePath, options.logger);
+      removeOwnedUserDesktopEntry(desktopFilePath, productName, options.logger);
     } else {
       changed = writeFileIfChanged(desktopFilePath, desktopEntry);
     }
@@ -262,8 +269,8 @@ export function registerLinuxDeepLinkProtocol(options: RegisterLinuxDeepLinkProt
     const updateResult = runCommand("update-desktop-database", [applicationsDir]);
     const defaultResult = runCommand("xdg-mime", [
       "default",
-      LINUX_DEEP_LINK_DESKTOP_FILE,
-      LINUX_DEEP_LINK_MIME_TYPE,
+      desktopFileName,
+      `x-scheme-handler/${scheme}`,
     ]);
 
     if (defaultResult.status === 0) {

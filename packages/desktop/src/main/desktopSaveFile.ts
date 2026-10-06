@@ -8,6 +8,7 @@ import type { SaveFileRequest, SaveFileResult } from "@zcode/shared";
 import { PlatformChannels } from "@zcode/shared";
 import { BrowserWindow, dialog, ipcMain } from "electron";
 import { Agent, fetch as undiciFetch } from "undici";
+import { isBlockedVendorUrl } from "@zcode/shared";
 
 const MAX_SAVE_FILE_BYTES = 50 * 1024 * 1024;
 const REMOTE_DOWNLOAD_TIMEOUT_MS = 30_000;
@@ -87,6 +88,7 @@ async function fetchPublicRemoteUrl(
 ): Promise<{ dispatcher: Agent; response: Awaited<ReturnType<typeof undiciFetch>> }> {
   let currentUrl = initialUrl;
   for (let redirectCount = 0; redirectCount <= MAX_REMOTE_REDIRECTS; redirectCount += 1) {
+    if (isBlockedVendorUrl(currentUrl)) throw new SaveFileError("remote_address_not_allowed");
     const addresses = await resolvePublicRemoteUrl(currentUrl);
     const pinnedLookup: LookupFunction = (_hostname, options, callback) => {
       if (options.all) {

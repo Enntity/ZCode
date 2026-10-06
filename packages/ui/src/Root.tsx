@@ -6,6 +6,7 @@ import {
   DesktopCommandIds,
   appRuntimePreferencesChangedBroadcastPayloadSchema,
   type RemoteTarget,
+  ZCODE_PRODUCT_FLAVOR,
 } from "@zcode/shared";
 import { TooltipProvider } from "@/components/ui/tooltip.js";
 import { Button } from "@/components/ui/button.js";
@@ -209,6 +210,7 @@ function RootInner({
   const [providerFamilyDomainMigrationComplete, setProviderFamilyDomainMigrationComplete] =
     useState(false);
   const loginEntryRequest = useZCodeStore((state) => state.loginEntryRequest);
+  const clearLoginEntryRequest = useZCodeStore((state) => state.clearLoginEntryRequest);
   const rootModelSelectionRead = useModelSelectionServiceView(services.modelSelectionService);
   const rootModelSelectionView =
     rootModelSelectionRead.state.status === "ready" ? rootModelSelectionRead.state.view : null;
@@ -429,7 +431,7 @@ function RootInner({
       rootProviderAvailability.hydrated || rootModelSelectionRead.state.status === "error",
   });
   const providerAvailabilityLoginEntryGuardEnabled =
-    shouldEnableProviderAvailabilityLoginEntryGuard();
+    shouldEnableProviderAvailabilityLoginEntryGuard(ZCODE_PRODUCT_FLAVOR);
   const { startupCheckCompleted: providerAvailabilityStartupCheckCompleted } =
     useProviderAvailabilityLoginEntryGuard({
       enabled: providerAvailabilityLoginEntryGuardEnabled,
@@ -862,10 +864,16 @@ function RootInner({
     if (!loginEntryRequest) {
       return;
     }
+    if (ZCODE_PRODUCT_FLAVOR === "enntity") {
+      // The fork runs its local provider without ZCode OAuth accounts.
+      // Custom providers remain configurable in Model Providers settings.
+      clearLoginEntryRequest();
+      return;
+    }
     // 登录入口已从模态弹窗收敛为 WelcomeScreen。
     // provider 连接请求仍要先退出首次启动引导语义，避免连接完成后误创建默认 workspace。
     setWelcomeScreenOpenReason("provider-request");
-  }, [loginEntryRequest]);
+  }, [clearLoginEntryRequest, loginEntryRequest]);
 
   const handleOpenLoginEntry = () => {
     setWelcomeScreenOpenReason("manual-login");
@@ -959,7 +967,7 @@ function RootInner({
     onCreateTask: handleCreateTask,
     onOpenWorkspace: handleOpenWorkspace,
     allowOpenWorkspace,
-    onLogin: !user ? handleOpenLoginEntry : undefined,
+    onLogin: !user && ZCODE_PRODUCT_FLAVOR !== "enntity" ? handleOpenLoginEntry : undefined,
     onLogout: user ? handleLogout : undefined,
     user,
   };
@@ -979,7 +987,7 @@ function RootInner({
     );
   }
 
-  if (welcomeScreenOpenReason) {
+  if (welcomeScreenOpenReason && ZCODE_PRODUCT_FLAVOR !== "enntity") {
     return (
       <RootShell>
         {rootModelSelectionErrorNode}
@@ -1057,7 +1065,7 @@ function RootInner({
             allowRemoteWorkspace={allowRemoteWorkspace}
             handleBackFromSettings={handleBackFromSettings}
             handleLogout={user ? handleLogout : undefined}
-            onLogin={!user ? handleOpenLoginEntry : undefined}
+            onLogin={!user && ZCODE_PRODUCT_FLAVOR !== "enntity" ? handleOpenLoginEntry : undefined}
             user={user}
             reconnectingRemoteWorkspaceKeys={reconnectingRemoteWorkspaceKeys}
             remoteWorkspaceErrorByWorkspaceKey={remoteWorkspaceErrorByWorkspaceKey}

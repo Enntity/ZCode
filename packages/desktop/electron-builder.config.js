@@ -21,6 +21,7 @@ import {
   resolveDesktopProductIdentity,
 } from "./scripts/desktop-product-identity.mjs";
 import { verifyStagedKoffi } from "./scripts/koffi-package-assets.mjs";
+import { createMacSigningHook } from "./scripts/mac-signing.mjs";
 const ELECTRON_BUILDER_ARCH = {
   1: "x64",
   3: "arm64",
@@ -98,6 +99,10 @@ const DEFAULT_ELECTRON_MIRROR = "https://github.com/electron/electron/releases/d
 // Linux CI（pnpm hoisted）往往解析不到该二进制，`asar list` 未运行即 exit 1。
 // 显式依赖 @electron/asar 并用 Node 直接执行 CLI，避免跨平台找不齐 shim。
 const requireFromConfig = createRequire(import.meta.url);
+const signMacWithResolvedIdentity = createMacSigningHook({
+  shouldSign: shouldEnableMacSigning,
+  loadSignAsync: () => requireFromConfig("@electron/osx-sign").signAsync,
+});
 let nsisInstallSectionPatched = false;
 let nsisInstallSectionOriginalSource = null;
 let nsisInstallSectionPath = null;
@@ -649,10 +654,9 @@ export default {
   // OAuth deep link 协议注册（macOS 打包后需要 Info.plist 中声明 CFBundleURLTypes）
   protocols: [
     {
-      // 协议处理器的展示名之前使用小写 scheme，打包产物里的协议描述无法体现产品名。
-      // 展示名跟随安装包身份；scheme 仍保持 zcode，因此两个应用中最后注册者会成为默认 handler。
+      // Keep the fork's protocol separate from upstream's registrations.
       name: desktopProductIdentity.productName,
-      schemes: ["zcode"],
+      schemes: ["enntity-zcode"],
     },
   ],
   mac: {
@@ -676,6 +680,7 @@ export default {
     // 并强制要求 APPLE_APP_SPECIFIC_PASSWORD，导致 build 还没产出 DMG 就提前失败。
     notarize: false,
     hardenedRuntime: shouldEnableMacSigning,
+    sign: signMacWithResolvedIdentity,
     gatekeeperAssess: false,
     entitlements: "build/entitlements.mac.plist",
     entitlementsInherit: "build/entitlements.mac.inherit.plist",
