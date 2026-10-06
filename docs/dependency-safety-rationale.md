@@ -18,7 +18,7 @@ This note records the production dependency audit and focused dependency adjustm
 The fresh production-only audit leaves 2 unique advisories across 2 dependency paths, reported as 3 counted findings:
 
 - `node-forge` (one high finding): it remains a direct desktop runtime dependency, but source use in `packages/services/src/runtime-tools/appCaCert.ts` is limited to RSA key generation and certificate signing/serialization. A workspace search found no node-forge signature-verification call; the advisory's affected verification path is not reached by current application source. The advisory currently has no patched release.
-- `apps/zcode-cli/packages/debug > ... > uuid` (two moderate findings): this is the separate debug application, not the packaged desktop UI; the available fix crosses from uuid v3 to v11 and remains pending compatibility review.
+- `apps/zcode-cli/packages/debug > ... > uuid` (two moderate findings): the separate debug application resolves uuid 9.0.1 through `http-mitm-proxy` and 11.1.0 through `vis-timeline`. The patched release is 11.1.1; the first path needs a major-version upgrade and remains pending isolated compatibility review. These paths are not part of the packaged desktop UI.
 
 The `shadcn` CLI path no longer appears in the production audit because it is a build-time UI dependency. `packages/ui/src/styles.css` continues to resolve it from development dependencies; it is not imported by runtime JavaScript or shipped as an application runtime dependency.
 
