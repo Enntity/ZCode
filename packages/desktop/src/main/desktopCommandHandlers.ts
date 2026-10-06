@@ -149,6 +149,7 @@ export async function clearCodingPlanWebviewStorage(options: {
 }
 
 async function fetchRemoteAppConfig(fetchRemoteConfig?: () => Promise<unknown>): Promise<unknown> {
+  if (ZCODE_PRODUCT_FLAVOR === "enntity") return undefined;
   if (!fetchRemoteConfig) throw new Error("Help config reader is unavailable");
   return fetchRemoteConfig();
 }

@@ -1,5 +1,5 @@
 /* oxlint-disable eslint(max-lines) -- footer 聚合账户、主题、模式和快捷键菜单。 */
-import type { Locale, UserInfo } from "@zcode/shared";
+import { ZCODE_PRODUCT_FLAVOR, type Locale, type UserInfo } from "@zcode/shared";
 import { memo, useCallback, useEffect, useState } from "react";
 import {
   DesktopCommandIds,
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu.js";
 import {
   PencilRuler,
+  Bot,
   Globe,
   Loader2,
   LogInIcon,
@@ -76,7 +77,9 @@ function getSidebarProfileBadge(
     return getSidebarProfileName(user);
   }
 
-  return formatMessage({ id: "sidebar.profile.notLoggedIn" });
+  return ZCODE_PRODUCT_FLAVOR === "enntity"
+    ? formatMessage({ id: "sidebar.profile.localModels" })
+    : formatMessage({ id: "sidebar.profile.notLoggedIn" });
 }
 
 function getAvatarFallbackText(user: UserInfo | null | undefined): string {
@@ -156,7 +159,11 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
               <span className="sr-only">{intl.formatMessage({ id: "common.loading" })}</span>
             </>
           ) : (
-            <User className="size-4" />
+            ZCODE_PRODUCT_FLAVOR === "enntity" ? (
+              <Bot className="size-4" />
+            ) : (
+              <User className="size-4" />
+            )
           )}
         </AvatarFallback>
       </Avatar>

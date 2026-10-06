@@ -9,7 +9,8 @@ credentials use an Enntity-specific root by default. Existing upstream ZCode
 settings and credentials are never imported automatically.
 The desktop starts directly into the local workspace rather than requiring a
 ZCode account. Z.ai/BigModel login entry points are hidden in the Enntity UI;
-custom providers remain available from Model Providers settings.
+custom providers remain available from Model Providers settings. The sidebar
+guest entry is labeled “Local models” and keeps its normal preferences menu.
 
 The default model provider is local LLooM's OpenAI-compatible API at
 `http://127.0.0.1:8100/v1`, which passes requests through to OpenRouter's
@@ -41,7 +42,10 @@ a substitute for web or media search.
 
 Product telemetry, crash reporting, automatic update checks, provider-registry
 sync/import, and model request/response retention are disabled for the fork.
-Ordinary local diagnostics remain available. Packaging builds use official
+Vendor-hosted client scenes and desktop rollout configuration are not fetched;
+the scenes API returns an empty local catalog, and community/feedback links use
+the Enntity GitHub repository. Ordinary local diagnostics remain available.
+Packaging builds use official
 Electron and builder artifact sources and do not publish artifacts.
 
 ## Ownership and boundaries

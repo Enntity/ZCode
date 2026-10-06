@@ -1,6 +1,7 @@
 import {
   buildZCodeEndpointUrls,
   buildZCodeSourceHeadersFromContext,
+  ZCODE_PRODUCT_FLAVOR,
   ZCODE_ENV,
   ZCODE_DESKTOP_CONTEXT_PROMPT_ENABLED_ENV,
 } from "@zcode/shared";
@@ -83,6 +84,10 @@ export function createElectronDesktopContextPromptConfigFetcher(options: {
   resolveEndpointOrigin: () => Promise<string>;
 }): (signal: AbortSignal) => Promise<unknown> {
   return async (signal) => {
+    if (ZCODE_PRODUCT_FLAVOR === "enntity") {
+      // This rollout is vendor-hosted metadata; Enntity uses its local fail-closed default.
+      return {};
+    }
     const { net } = await import("electron");
     const endpointOrigin = await options.resolveEndpointOrigin();
     const url = new URL(`${buildZCodeEndpointUrls(endpointOrigin).origin}/api/v1/client/configs`);
