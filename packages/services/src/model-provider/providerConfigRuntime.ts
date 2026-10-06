@@ -7,6 +7,7 @@ import {
 } from "@zcode/provider-node";
 import type { ModelProviderConfig } from "./legacyModelProviderSerialized.js";
 import { getAppConfigDir } from "../paths.js";
+import { ZCODE_PRODUCT_FLAVOR } from "@zcode/shared";
 import { importLegacyPersonalProviderConfig } from "./legacyPersonalProviderConfigImporter.js";
 
 export interface ProviderConfigRuntimeOptions {
@@ -35,8 +36,9 @@ export class ProviderConfigRuntime {
     const runtimeOptions: NodeProviderConfigRuntimeOptions = {
       zcodeBuiltinFilePath: options.zcodeBuiltinFilePath,
       zcodeBuiltinActiveFilePath: options.zcodeBuiltinActiveFilePath,
-      zcodeBuiltinRemote: options.zcodeBuiltinRemote,
-      zcodeBuiltinEnvironment: options.zcodeBuiltinEnvironment,
+      zcodeBuiltinRemote: ZCODE_PRODUCT_FLAVOR === "enntity" ? undefined : options.zcodeBuiltinRemote,
+      zcodeBuiltinEnvironment:
+        ZCODE_PRODUCT_FLAVOR === "enntity" ? undefined : options.zcodeBuiltinEnvironment,
       onZCodeBuiltinRefreshError: options.onZCodeBuiltinRefreshError,
       onPersonalConfigRecovery: options.onPersonalConfigRecovery,
       onPersonalConfigPollingError: options.onPersonalConfigPollingError,
@@ -44,7 +46,7 @@ export class ProviderConfigRuntime {
         options.personalFilePath ?? join(getAppConfigDir(), PERSONAL_PROVIDER_CONFIG_FILE_NAME),
       personalPollingIntervalMs: options.personalPollingIntervalMs,
       watch: options.watch,
-      ...(options.readLegacyProviders
+      ...(options.readLegacyProviders && ZCODE_PRODUCT_FLAVOR !== "enntity"
         ? {
             importLegacy: async () =>
               importLegacyPersonalProviderConfig({

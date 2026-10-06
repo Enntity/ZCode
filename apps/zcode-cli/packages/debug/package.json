@@ -12,8 +12,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.server.json --noEmit"
   },
   "dependencies": {
-    "@hono/node-server": "^1.14.4",
-    "hono": "^4.10.7",
+    "@hono/node-server": "^1.19.15",
+    "hono": "^4.13.7",
     "http-mitm-proxy": "^1.1.0",
     "lucide-react": "^1.17.0",
     "react": "^19.2.1",

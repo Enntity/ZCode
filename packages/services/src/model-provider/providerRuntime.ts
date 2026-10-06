@@ -24,6 +24,7 @@ import {
   type ModelSelectionConfiguredDefaultSource,
   type ProviderSettingsConnectivityTester,
 } from "./providerFacadeServices.js";
+import { ZCODE_PRODUCT_FLAVOR } from "@zcode/shared";
 
 export interface ProviderRuntimeOptions extends ProviderConfigRuntimeOptions {
   readonly accountSource?: RefreshableProviderSource<AccountProviderConfigSnapshot>;
@@ -69,6 +70,7 @@ export class ProviderRuntime {
   readonly #disposeAccountSource?: () => void;
   readonly #disposeBuiltinRecovery: () => void;
   readonly #modelSelectionRuntime: IModelSelectionService & { dispose(): void };
+  readonly #modelSelectionConfiguredDefaultSource?: ModelSelectionConfiguredDefaultSource;
   readonly #disposeModelSelectionConfiguredDefaultSource?: () => void;
   #startPromise: ReturnType<ProviderRegistryService["start"]> | null = null;
   #disposed = false;
@@ -78,6 +80,8 @@ export class ProviderRuntime {
     this.#disposeAccountSource = dependencies.disposeAccountSource;
     this.#disposeModelSelectionConfiguredDefaultSource =
       dependencies.disposeModelSelectionConfiguredDefaultSource;
+    this.#modelSelectionConfiguredDefaultSource =
+      dependencies.modelSelectionConfiguredDefaultSource;
     this.configService = this.#configRuntime.configService;
     const accountSource: RefreshableProviderSource<AccountProviderConfigSnapshot> =
       dependencies.accountSource ?? new EmptyAccountProviderConfigSource(this.configService);
@@ -117,7 +121,25 @@ export class ProviderRuntime {
   start(): Promise<void> {
     if (this.#disposed) throw new Error("ProviderRuntime 已 dispose");
     if (this.#startPromise) return this.#startPromise;
-    const startPromise = this.#configRuntime.start().then(() => this.registryService.start());
+    const startPromise = this.#configRuntime
+      .start()
+      .then(() => this.registryService.start())
+      .then(async () => {
+        if (ZCODE_PRODUCT_FLAVOR !== "enntity") return;
+        const configured = await this.#modelSelectionConfiguredDefaultSource?.read();
+        if (configured) return;
+        const model = this.registryService
+          .getView()
+          .providers.find((provider) => provider.providerId === "enntity-lloom")
+          ?.models.find((candidate) => candidate.modelId === "z-ai/glm-5.3-flashx");
+        if (model?.config.optionSpecs.reasoningLevel.values.includes("low")) {
+          await this.#modelSelectionConfiguredDefaultSource?.saveConfiguredDefault?.({
+            providerId: "enntity-lloom",
+            modelId: "z-ai/glm-5.3-flashx",
+            options: { reasoningLevel: "low" },
+          });
+        }
+      });
     this.#startPromise = startPromise;
     void startPromise.catch(() => {
       if (this.#startPromise === startPromise) this.#startPromise = null;

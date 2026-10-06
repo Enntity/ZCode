@@ -1,4 +1,5 @@
 import { formatJson } from "@zcode/core";
+import { ZCODE_PRODUCT_FLAVOR } from "@zcode/shared";
 import type { GlobalOptions, RunContext } from "@zcode/shared-types";
 import { loadBootstrapModule } from "./bootstrap-loader.js";
 import { loadCliDotenv } from "./env.js";
@@ -12,6 +13,9 @@ export async function runLoginCommand(
   args: readonly string[] = [],
 ): Promise<number> {
   try {
+    if (ZCODE_PRODUCT_FLAVOR === "enntity") {
+      throw new Error("Vendor account login is unavailable in Enntity ZCode; configure the local LLooM provider instead.");
+    }
     const providerId = args[0] ?? "zai";
     if (args.length > 1 || (providerId !== "zai" && providerId !== "bigmodel")) {
       throw new Error("Usage: zcode login [zai|bigmodel] [--no-browser]");

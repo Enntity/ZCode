@@ -8,6 +8,7 @@ import {
 import {
   isBuiltinModelProviderId,
   resolveRuntimeZCodeEndpointOrigin,
+  ZCODE_PRODUCT_FLAVOR,
   ZCODE_VERSION,
 } from "@zcode/shared";
 import { dirname, join } from "node:path";
@@ -56,7 +57,7 @@ export async function startProcessProviderRegistryRuntime(
     ? (options.standalone.credentialStore ?? createSharedZCodeCredentialStore({ env: { ...env } }))
     : undefined;
   let standaloneAccount: AccountProviderService | undefined;
-  const bundledFile = options.standalone
+  const bundledFile = options.standalone && ZCODE_PRODUCT_FLAVOR !== "enntity"
     ? env[ZCODE_BUILTIN_PROVIDER_BUNDLED_CONFIG_FILE_ENV]?.trim()
     : undefined;
   const runtime = new NodeProviderRegistryRuntime({
@@ -111,7 +112,7 @@ export async function startProcessProviderRegistryRuntime(
           },
         }
       : {}),
-    ...(options.standalone
+    ...(options.standalone && ZCODE_PRODUCT_FLAVOR !== "enntity"
       ? {
           importLegacy: () =>
             readLegacyCliPersonalProviderConfig({
@@ -144,7 +145,20 @@ export async function startProcessProviderRegistryRuntime(
       personalRepository: runtime.personalRepository,
     });
     try {
-      const configuredDefaultModelSelection = await modelSelectionConfigRepository.read();
+      let configuredDefaultModelSelection = await modelSelectionConfigRepository.read();
+      if (!configuredDefaultModelSelection && ZCODE_PRODUCT_FLAVOR === "enntity") {
+        const provider = snapshot.registry.providers.find(
+          (candidate) => candidate.providerId === "enntity-lloom",
+        );
+        const model = provider?.models.find((candidate) => candidate.modelId === "z-ai/glm-5.3-flashx");
+        if (provider && model?.config.optionSpecs.reasoningLevel.values.includes("low")) {
+          configuredDefaultModelSelection = await modelSelectionConfigRepository.saveConfiguredDefault({
+            providerId: provider.providerId,
+            modelId: model.modelId,
+            options: { reasoningLevel: "low" },
+          });
+        }
+      }
       return Object.freeze({
         accountSource: standaloneAccount ?? accountSource,
         async syncAccountProviderConfig(next: AccountProviderConfigSnapshot): Promise<boolean> {

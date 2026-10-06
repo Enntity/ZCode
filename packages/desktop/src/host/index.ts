@@ -2967,3 +2967,5 @@ async function setupRemoteConnection(
   });
   return { ...connection, backend };
 }
+import { installNodeVendorNetworkGuard } from "@zcode/shared/node";
+installNodeVendorNetworkGuard();

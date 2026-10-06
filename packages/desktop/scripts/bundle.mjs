@@ -121,7 +121,7 @@ const requiredRuntimeModules = [
 const electronBuilderRetryCount = 3;
 const electronBuilderRetryDelayMs = 5_000;
 const electronBuilderHeartbeatIntervalMs = 30_000;
-export const DEFAULT_ELECTRON_MIRROR = "https://npmmirror.com/mirrors/electron/";
+export const DEFAULT_ELECTRON_MIRROR = "https://github.com/electron/electron/releases/download/";
 export const NPMMIRROR_ELECTRON_BUILDER_BINARIES_MIRROR =
   "https://registry.npmmirror.com/-/binary/electron-builder-binaries/";
 export const OFFICIAL_ELECTRON_BUILDER_BINARIES_MIRROR =
@@ -163,7 +163,7 @@ export function createElectronRuntimeMirrorEnv(mirror) {
 function resolveDefaultElectronBuilderBinariesMirror(env = process.env) {
   return env.ZCODE_DEPS_BASE_URL?.trim() || env.INTRANET_MACHINE_HOST?.trim()
     ? `${resolveIntranetDepsBaseUrl(env)}/electron-builder-binaries/`
-    : NPMMIRROR_ELECTRON_BUILDER_BINARIES_MIRROR;
+    : OFFICIAL_ELECTRON_BUILDER_BINARIES_MIRROR;
 }
 
 export function resolveElectronBuilderBinariesMirror(env = process.env) {
@@ -176,7 +176,7 @@ export function resolveElectronBuilderBinariesMirror(env = process.env) {
     if (isMisconfiguredNpmMirrorElectronRuntimeMirror(existingMirror)) {
       // electron-builder binaries mirror 若被配成 Electron runtime 镜像，
       // 两类资源目录结构不同，dmg-builder 会被拼到 runtime 目录下导致 404。
-      return NPMMIRROR_ELECTRON_BUILDER_BINARIES_MIRROR;
+      return OFFICIAL_ELECTRON_BUILDER_BINARIES_MIRROR;
     }
 
     return existingMirror.trim();
@@ -227,10 +227,9 @@ export function resolveElectronBuilderBinariesFallbackMirror(output, mirror, env
     return null;
   }
 
-  // CI 曾把 ELECTRON_BUILDER_BINARIES_MIRROR 误配到 Electron runtime 镜像目录，
-  // 该目录缺 dmg-builder/appimage/nsis 等 builder 辅助包。registry.npmmirror 的 binary
-  // electron-builder-binaries 路径包含这些文件，优先用国内源避免 macOS 打包 cache miss。
-  return NPMMIRROR_ELECTRON_BUILDER_BINARIES_MIRROR;
+  // CI 曾把 ELECTRON_BUILDER_BINARIES_MIRROR 误配到 Electron runtime 镜像目录；
+  // 缺少辅助包时回到 electron-builder 官方发布源。
+  return OFFICIAL_ELECTRON_BUILDER_BINARIES_MIRROR;
 }
 
 function escapeRegExp(value) {

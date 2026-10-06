@@ -1,4 +1,5 @@
 import { extractDisallowedToolsArgs, parseGlobalArgs } from "./arguments.js";
+import { installVendorNetworkGuard } from "@zcode/adapters";
 import { createNodeLoggerFactory } from "@zcode/adapters";
 import { getRuntimeInfo, type PresentationSurface } from "@zcode/core";
 import { color, formatJson, supportsColor } from "@zcode/core";
@@ -39,7 +40,9 @@ declare const __CLI_VERSION__: string | undefined;
 const version = typeof __CLI_VERSION__ === "string" ? __CLI_VERSION__ : "0.0.0";
 
 const EMPTY_TARGET_ERROR = "--target requires non-empty text.";
-const DEFAULT_HEADLESS_PROMPT_MODE: CliPermissionMode = "yolo";
+const DEFAULT_HEADLESS_PROMPT_MODE: CliPermissionMode = "edit";
+
+installVendorNetworkGuard();
 const FORCE_MCS_SCOPE_ERROR = "--force-mcs can only be used with --prompt, --target, or tui.";
 const TARGET_REPLACE_REQUIRES_TARGET_ERROR = "--target-replace requires --target.";
 const TARGET_CONFLICTS_WITH_PROMPT_ERROR =

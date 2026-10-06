@@ -20,6 +20,7 @@ import {
   type ZCodeCommand,
 } from "@zcode/shared";
 import { DEFAULT_ENABLED_OFFICIAL_PLUGIN_IDS } from "@zcode/shared";
+import { getZCodeDataRootDir } from "#src/paths.js";
 import type { ICommandsService } from "./commands.js";
 import { CommandFileParser, type CommandFileFormat } from "./commandFileParser.js";
 import { readInstalledPluginRoots } from "#src/plugins/installedPluginRoots.js";
@@ -52,7 +53,7 @@ const CODEX_PLUGIN_MANIFEST_PATH = join(".codex-plugin", "plugin.json");
 const ZCODE_COMMAND_DESCRIPTOR: CommandAgentSourceDescriptor = {
   agentSource: "zcodeAgent",
   directorySource: "zcode",
-  userDirectorySegments: [".zcode", "commands"],
+  userDirectorySegments: [".enntity-zcode", "commands"],
   workspaceDirectorySegments: [".zcode", "commands"],
   fileExtension: ".md",
   format: "markdown",
@@ -82,11 +83,12 @@ function getCommandSourceDescriptor(
 
 function getUserCommandsRoot(agentSource?: CommandAgentSource): string {
   const descriptor = getCommandSourceDescriptor(agentSource);
+  if (descriptor.directorySource === "zcode") return join(getZCodeDataRootDir(), "commands");
   return join(resolveUserHomeDir(), ...descriptor.userDirectorySegments);
 }
 
 function getUserCliConfigPath(): string {
-  return join(resolveUserHomeDir(), ".zcode", "cli", "config.json");
+  return join(getZCodeDataRootDir(), "cli", "config.json");
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -203,7 +205,7 @@ function readStorageDirFromConfig(config: Record<string, unknown>): string {
   const storage = isRecord(config.storage) ? config.storage : {};
   return typeof storage.dir === "string" && storage.dir.trim().length > 0
     ? storage.dir
-    : "~/.zcode";
+    : join(getZCodeDataRootDir(), "cli");
 }
 
 function readPluginConfigFromConfig(config: Record<string, unknown>): PluginConfigSummary {
@@ -417,6 +419,7 @@ async function resolvePluginCommandRootDescriptors(): Promise<PluginCommandRootD
 }
 
 function getUserCommandsRootForDescriptor(descriptor: CommandAgentSourceDescriptor): string {
+  if (descriptor.directorySource === "zcode") return join(getZCodeDataRootDir(), "commands");
   return join(resolveUserHomeDir(), ...descriptor.userDirectorySegments);
 }
 

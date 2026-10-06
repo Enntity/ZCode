@@ -10,6 +10,7 @@ import type {
   ResolvedAiSdkModel,
 } from "./runner-runtime.js";
 import { createModelRequestAttributionHeaders, type ModelStatusContext } from "./runner-status.js";
+import { supportsOpenRouterFlashXWebSearch } from "./openrouter-flashx-web-search.js";
 
 type ExperimentalIncludeWithResponseBody = {
   requestBody?: boolean;
@@ -68,6 +69,12 @@ export function createGenerateTextOptions(input: {
       modelId: input.resolved.modelId,
       requiresMfjsToolSchema: input.resolved.properties.requiresMfjsToolSchema,
       supportsNativeWebSearch: input.resolved.properties.supportsNativeWebSearch,
+      supportsOpenRouterWebSearch: supportsOpenRouterFlashXWebSearch({
+        providerId: input.resolved.providerId,
+        modelId: input.resolved.modelId,
+        providerKind: input.resolved.providerKind,
+        baseURL: input.resolved.baseURL,
+      }),
     }),
     toolChoice: toAiSdkToolChoice(input.request.toolChoice),
     temperature: input.request.temperature,
@@ -129,6 +136,12 @@ export function createStreamTextOptions(input: {
       modelId: input.resolved.modelId,
       requiresMfjsToolSchema: input.resolved.properties.requiresMfjsToolSchema,
       supportsNativeWebSearch: input.resolved.properties.supportsNativeWebSearch,
+      supportsOpenRouterWebSearch: supportsOpenRouterFlashXWebSearch({
+        providerId: input.resolved.providerId,
+        modelId: input.resolved.modelId,
+        providerKind: input.resolved.providerKind,
+        baseURL: input.resolved.baseURL,
+      }),
     }),
     toolChoice: toAiSdkToolChoice(input.request.toolChoice),
     temperature: input.request.temperature,

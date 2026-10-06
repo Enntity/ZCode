@@ -22,6 +22,11 @@ import type { RegistryProviderConfig } from "@zcode/provider";
 import { withOpenRouterAttributionHeaders } from "@zcode/shared";
 import { createAnthropicCompatFetch } from "./anthropic-stream-compat.js";
 import { createOpenAIResponsesJsonCompatFetch } from "./openai-responses-json-compat.js";
+import {
+  createOpenRouterFlashXWebSearchFetch,
+  OPENROUTER_FLASHX_WEBSEARCH_MODEL_ID,
+  supportsOpenRouterFlashXWebSearch,
+} from "./openrouter-flashx-web-search.js";
 import { createModelOptionMapFetch, type RawRequestBodyCapture } from "./model-option-map-fetch.js";
 import { createNetworkProxyFetch } from "../network/proxy-fetch.js";
 import { createOfficialCodingPlanGatewayFetch } from "./official-coding-plan-gateway.js";
@@ -277,6 +282,20 @@ export class AiSdkModelExecution {
             values: optionValues,
           })
         : fetch;
+    const providerFetch = supportsOpenRouterFlashXWebSearch({
+      providerId,
+      modelId: OPENROUTER_FLASHX_WEBSEARCH_MODEL_ID,
+      providerKind: providerConfig.kind,
+      baseURL: providerConfig.baseURL,
+    })
+      ? createOpenRouterFlashXWebSearchFetch({
+          providerId,
+          modelId: OPENROUTER_FLASHX_WEBSEARCH_MODEL_ID,
+          providerKind: providerConfig.kind,
+          baseURL: providerConfig.baseURL,
+          fetch: optionFetch,
+        })
+      : optionFetch;
 
     switch (providerConfig.kind) {
       case "openai": {
@@ -304,7 +323,7 @@ export class AiSdkModelExecution {
           name: providerConfig.name ?? providerId,
           baseURL: providerConfig.baseURL,
           apiKey,
-          fetch: optionFetch,
+          fetch: providerFetch,
           headers,
           // OpenAI Compatible 流式 usage 需要显式请求，Usage 是执行结果的一部分。
           includeUsage: true,

@@ -83,7 +83,8 @@ const webSearchHandler: ToolHandler<WebSearchInput, WebSearchOutput> = async (in
     messages: [
       {
         role: "system",
-        content: "You are an assistant for performing a web search tool use.",
+        content:
+          "You are an assistant for performing a web search tool use. Finish with a Sources list of Markdown links using only URLs returned by web search; never invent or reconstruct a source URL.",
       },
       {
         role: "user",

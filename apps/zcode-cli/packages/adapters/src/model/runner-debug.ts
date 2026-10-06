@@ -10,7 +10,7 @@ import {
 import { homedir } from "node:os";
 import { join } from "node:path";
 import type { ModelTextResult } from "@zcode/contracts";
-import { ZCODE_RUNTIME_ENV_KEY, normalizeZCodeRuntimeEnv } from "@zcode/shared";
+import { ZCODE_PRODUCT_FLAVOR, ZCODE_RUNTIME_ENV_KEY, normalizeZCodeRuntimeEnv } from "@zcode/shared";
 import { redactAnthropicRequestMetadata } from "./anthropic-request-metadata.js";
 import type { EnvRecord } from "./model-execution.js";
 import { sanitizeModelIODebugRecord } from "./runner-debug-redaction.js";
@@ -62,6 +62,7 @@ interface ModelIOCompactionState {
 const modelIOCompactionStates = new Map<string, ModelIOCompactionState>();
 
 export function shouldRecordModelIO(env: EnvRecord): boolean {
+  if (ZCODE_PRODUCT_FLAVOR === "enntity") return false;
   // 开发态与生产态都记录(分别落到 debug / rollout 目录);仅测试态(ZCODE_RUNTIME_ENV=test)不写,
   // 避免单测产生磁盘副作用。未设时按生产处理(记录到 rollout,带条数上限)。
   return normalizeRuntimeEnv(env) !== "test";

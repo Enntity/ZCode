@@ -6,11 +6,16 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { jsonSchema, tool, type ToolSet } from "ai";
 import { ModelErrorCode, type JsonSchema, type ModelToolContract } from "@zcode/contracts";
 import { AiSdkModelAdapterError } from "./errors.js";
+import {
+  OPENROUTER_WEB_SEARCH_MARKER,
+  serializeOpenRouterWebSearchMarkerMetadata,
+} from "./openrouter-flashx-web-search.js";
 import { isAnthropicFirstPartyModelId, toStrictToolSchema } from "./strict-tool-schema.js";
 
 export interface AiSdkToolTransformOptions {
   requiresMfjsToolSchema?: boolean;
   supportsNativeWebSearch?: boolean;
+  supportsOpenRouterWebSearch?: boolean;
   providerKind?: "openai" | "anthropic" | "openai-compatible" | "gateway" | "custom";
 
   /** 本次请求的模型 id，仅用于首方 strict 资格判定；缺席即不启用 strict。 */
@@ -28,7 +33,14 @@ export function toAiSdkTools(
   const entries = tools.flatMap((contract): [string, ToolSet[string]][] => {
     if (contract.providerNative) {
       const providerTool = toAiSdkProviderNativeTool(contract, options);
-      return providerTool ? [[contract.name, providerTool]] : [];
+      if (!providerTool) return [];
+      const toolName =
+        options.providerKind === "openai-compatible" &&
+        options.supportsOpenRouterWebSearch &&
+        contract.providerNative.logicalName === "WebSearch"
+          ? OPENROUTER_WEB_SEARCH_MARKER
+          : contract.name;
+      return [[toolName, providerTool]];
     }
 
     const strictSchema = resolveStrictToolSchema(contract, options);
@@ -268,6 +280,23 @@ function toAiSdkProviderNativeTool(
         allowedDomains,
         blockedDomains,
       }) as ToolSet[string];
+
+    case "openai-compatible":
+      if (!options.supportsOpenRouterWebSearch) {
+        throw new AiSdkModelAdapterError(
+          ModelErrorCode.InvalidModelRequest,
+          "Effective Model Config does not support this provider-native WebSearch route",
+        );
+      }
+      // The scoped fetch adapter replaces this ordinary placeholder with the
+      // OpenRouter server tool; it never reaches any other upstream provider.
+      return tool<unknown, never>({
+        description: serializeOpenRouterWebSearchMarkerMetadata({
+          allowedDomains,
+          blockedDomains,
+        }),
+        inputSchema: jsonSchema<unknown>(contract.inputSchema as JsonSchema),
+      });
 
     default:
       throw new AiSdkModelAdapterError(

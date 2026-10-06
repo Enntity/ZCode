@@ -100,11 +100,19 @@ export const providerTemplateConfigRuleSchema = providerTemplateDataSchema.exten
       access: apiKeyAccessDataSchema.omit({ apiKey: true }).nullable().optional(),
     }),
 });
-export const builtinProviderConfigRuleSchema = providerConfigRuleSchema.extend({
-  config: providerConfigDataSchema.omit({ personalModelIds: true, modelOrder: true }).extend({
-    group: providerGroupDataSchema.exclude(["standard-personal"]),
-  }),
-});
+export const builtinProviderConfigRuleSchema = providerConfigRuleSchema
+  .extend({
+    config: providerConfigDataSchema.omit({ personalModelIds: true, modelOrder: true }),
+  })
+  .superRefine((rule, context) => {
+    if (rule.config.group === "standard-personal" && rule.providerId !== "enntity-lloom") {
+      context.addIssue({
+        code: "custom",
+        path: ["config", "group"],
+        message: "Built-in standard-personal group is reserved for the Enntity LLooM route",
+      });
+    }
+  });
 const personalProviderConfigRuleSchema = providerConfigRuleSchema
   .extend({
     config: providerConfigDataSchema.omit({ builtinModelIds: true }).extend({

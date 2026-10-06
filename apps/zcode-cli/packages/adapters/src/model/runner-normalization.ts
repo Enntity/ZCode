@@ -18,7 +18,12 @@ export function normalizeUsage(usage?: Partial<LanguageModelUsage>): ModelUsage 
   const rawServerToolUse = isRecord(rawUsage?.server_tool_use)
     ? rawUsage.server_tool_use
     : undefined;
-  const webSearchRequests = numberProperty(rawServerToolUse, "web_search_requests");
+  const rawServerToolUseDetails = isRecord(rawUsage?.server_tool_use_details)
+    ? rawUsage.server_tool_use_details
+    : undefined;
+  const webSearchRequests =
+    numberProperty(rawServerToolUse, "web_search_requests") ??
+    numberProperty(rawServerToolUseDetails, "web_search_requests");
   const webFetchRequests = numberProperty(rawServerToolUse, "web_fetch_requests");
 
   return {

@@ -1,5 +1,10 @@
 ## 核心原则
 
+> Enntity fork: product identity and vendor-network safeguards in this repository
+> are intentional fork behavior. Preserve them during upstream merges and re-run
+> their focused behavioral tests. Use the `data-angel` GitHub identity for any
+> Enntity repository publication; do not inherit ZCode vendor release channels.
+
 - 新增或修改行为前，先更新对应 spec；目录不存在时按需创建。先明确产品规则、状态所有者、接口和验收场景，再实现代码。
 - 以当前检出的源码、`package.json` 和架构策略为准。说明中只保留当前仓库提供的功能、命令和文件；删除功能时同步清理指令和技能中的引用。
 - 定位问题时，未明确要求修改代码就先调查原因。结合源码、日志和运行时证据，区分已确认原因与待验证假设。

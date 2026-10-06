@@ -23,9 +23,19 @@ const PREVIEW_IDENTITY = Object.freeze({
   cuaHelperInstallVariant: "preview",
 });
 
+const ENNTITY_IDENTITY = Object.freeze({
+  flavor: "enntity",
+  appId: "com.enntity.zcode",
+  productName: "Enntity ZCode",
+  linuxExecutableName: "enntity-zcode",
+  linuxPackageName: "enntity-zcode",
+  cuaHelperInstallVariant: null,
+});
+
 export const desktopProductIdentities = Object.freeze({
   production: PRODUCTION_IDENTITY,
   preview: PREVIEW_IDENTITY,
+  enntity: ENNTITY_IDENTITY,
 });
 
 function normalizeDesktopZCodeEnv(env) {
@@ -57,10 +67,8 @@ export function isPreviewIdentityRequested(env = process.env) {
  * 未知 `ZCODE_ENV` 继续按 test 处理，和共享层 normalizeZCodeEnv 的 fail-safe 默认值一致。
  */
 export function resolveDesktopProductFlavor(env = process.env) {
-  if (isPreviewIdentityRequested(env)) {
-    return "preview";
-  }
-  return normalizeDesktopZCodeEnv(env) === "production" ? "production" : "preview";
+  void env;
+  return "enntity";
 }
 
 export function resolveDesktopProductIdentity(env = process.env) {
@@ -84,9 +92,10 @@ export function resolveDesktopArtifactSuffix(env = process.env) {
  */
 export function resolveWindowsAppUserModelIdForFlavor(flavor, runtime = { isPackaged: true }) {
   if (runtime.isPackaged === false) {
+    if (flavor === "enntity") return "com.enntity.zcode";
     return "cn.aminer.zcode";
   }
-  return desktopProductIdentities[flavor === "preview" ? "preview" : "production"].appId;
+  return desktopProductIdentities[flavor]?.appId ?? desktopProductIdentities.production.appId;
 }
 
 export function resolveWindowsAppUserModelId(env = process.env, runtime = { isPackaged: true }) {
