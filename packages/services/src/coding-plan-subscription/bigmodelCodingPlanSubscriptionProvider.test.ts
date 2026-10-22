@@ -1,17 +1,17 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import {
-  ZCODE_DYNAMIC_WORKFLOW_MODE_ENV,
-  type ApiClient,
-} from "@zcode/shared";
+import { ZCODE_DYNAMIC_WORKFLOW_MODE_ENV, type ApiClient } from "@zcode/shared";
 import { BigModelCodingPlanSubscriptionProvider } from "./bigmodelCodingPlanSubscriptionProvider.js";
 
 function createProvider(): BigModelCodingPlanSubscriptionProvider {
-  const apiClient = new Proxy({}, {
-    get() {
-      assert.fail("Enntity dynamic workflow settings must not make a vendor API request");
+  const apiClient = new Proxy(
+    {},
+    {
+      get() {
+        assert.fail("Enntity dynamic workflow settings must not make a vendor API request");
+      },
     },
-  }) as ApiClient;
+  ) as ApiClient;
   return new BigModelCodingPlanSubscriptionProvider({
     apiClient,
     credentialService: { load: async () => null },
@@ -26,6 +26,7 @@ test("Enntity enables local dynamic workflows without reading vendor rollout con
       mode: "alwaysOn",
       enabled: true,
       source: "default",
+      offeredMode: "alwaysOn",
     });
   } finally {
     if (previous === undefined) delete process.env[ZCODE_DYNAMIC_WORKFLOW_MODE_ENV];
@@ -41,6 +42,7 @@ test("Enntity honors an explicit local dynamic workflow override without a vendo
       mode: "disabled",
       enabled: false,
       source: "override",
+      offeredMode: "disabled",
     });
   } finally {
     if (previous === undefined) delete process.env[ZCODE_DYNAMIC_WORKFLOW_MODE_ENV];

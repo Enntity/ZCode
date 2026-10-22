@@ -11,6 +11,7 @@ test("Enntity desktop context rollout returns a local empty config without resol
       endpointLookups += 1;
       return "https://unused.example";
     },
+    getClientLanguage: () => "en-US",
   });
 
   assert.deepEqual(await fetchConfig(new AbortController().signal), {});

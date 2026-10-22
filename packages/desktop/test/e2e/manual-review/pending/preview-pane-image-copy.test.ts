@@ -74,9 +74,19 @@ describe("右侧图片预览复制 E2E", () => {
       await copy.click();
       await browser.waitUntil(
         async () => {
-          const result = await browser.electron.execute((electron) => {
-            const image = electron.clipboard.readImage();
-            return { empty: image.isEmpty(), ...image.getSize() };
+          const result = await browser.electron.execute(async (electron) => {
+            const items = await electron.clipboard.read();
+            const item = items.find((candidate) => candidate.types.includes("image/png"));
+            if (!item) return { empty: true, width: 0, height: 0 };
+            const blob = await item.getType("image/png");
+            const bytes = new Uint8Array(await blob.arrayBuffer());
+            // PNG IHDR：宽高分别位于第 16/20 字节，大端序。
+            const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+            return {
+              empty: false,
+              width: view.getUint32(16),
+              height: view.getUint32(20),
+            };
           });
           return !result.empty && result.width === width && result.height === height;
         },

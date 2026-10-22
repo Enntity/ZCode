@@ -573,9 +573,9 @@ async function waitForBrowserSurface(expectedUrl: string, bodyMarker: string) {
           const address = document.querySelector<HTMLInputElement>(
             `[data-testid="${addressTestId}"]`,
           );
-          const webview = document.querySelector<HTMLElement>(`[data-testid="${webviewTestId}"]`) as
-            | (HTMLElement & { getWebContentsId?: () => number })
-            | null;
+          const webview = document.querySelector<HTMLElement>(
+            `[data-testid="${webviewTestId}"]`,
+          ) as (HTMLElement & { getWebContentsId?: () => number }) | null;
           return {
             address: address?.value ?? "",
             webContentsId: webview?.getWebContentsId?.() ?? 0,

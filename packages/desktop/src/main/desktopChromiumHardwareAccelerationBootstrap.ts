@@ -11,7 +11,6 @@ export function resolveChromiumHardwareAccelerationSettingsFile(
 ): string {
   return join(homePath, ".enntity-zcode", "v2", "setting.json");
 }
-}
 
 export function extractBootstrapChromiumHardwareAccelerationEnabled(rawValue: unknown): boolean {
   if (!rawValue || typeof rawValue !== "object" || Array.isArray(rawValue)) {

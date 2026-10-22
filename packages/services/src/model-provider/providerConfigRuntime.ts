@@ -36,7 +36,8 @@ export class ProviderConfigRuntime {
     const runtimeOptions: NodeProviderConfigRuntimeOptions = {
       zcodeBuiltinFilePath: options.zcodeBuiltinFilePath,
       zcodeBuiltinActiveFilePath: options.zcodeBuiltinActiveFilePath,
-      zcodeBuiltinRemote: ZCODE_PRODUCT_FLAVOR === "enntity" ? undefined : options.zcodeBuiltinRemote,
+      zcodeBuiltinRemote:
+        ZCODE_PRODUCT_FLAVOR === "enntity" ? undefined : options.zcodeBuiltinRemote,
       zcodeBuiltinEnvironment:
         ZCODE_PRODUCT_FLAVOR === "enntity" ? undefined : options.zcodeBuiltinEnvironment,
       onZCodeBuiltinRefreshError: options.onZCodeBuiltinRefreshError,
