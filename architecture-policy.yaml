@@ -925,15 +925,3 @@ exceptions:
       - packages/shared/src/node/vendorNetworkGuard.ts
       - packages/shared/src/vendor-network-policy.ts
     reason: Enntity fork files implementing the documented vendor-network host policy and local dynamic-workflow enablement (docs/enntity-fork.md); they have no upstream counterpart and adopting the whole shared/adapters/desktop directories is out of scope for this fork.
-  - id: upstream-sync-20261021-reformat-unmanaged-edit
-    rule: unmanaged-new-file
-    paths:
-      - packages/desktop/src/host/sourceServerOperationLogs.ts
-      - packages/desktop/src/main/embeddedBrowserPermissionUiBridge.ts
-      - packages/desktop/src/main/embeddedBrowserSitePermissionStore.ts
-      - packages/services/src/file/workspaceFileIgnore.ts
-      - packages/ui/src/WorkspaceSidebar/RemoteProjectDetailsPopover.tsx
-      - packages/ui/src/browser-use/BrowserSitePermissionsPage.tsx
-      - packages/ui/src/lib/workflowRunLine.ts
-      - packages/ui/src/workspace-file-search/workspaceFileSearchFilterBackend.ts
-    reason: Files admitted by the upstream v3.16.2 sync, edited only by the fork-wide oxfmt 0.47 reformat; logic is identical to the upstream blob and the directories stay unmanaged pending a separate module boundary refactor.

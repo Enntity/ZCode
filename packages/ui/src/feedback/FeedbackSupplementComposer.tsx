@@ -106,7 +106,9 @@ export function FeedbackSupplementComposer({
       }
       try {
         const next = await Promise.all(accepted.map((file) => readSupplementAttachment(file)));
-        setAttachments((current) => [...current, ...next].slice(0, MAX_SUPPLEMENT_ATTACHMENTS));
+        setAttachments((current) =>
+          [...current, ...next].slice(0, MAX_SUPPLEMENT_ATTACHMENTS),
+        );
         if (files.length > remaining) {
           setError(
             formatMessage(
@@ -170,7 +172,9 @@ export function FeedbackSupplementComposer({
           <h3 className="text-ui-base font-semibold tracking-wide text-foreground-subtle">
             {displayTitle}
           </h3>
-          <p className="mt-1 text-ui-base leading-5 text-foreground-subtle">{displayDescription}</p>
+          <p className="mt-1 text-ui-base leading-5 text-foreground-subtle">
+            {displayDescription}
+          </p>
         </div>
         <Button
           type="button"
