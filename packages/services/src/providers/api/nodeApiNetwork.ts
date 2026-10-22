@@ -43,7 +43,7 @@ function guardUndiciDispatcher(dispatcher: Dispatcher): Dispatcher {
   });
 }
 
-function mergeHostApiCaCertificates(
+export function mergeHostApiCaCertificates(
   customCa: string,
   defaultCa: readonly string[] = rootCertificates,
 ): string[] {

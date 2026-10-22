@@ -18,3 +18,4 @@ export * from "./browser/index.js";
 export * from "./mcp/index.js";
 export * from "./workflow/index.js";
 export * from "./network/vendor-network-guard.js";
+export * from "./tools/index.js";

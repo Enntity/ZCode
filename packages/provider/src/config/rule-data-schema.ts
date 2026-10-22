@@ -113,7 +113,7 @@ export const builtinProviderConfigRuleSchema = providerConfigRuleSchema
       });
     }
   });
-const personalProviderConfigRuleSchema = providerConfigRuleSchema
+export const personalProviderConfigRuleSchema = providerConfigRuleSchema
   .extend({
     config: providerConfigDataSchema.omit({ builtinModelIds: true }).extend({
       group: providerGroupDataSchema.extract(["standard-personal"]).nullable().optional(),
