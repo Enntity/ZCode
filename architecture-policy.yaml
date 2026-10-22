@@ -915,3 +915,25 @@ exceptions:
       - packages/ui/src/settings/DynamicWorkflowModeSetting.tsx
       - packages/ui/src/store/dynamicWorkflowAvailabilityStore.ts
     reason: Admitted upstream files edited only to let the user's dynamic workflow mode choice always win and keep the settings row visible; adopting packages/shared/src and packages/ui/src needs a separate module boundary refactor.
+  - id: enntity-fork-vendor-network-files
+    rule: unmanaged-new-file
+    paths:
+      - apps/zcode-cli/packages/adapters/src/browser/vendor-network-policy.ts
+      - apps/zcode-cli/packages/adapters/src/model/openrouter-flashx-web-search.ts
+      - apps/zcode-cli/packages/adapters/src/network/vendor-network-guard.ts
+      - packages/desktop/src/main/desktopEarlyVendorNetworkBootstrap.ts
+      - packages/shared/src/node/vendorNetworkGuard.ts
+      - packages/shared/src/vendor-network-policy.ts
+    reason: Enntity fork files implementing the documented vendor-network host policy and local dynamic-workflow enablement (docs/enntity-fork.md); they have no upstream counterpart and adopting the whole shared/adapters/desktop directories is out of scope for this fork.
+  - id: upstream-sync-20261021-reformat-unmanaged-edit
+    rule: unmanaged-new-file
+    paths:
+      - packages/desktop/src/host/sourceServerOperationLogs.ts
+      - packages/desktop/src/main/embeddedBrowserPermissionUiBridge.ts
+      - packages/desktop/src/main/embeddedBrowserSitePermissionStore.ts
+      - packages/services/src/file/workspaceFileIgnore.ts
+      - packages/ui/src/WorkspaceSidebar/RemoteProjectDetailsPopover.tsx
+      - packages/ui/src/browser-use/BrowserSitePermissionsPage.tsx
+      - packages/ui/src/lib/workflowRunLine.ts
+      - packages/ui/src/workspace-file-search/workspaceFileSearchFilterBackend.ts
+    reason: Files admitted by the upstream v3.16.2 sync, edited only by the fork-wide oxfmt 0.47 reformat; logic is identical to the upstream blob and the directories stay unmanaged pending a separate module boundary refactor.
