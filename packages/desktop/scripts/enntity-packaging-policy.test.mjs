@@ -9,7 +9,7 @@ test("packaging uses the manifest runtime and isolated fork identity", async () 
   assert.equal(config.electronVersion, manifest.devDependencies.electron);
   assert.equal(config.appId, "com.enntity.zcode");
   assert.equal(config.productName, "Enntity ZCode");
-  assert.equal(config.mac.minimumSystemVersion, "13.0");
+  assert.equal(config.mac.minimumSystemVersion, "13.0.0");
   assert.deepEqual(config.publish, []);
   assert.equal(config.mac.notarize, false);
   assert.deepEqual(config.protocols[0].schemes, ["enntity-zcode"]);
