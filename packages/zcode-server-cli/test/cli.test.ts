@@ -374,7 +374,8 @@ describe("Server CLI routing", () => {
   });
 
   it("treats stop as an idempotent no-op after the supervisor socket is gone", async () => {
-    const root = await mkdtemp(join(tmpdir(), "zcode-r2-cli-stop-"));
+    // Enntity fork: the longer .enntity-zcode root pushes the control socket past macOS's 104-byte limit under the default TMPDIR.
+    const root = await mkdtemp(join(process.platform === "win32" ? tmpdir() : "/tmp", "zcode-r2-cli-stop-"));
     vi.stubEnv("ZCODE_DATA_BASE_DIR", root);
     const layout = resolveServerLayout();
     await mkdir(layout.runDir, { recursive: true });
