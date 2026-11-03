@@ -1,15 +1,5 @@
 /* eslint-disable max-lines -- skill 发现 + 校验 + 状态 + 通用目录管理在同一服务里聚合，分层后跳转成本更高 */
-import {
-  access,
-  appendFile,
-  cp,
-  mkdir,
-  realpath,
-  rm,
-  readFile,
-  readdir,
-  writeFile,
-} from "node:fs/promises";
+import { access, appendFile, cp, mkdir, realpath, rm, readFile, readdir } from "node:fs/promises";
 import { existsSync, type Dirent } from "node:fs";
 import { createHash } from "node:crypto";
 import { homedir } from "node:os";
@@ -26,10 +16,10 @@ import type {
   SkillsCapability,
 } from "@zcode/shared";
 import { DEFAULT_ENABLED_OFFICIAL_PLUGIN_IDS } from "@zcode/shared";
-import { getZCodeDataRootDir } from "#src/paths.js";
 import type { ISkillsService } from "./skills.js";
 import { SKILL_FILE_NAME, walkSkillMarkdownPaths } from "./skillDiscoveryWalk.js";
 import { readInstalledPluginRoots } from "#src/plugins/installedPluginRoots.js";
+import { updateJsonObjectFile } from "#src/fs/atomicFileUtils.js";
 
 interface DiscoverResult {
   skills: SkillSummary[];
@@ -48,8 +38,8 @@ interface ParsedFrontmatter {
 }
 
 const SKILL_META_FILE_NAME = "_meta.json";
-const SKILL_SETTINGS_DIR = join(getZCodeDataRootDir(), "v2");
-const SKILL_CLI_SETTINGS_DIR = join(getZCodeDataRootDir(), "cli");
+const SKILL_SETTINGS_DIR = join(resolveUserHomeDir(), ".enntity-zcode", "v2");
+const SKILL_CLI_SETTINGS_DIR = join(resolveUserHomeDir(), ".enntity-zcode", "cli");
 const SKILL_CLI_CONFIG_FILE = join(SKILL_CLI_SETTINGS_DIR, "config.json");
 const GIT_MARKER = ".git";
 const HOME_PREFIX = "~/";
@@ -82,7 +72,7 @@ function getWorkspaceAgentsSkillRoot(workspacePath: string): string {
 
 /** ZCode Agent 用户级技能目录。 */
 function getUserZcodeSkillRoot(): string {
-  return join(getZCodeDataRootDir(), "skills");
+  return join(resolveUserHomeDir(), ".enntity-zcode", "skills");
 }
 
 /** 兼容目录: 用户级 `~/.agents/skills`。 */
@@ -530,6 +520,7 @@ function normalizeSkillConfigPath(path: string): string {
   return path.replaceAll("\\", "/");
 }
 
+// 只用于列表展示：config.json 损坏时按空配置展示技能，不影响浏览。写入走 writeSkillEnabledMap。
 async function readCliConfigFile(): Promise<Record<string, unknown>> {
   try {
     const raw = await readFile(SKILL_CLI_CONFIG_FILE, "utf-8");
@@ -559,29 +550,35 @@ async function readSkillEnabledMap(): Promise<Record<string, boolean>> {
   return readSkillEnabledMapFromConfig(await readCliConfigFile());
 }
 
+/**
+ * 根因：旧实现写入前用 readCliConfigFile 读取，读失败或 JSON 损坏时返回空对象，再用 writeFile
+ * 整文件写回，config.json 里的 MCP、插件等其他配置会被冲掉；writeFile 也不是原子写。
+ * 修法：改用 updateJsonObjectFile——文件损坏时报错不写，写前重读，只改 skills 字段，原子替换。
+ */
 async function writeSkillEnabledMap(next: Record<string, boolean>): Promise<void> {
-  const config = await readCliConfigFile();
-  const skillsConfig = isObjectRecord(config.skills) ? config.skills : {};
-  for (const [path, enable] of Object.entries(next).sort(([left], [right]) =>
-    left.localeCompare(right),
-  )) {
-    // 技能开关之前分散在 workspace/provider/context 状态文件，导致同一技能在不同入口表现不一致。
-    // 现在只按 SKILL.md 路径写入 CLI config 的 skills 字段，避免额外迁移或旧文件副作用。
-    const normalizedPath = normalizeSkillConfigPath(path);
-    if (enable) {
-      // 开启态是默认值，不应落盘成 `{ enable: true }`；删除 override 才能跟随插件/默认配置变化。
-      delete skillsConfig[normalizedPath];
-    } else {
-      skillsConfig[normalizedPath] = { enable };
+  await updateJsonObjectFile(SKILL_CLI_CONFIG_FILE, (current) => {
+    const config = { ...current };
+    const skillsConfig = isObjectRecord(config.skills) ? { ...config.skills } : {};
+    for (const [path, enable] of Object.entries(next).sort(([left], [right]) =>
+      left.localeCompare(right),
+    )) {
+      // 技能开关之前分散在 workspace/provider/context 状态文件，导致同一技能在不同入口表现不一致。
+      // 现在只按 SKILL.md 路径写入 CLI config 的 skills 字段，避免额外迁移或旧文件副作用。
+      const normalizedPath = normalizeSkillConfigPath(path);
+      if (enable) {
+        // 开启态是默认值，不应落盘成 `{ enable: true }`；删除 override 才能跟随插件/默认配置变化。
+        delete skillsConfig[normalizedPath];
+      } else {
+        skillsConfig[normalizedPath] = { enable };
+      }
     }
-  }
-  if (Object.keys(skillsConfig).length > 0) {
-    config.skills = skillsConfig;
-  } else {
-    delete config.skills;
-  }
-  await mkdir(SKILL_CLI_SETTINGS_DIR, { recursive: true });
-  await writeFile(SKILL_CLI_CONFIG_FILE, `${JSON.stringify(config, null, 2)}\n`, "utf-8");
+    if (Object.keys(skillsConfig).length > 0) {
+      config.skills = skillsConfig;
+    } else {
+      delete config.skills;
+    }
+    return config;
+  });
 }
 
 interface SkillRootDescriptor {
@@ -644,7 +641,7 @@ function readStorageDirFromConfig(config: Record<string, unknown>): string {
   const storage = isObjectRecord(config.storage) ? config.storage : {};
   return typeof storage.dir === "string" && storage.dir.trim().length > 0
     ? storage.dir
-    : join(getZCodeDataRootDir(), "cli");
+    : "~/.enntity-zcode";
 }
 
 function resolveConfigPath(path: string): string {
@@ -826,7 +823,7 @@ async function resolvePluginSkillRootDescriptors(): Promise<SkillRootDescriptor[
     }
     // agent runtime 已经从 plugin manifest 注入 skillRoots，但 UI 的 skillsService
     // 之前只扫描内置官方 cache/手动目录，漏掉 marketplace installed_plugins.json 中的
-    // Claude 官方和自建市场插件，导致插件详情页只有技能数量、没有技能名。
+    // 个人来源市场（claude-plugins-official、自建市场等）插件，导致插件详情页只有技能数量、没有技能名。
     for (const rootPath of resolvePluginSkillRoots({ manifest, rootPath: candidate.rootPath })) {
       descriptors.push({
         scope: "plugin",
@@ -1237,3 +1234,10 @@ export function createSkillsService(options?: SkillsServiceOptions): ISkillsServ
     },
   };
 }
+
+// 仅供测试/调试，便于在 vitest 里直接 fixture 出诊断结果。
+export const __INTERNAL__ = {
+  discoverSkills,
+  readFrontmatter,
+  MAX_DESCRIPTION_LENGTH,
+};

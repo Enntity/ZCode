@@ -102,7 +102,9 @@ export const providerTemplateConfigRuleSchema = providerTemplateDataSchema.exten
 });
 export const builtinProviderConfigRuleSchema = providerConfigRuleSchema
   .extend({
-    config: providerConfigDataSchema.omit({ personalModelIds: true, modelOrder: true }),
+    config: providerConfigDataSchema.omit({ personalModelIds: true, modelOrder: true }).extend({
+      group: providerGroupDataSchema,
+    }),
   })
   .superRefine((rule, context) => {
     if (rule.config.group === "standard-personal" && rule.providerId !== "enntity-lloom") {
@@ -113,7 +115,7 @@ export const builtinProviderConfigRuleSchema = providerConfigRuleSchema
       });
     }
   });
-const personalProviderConfigRuleSchema = providerConfigRuleSchema
+export const personalProviderConfigRuleSchema = providerConfigRuleSchema
   .extend({
     config: providerConfigDataSchema.omit({ builtinModelIds: true }).extend({
       group: providerGroupDataSchema.extract(["standard-personal"]).nullable().optional(),

@@ -2,7 +2,7 @@
 
 Enntity fork of zai-org/ZCode for local coding on macOS. The default provider is MacBook LLooM at `http://127.0.0.1:8100/v1`, using OpenRouter `z-ai/glm-5.3-flashx`. Product telemetry, upstream login/sync/updates, and managed requests to known Z.ai vendor domains are disabled. Data uses `~/.enntity-zcode`. See [fork behavior and feature limits](docs/enntity-fork.md) and [dependency review](docs/dependency-safety-rationale.md).
 
-Apple silicon builds use Electron 44.5.1 and require macOS 13+. The public source omits working Computer Use and several vendor document/image plugins; this fork does not claim those features are available.
+Apple silicon builds use Electron 44.7.0 and require macOS 13+. The public source omits working Computer Use and several vendor document/image plugins; this fork does not claim those features are available.
 
 <div align="center">
   <img src="public/logo/icons/1024x1024.png" alt="ZCode" width="128" height="128" />
@@ -16,6 +16,12 @@ ZCode is an AI coding workspace with desktop, browser, and terminal interfaces. 
 
 ## Updates
 
+- **2026-11-03**: Updated to ZCode v3.17.2.
+- 2026-10-30: Updated to ZCode v3.17.1.
+- 2026-10-19: Updated to ZCode v3.16.2.
+- 2026-10-16: Updated to ZCode v3.16.1.
+- 2026-10-16: Updated to ZCode v3.15.4.
+- 2026-10-10: Updated to ZCode v3.15.1.
 - 2026-9-23: Updated to ZCode v3.14.3.
 
 ## Setup
@@ -103,6 +109,8 @@ See Packaging below for build instructions. `pnpm build:zcode` only creates the 
 
 ### CLI Source Development
 
+See the [CLI usage guide (Chinese)](apps/zcode-cli/docs/usage/README.md) for model configuration, non-interactive runs, tools and extensions, batch evaluation, and trajectory capture.
+
 Use the source entry when developing the TUI or Agent:
 
 ```bash
@@ -115,6 +123,12 @@ node apps/zcode-cli/packages/cli/dist/zcode.cjs --help
 ```
 
 This entry runs the Agent CLI directly and does not handle the distribution's `--web` switch. Use `pnpm dev:web` for Web development, or the extracted `bin/zcode.mjs` shown below to test the unified command.
+
+### UI Plugin development
+
+See the [UI Plugin guide](UI_PLUGIN.en.md) for the Excalidraw workflow, supported APIs, plugin installation and updates, and host debugging.
+
+**Plugin PRs in `zcode-plugins` must declare whether they affect a UI Plugin and list the plugin names in the PR template.** See the [required plugin-type declaration](UI_PLUGIN.en.md#declare-the-plugin-type-in-pull-requests).
 
 ## Configuration
 

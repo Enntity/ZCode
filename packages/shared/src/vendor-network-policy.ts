@@ -10,9 +10,10 @@ export const BLOCKED_VENDOR_DOMAIN_SUFFIXES = [
   "zcode.ai",
   "chatglm.cn",
   "aminer.cn",
+  "codegeex.cn",
 ] as const;
 
-/** True for a known Z.ai/BigModel/Zhipu/ChatGLM/Aminer host or any subdomain. */
+/** True for a known Z.ai/BigModel/Zhipu/ChatGLM/Aminer/CodeGeeX host or any subdomain. */
 export function isBlockedVendorHost(hostname: string): boolean {
   const host = hostname.trim().toLowerCase().replace(/\.+$/u, "");
   return BLOCKED_VENDOR_DOMAIN_SUFFIXES.some(

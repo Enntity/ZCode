@@ -24,7 +24,7 @@ verified `z-ai/glm-5.3-flashx` route. Its selection starts with reasoning effort
 no cloud or alternate-model fallback. Users may choose another model exposed by
 LLooM.
 
-The fork sends no managed requests to Z.ai, BigModel, Zhipu, ChatGLM, or Aminer
+The fork sends no managed requests to Z.ai, BigModel, Zhipu, ChatGLM, CodeGeeX, or Aminer
 hosts. A centralized, early outbound guard blocks those vendor host suffixes
 across application-managed desktop and Node networking, including explicit
 endpoint overrides and redirects. Managed CLI Chromium uses direct networking
@@ -92,6 +92,6 @@ provider-selection flow.
 
 ## Local macOS build
 
-The Apple silicon desktop build requires macOS 13 or newer. Electron is pinned to 44.5.1. A local development signature is used when available; artifacts are not notarized or uploaded.
+The Apple silicon desktop build requires macOS 13 or newer. Electron is pinned to 44.7.0. A local development signature is used when available; artifacts are not notarized or uploaded.
 
 WebSearch uses OpenRouter Exa search through LLooM and retains source links. It is bounded to one search and two results per invocation; no additional search key is stored in ZCode. See the CLI search integration spec for route and domain-filter constraints.

@@ -1,3 +1,5 @@
+import { installNodeVendorNetworkGuard } from "@zcode/shared/node";
+import { STORAGE_MIGRATION_COMMAND } from "@zcode/shared/sqlite-migrations";
 import { interceptTuiStderr, isTuiInvocation } from "./tui-stderr.js";
 import { interceptKnownRuntimeWarnings } from "./runtime-warnings.js";
 import { installStderrConsoleBoundary } from "./protocol-console.js";
@@ -10,21 +12,23 @@ import { installCliProcessErrorBoundary } from "./process-errors.js";
 import { installProtocolStderrBoundary } from "./protocol-stderr.js";
 import { createProtocolProcessLifecycle } from "./protocol-lifecycle.js";
 import { isProtocolServerInvocation } from "./arguments.js";
+// Enntity fork: install the vendor host guard before this entry makes any request.
+installNodeVendorNetworkGuard();
 
 void main();
 
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
   // 存储模式也可运行在 Host Worker 中，不能修改整个 Host 的进程名称。
-  if (!argv.includes("--prepare-storage")) setCliProcessTitle();
+  if (argv[0] !== STORAGE_MIGRATION_COMMAND && !argv.includes("--prepare-storage")) setCliProcessTitle();
   // 真实 zcode CLI 进程里仍可能有少量路径直接读取 process.env。
   // 入口先清洗用户 shell 注入的 NODE_ENV、代理和证书变量；网络变量只封存给后续 Bash/tool 子进程恢复。
   applyCliRuntimeEnvSanitization(process.env);
-  const isProtocol = isProtocolServerInvocation(argv);
+  const isProtocol = argv[0] === STORAGE_MIGRATION_COMMAND || isProtocolServerInvocation(argv);
   const isTui = isTuiInvocation(argv);
   if (isProtocol) installProtocolStderrBoundary(process.stderr);
   const lifecycle =
-    isProtocol && !argv.includes("--prepare-storage")
+    isProtocol && argv[0] !== STORAGE_MIGRATION_COMMAND && !argv.includes("--prepare-storage")
       ? createProtocolProcessLifecycle()
       : undefined;
   // app-server/agent-server 的 stdout 是严格的 ZCode Protocol 帧通道，三方 SDK 的
@@ -48,7 +52,7 @@ async function main(): Promise<void> {
     : undefined;
 
   try {
-    if (!argv.includes("--prepare-storage"))
+    if (argv[0] !== STORAGE_MIGRATION_COMMAND && !argv.includes("--prepare-storage"))
       Object.assign(process.env, await ensureSeaRuntimeTools());
     lifecycle?.signal.throwIfAborted();
     const context = {
@@ -63,7 +67,7 @@ async function main(): Promise<void> {
       process.exitCode = await runPluginHostCommand(context, argv.slice(1));
       return;
     }
-    if (!argv.includes("--prepare-storage")) {
+    if (argv[0] !== STORAGE_MIGRATION_COMMAND && !argv.includes("--prepare-storage")) {
       const { prepareCliProviderRuntimeEnv } = await import("./provider-runtime-env.js");
       Object.assign(
         process.env,
