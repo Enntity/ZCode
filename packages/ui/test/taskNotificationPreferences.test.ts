@@ -28,8 +28,9 @@ describe("task notification preferences", () => {
     localStorageState.set("zcode-notification-enabled", "false");
     localStorageState.set("zcode-notification-sound-enabled", "true");
 
-    const { isTaskNotificationSoundEnabled } =
-      await import("../src/lib/taskNotificationPreferences.js");
+    const { isTaskNotificationSoundEnabled } = await import(
+      "../src/lib/taskNotificationPreferences.js"
+    );
 
     expect(isTaskNotificationSoundEnabled()).toBe(false);
   });
@@ -53,7 +54,9 @@ describe("task notification preferences", () => {
     localStorageState.set("zcode-notification-enabled", "true");
     localStorageState.set("zcode-notification-sound-enabled", "false");
 
-    const { playTaskNotificationSound } = await import("../src/lib/taskNotificationSound.js");
+    const { playTaskNotificationSound } = await import(
+      "../src/lib/taskNotificationSound.js"
+    );
 
     await playTaskNotificationSound();
 
@@ -82,7 +85,9 @@ describe("task notification preferences", () => {
     localStorageState.set("zcode-notification-enabled", "true");
     localStorageState.set("zcode-notification-sound-enabled", "true");
 
-    const { playTaskNotificationSound } = await import("../src/lib/taskNotificationSound.js");
+    const { playTaskNotificationSound } = await import(
+      "../src/lib/taskNotificationSound.js"
+    );
 
     await playTaskNotificationSound();
 

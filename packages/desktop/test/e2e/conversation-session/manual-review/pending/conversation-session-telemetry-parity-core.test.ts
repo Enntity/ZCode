@@ -178,7 +178,9 @@ function assertRuntimeCoverage(eventReport: JsonRecord[], armsFinal: JsonRecord[
     ),
   ).toBe(true);
   expect(
-    details.some((detail) => detail.status === "completed" && detail.trigger === "manual"),
+    details.some(
+      (detail) => detail.status === "completed" && detail.trigger === "manual",
+    ),
   ).toBe(true);
 
   const armsInventory = telemetryInventory(

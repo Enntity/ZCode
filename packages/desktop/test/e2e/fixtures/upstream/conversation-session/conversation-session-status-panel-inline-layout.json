@@ -16,8 +16,12 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_STATUS_PANEL_EMPTY"],
-        "lastUserMessageIncludes": ["E2E_STATUS_PANEL_EMPTY"]
+        "bodyIncludes": [
+          "E2E_STATUS_PANEL_EMPTY"
+        ],
+        "lastUserMessageIncludes": [
+          "E2E_STATUS_PANEL_EMPTY"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -43,8 +47,12 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_STATUS_PANEL_GOAL"],
-        "lastUserMessageIncludes": ["E2E_STATUS_PANEL_GOAL"]
+        "bodyIncludes": [
+          "E2E_STATUS_PANEL_GOAL"
+        ],
+        "lastUserMessageIncludes": [
+          "E2E_STATUS_PANEL_GOAL"
+        ]
       },
       "response": {
         "statusCode": 200,

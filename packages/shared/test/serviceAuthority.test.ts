@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { parseServiceAuthorityMode, SERVICE_AUTHORITY_MODE_ENV } from "../src/serviceAuthority.js";
+import {
+  parseServiceAuthorityMode,
+  SERVICE_AUTHORITY_MODE_ENV,
+} from "../src/serviceAuthority.js";
 
 describe("service authority mode", () => {
   it("parses desktop attached remote mode from env", () => {

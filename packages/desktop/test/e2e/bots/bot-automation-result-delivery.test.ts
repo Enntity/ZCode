@@ -2,7 +2,10 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import type { ZCodeAutomationBotDeliveryTarget, ZCodeStreamEvent } from "@zcode/shared";
+import type {
+  ZCodeAutomationBotDeliveryTarget,
+  ZCodeStreamEvent,
+} from "@zcode/shared";
 import { AutomationRepo, setDataBaseDir } from "@zcode/services/node";
 
 import {
@@ -49,10 +52,16 @@ describe("Bot automation terminal result delivery E2E", () => {
 
     const callback = await harness.service.handleProviderCallbackResponse(
       "feishu",
-      createFeishuCallback("feishu-e2e", `${fixture.promptMarker} 每天九点生成日报`),
+      createFeishuCallback(
+        "feishu-e2e",
+        `${fixture.promptMarker} 每天九点生成日报`,
+      ),
     );
     expect(callback.ok).toBe(true);
-    await waitFor(() => harness?.sendPromptCalls.length === 1, "Bot prompt dispatch");
+    await waitFor(
+      () => harness?.sendPromptCalls.length === 1,
+      "Bot prompt dispatch",
+    );
     const creationPrompt = harness.sendPromptCalls[0] as {
       botDeliveryTarget?: ZCodeAutomationBotDeliveryTarget;
     };
@@ -98,22 +107,18 @@ describe("Bot automation terminal result delivery E2E", () => {
     expect(harness.subscriptions).toHaveLength(subscriptionsBeforeRun + 1);
     const completionListener = harness.subscriptions.at(-1)?.listener;
     expect(completionListener).toBeDefined();
-    await completionListener?.(
-      streamEvent({
-        type: "agent_message_chunk",
-        taskId: "task-e2e-automation-complete",
-        traceId: "trace-e2e-automation-complete",
-        content: "日报已生成。",
-      }),
-    );
-    await completionListener?.(
-      streamEvent({
-        type: "task_complete",
-        taskId: "task-e2e-automation-complete",
-        traceId: "trace-e2e-automation-complete",
-        stopReason: "end_turn",
-      }),
-    );
+    await completionListener?.(streamEvent({
+      type: "agent_message_chunk",
+      taskId: "task-e2e-automation-complete",
+      traceId: "trace-e2e-automation-complete",
+      content: "日报已生成。",
+    }));
+    await completionListener?.(streamEvent({
+      type: "task_complete",
+      taskId: "task-e2e-automation-complete",
+      traceId: "trace-e2e-automation-complete",
+      stopReason: "end_turn",
+    }));
     await waitFor(
       () => requests.some((request) => request.body?.includes("日报已生成")),
       "Feishu completion delivery",
@@ -125,14 +130,12 @@ describe("Bot automation terminal result delivery E2E", () => {
       workspacePath: automation.workspacePath,
     });
     const errorListener = harness.subscriptions.at(-1)?.listener;
-    await errorListener?.(
-      streamEvent({
-        type: "task_error",
-        taskId: "task-e2e-automation-error",
-        traceId: "trace-e2e-automation-error",
-        error: "automation failed",
-      }),
-    );
+    await errorListener?.(streamEvent({
+      type: "task_error",
+      taskId: "task-e2e-automation-error",
+      traceId: "trace-e2e-automation-error",
+      error: "automation failed",
+    }));
     await waitFor(
       () => requests.some((request) => request.body?.includes("automation failed")),
       "Feishu failure delivery",
@@ -155,7 +158,11 @@ function streamEvent(event: ZCodeStreamEvent): ZCodeStreamEvent {
   return event;
 }
 
-async function waitFor(condition: () => boolean, label: string, timeoutMs = 5_000): Promise<void> {
+async function waitFor(
+  condition: () => boolean,
+  label: string,
+  timeoutMs = 5_000,
+): Promise<void> {
   const startedAt = Date.now();
   while (!condition()) {
     if (Date.now() - startedAt >= timeoutMs) {

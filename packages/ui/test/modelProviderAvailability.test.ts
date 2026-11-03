@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { resolveProviderAvailabilityState } from "@/lib/modelProviderAvailability.js";
+import {
+  resolveProviderAvailabilityState,
+} from "@/lib/modelProviderAvailability.js";
 
 describe("modelProviderAvailability", () => {
   it("新 Host 只使用 Registry Selection View 判断启动可用性", () => {
@@ -49,4 +51,5 @@ describe("modelProviderAvailability", () => {
       hasUsableProvider: false,
     });
   });
+
 });

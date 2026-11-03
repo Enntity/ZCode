@@ -61,7 +61,9 @@ function parseRemoteImageUrl(value: unknown): URL | null {
   }
 }
 
-async function resolvePublicRemoteUrl(url: URL): Promise<LookupAddress[]> {
+async function resolvePublicRemoteUrl(
+  url: URL,
+): Promise<LookupAddress[]> {
   const hostname = url.hostname.replace(/^\[|\]$/g, "").toLowerCase();
   if (hostname === "localhost" || hostname.endsWith(".localhost")) {
     throw new SaveFileError("remote_address_not_allowed");
@@ -134,7 +136,10 @@ async function fetchPublicRemoteUrl(
   throw new SaveFileError("download_failed");
 }
 
-async function downloadRemoteFile(sourceUrl: URL, destinationPath: string): Promise<void> {
+async function downloadRemoteFile(
+  sourceUrl: URL,
+  destinationPath: string,
+): Promise<void> {
   const controller = new AbortController();
   const temporaryDirectory = await mkdtemp(join(tmpdir(), "zcode-save-file-"));
   const temporaryPath = join(temporaryDirectory, "download");

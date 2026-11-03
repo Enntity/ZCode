@@ -47,7 +47,8 @@ export function resolveUpstreamE2EHttpModeForWorker({
     specs.map((spec) => {
       const normalized = spec.replaceAll("\\", "/");
       return (
-        (normalized.includes("/manual-review/") && !caseLocalReplayFixtureAvailable) ||
+        (normalized.includes("/manual-review/") &&
+          !caseLocalReplayFixtureAvailable) ||
         normalized.endsWith("/upstream-provider.test.ts")
       );
     }),

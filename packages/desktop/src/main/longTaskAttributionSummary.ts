@@ -65,7 +65,9 @@ export function summarizeLongTaskAttribution(
 
   const total = typeof totalDurationMs === "number" ? totalDurationMs : Number.NaN;
   const sharePct =
-    Number.isFinite(total) && total > 0 ? Math.round((Math.max(0, topDuration) / total) * 100) : 0;
+    Number.isFinite(total) && total > 0
+      ? Math.round((Math.max(0, topDuration) / total) * 100)
+      : 0;
 
   return {
     loaf_script_count: attributions.length,

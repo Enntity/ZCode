@@ -8,19 +8,32 @@ import {
 
 describe("getPlainTextPatchFallbackLines", () => {
   it("falls back for created files whose unknown suffix resolves to plain text", () => {
-    const patch = ["--- /dev/null", "+++ b/test.123", "@@ -0,0 +1,1 @@", "+123"].join("\n");
+    const patch = [
+      "--- /dev/null",
+      "+++ b/test.123",
+      "@@ -0,0 +1,1 @@",
+      "+123",
+    ].join("\n");
 
     expect(getPlainTextPatchFallbackLines(patch)).toEqual(["+123"]);
   });
 
   it("falls back for created structured files so expansion never renders blank", () => {
-    const patch = ["--- /dev/null", "+++ b/demo.json", "@@ -0,0 +1,1 @@", "+{}"].join("\n");
+    const patch = [
+      "--- /dev/null",
+      "+++ b/demo.json",
+      "@@ -0,0 +1,1 @@",
+      "+{}",
+    ].join("\n");
 
     expect(getPlainTextPatchFallbackLines(patch)).toEqual(["+{}"]);
   });
 
   it("falls back for oversized patches to keep UI responsive", () => {
-    const changedLines = Array.from({ length: 1_300 }, (_, index) => `+line-${index + 1}`);
+    const changedLines = Array.from(
+      { length: 1_300 },
+      (_, index) => `+line-${index + 1}`,
+    );
     const patch = [
       "--- a/demo.json",
       "+++ b/demo.json",
@@ -35,7 +48,9 @@ describe("getPlainTextPatchFallbackLines", () => {
       (line) => parseTruncatedMarkerOmittedLineCount(line) !== null,
     );
     expect(truncatedMarkerLine).toBeTruthy();
-    expect(parseTruncatedMarkerOmittedLineCount(truncatedMarkerLine ?? "")).toBe(501);
+    expect(parseTruncatedMarkerOmittedLineCount(truncatedMarkerLine ?? "")).toBe(
+      501,
+    );
     expect(fallback?.at(-1)).toBe("+line-1300");
     expect(fallback?.length).toBe(800);
   });
@@ -99,7 +114,11 @@ describe("getPlainTextPatchFallbackLines", () => {
     ].join("\n");
 
     expect(countPatchFileDiffs(patch)).toBe(0);
-    expect(getPlainTextPatchFallbackLines(patch)).toEqual(["-old", "+new", "*** End Patch"]);
+    expect(getPlainTextPatchFallbackLines(patch)).toEqual([
+      "-old",
+      "+new",
+      "*** End Patch",
+    ]);
   });
 
   it("does not treat hunk text that starts with file headers as new files", () => {
@@ -227,11 +246,22 @@ describe("getPlainTextPatchFallbackLines", () => {
       " line-4",
     ].join("\n");
 
-    expect(getPlainTextPatchPreviewLines(patch)).toEqual([" line-2", "-old", "+new", " line-4"]);
+    expect(getPlainTextPatchPreviewLines(patch)).toEqual([
+      " line-2",
+      "-old",
+      "+new",
+      " line-4",
+    ]);
   });
 
   it("falls back for deleted plain text files and strips patch metadata", () => {
-    const patch = ["--- a/demo.txt", "+++ /dev/null", "@@ -1,1 +0,0 @@", "-hello", ""].join("\n");
+    const patch = [
+      "--- a/demo.txt",
+      "+++ /dev/null",
+      "@@ -1,1 +0,0 @@",
+      "-hello",
+      "",
+    ].join("\n");
 
     expect(getPlainTextPatchFallbackLines(patch)).toEqual(["-hello"]);
   });
@@ -294,7 +324,10 @@ describe("getPlainTextPatchFallbackLines", () => {
       "",
     ].join("\n");
 
-    expect(getPlainTextPatchFallbackLines(patch)).toEqual(["old mode 100644", "new mode 100755"]);
+    expect(getPlainTextPatchFallbackLines(patch)).toEqual([
+      "old mode 100644",
+      "new mode 100755",
+    ]);
   });
 
   it("falls back for package manager lockfiles", () => {

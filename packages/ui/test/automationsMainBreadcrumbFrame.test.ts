@@ -25,9 +25,10 @@ describe("AutomationsMainBreadcrumbFrame", () => {
       ),
     );
 
-    expect((await screen.findByRole("navigation", { name: "Automation path" })).textContent).toBe(
-      "AutomationsDaily summary",
-    );
+    expect(
+      (await screen.findByRole("navigation", { name: "Automation path" }))
+        .textContent,
+    ).toBe("AutomationsDaily summary");
     screen.getByRole("button", { name: "Automations" }).click();
     expect(onBack).toHaveBeenCalledOnce();
   });

@@ -43,7 +43,9 @@ describe("presentation element model", () => {
       ],
     });
 
-    expect(elements.map((element) => [element.nodeType, element.nodeId])).toEqual([
+    expect(
+      elements.map((element) => [element.nodeType, element.nodeId]),
+    ).toEqual([
       ["shape", "2"],
       ["picture", "3"],
       ["shape", "9"],
@@ -117,7 +119,9 @@ describe("presentation element model", () => {
     );
     const value = elements.find(
       (element) =>
-        element.nodeType === "table-cell" && element.rowIndex === 1 && element.cellIndex === 1,
+        element.nodeType === "table-cell" &&
+        element.rowIndex === 1 &&
+        element.cellIndex === 1,
     );
     expect(header?.bounds).toEqual({ x: 100, y: 50, width: 300, height: 50 });
     expect(value?.bounds).toEqual({ x: 200, y: 100, width: 200, height: 150 });
@@ -182,7 +186,9 @@ describe("presentation element model", () => {
 
     const bottomRight = elements.find(
       (element) =>
-        element.nodeType === "table-cell" && element.rowIndex === 1 && element.cellIndex === 1,
+        element.nodeType === "table-cell" &&
+        element.rowIndex === 1 &&
+        element.cellIndex === 1,
     );
     expect(bottomRight?.bounds).toEqual({
       x: 200,
@@ -217,6 +223,8 @@ describe("presentation element model", () => {
       groupTextEntries: [],
     });
 
-    expect(hitTestPresentationElement(elements, { x: 30, y: 30 })?.nodeId).toBe("3");
+    expect(hitTestPresentationElement(elements, { x: 30, y: 30 })?.nodeId).toBe(
+      "3",
+    );
   });
 });

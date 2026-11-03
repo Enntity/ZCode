@@ -28,14 +28,20 @@ describe("McpSettingsSection status list", () => {
       shouldRefresh: true,
     });
 
-    const emptyWorkspace = transitionMcpAutoStatusListRefreshKey(first.lastRefreshKey, "");
+    const emptyWorkspace = transitionMcpAutoStatusListRefreshKey(
+      first.lastRefreshKey,
+      "",
+    );
     expect(emptyWorkspace).toEqual({
       lastRefreshKey: "",
       shouldRefresh: false,
     });
 
     expect(
-      transitionMcpAutoStatusListRefreshKey(emptyWorkspace.lastRefreshKey, workspaceAKey),
+      transitionMcpAutoStatusListRefreshKey(
+        emptyWorkspace.lastRefreshKey,
+        workspaceAKey,
+      ),
     ).toEqual({
       lastRefreshKey: workspaceAKey,
       shouldRefresh: true,
@@ -270,7 +276,9 @@ describe("McpSettingsSection status list", () => {
         mode: "status",
         mcpServers: [
           {
-            headers: [{ name: "Authorization", value: "Bearer workspace-a-header-secret" }],
+            headers: [
+              { name: "Authorization", value: "Bearer workspace-a-header-secret" },
+            ],
             name: "http-a",
             oauth: {
               clientId: "workspace-a-client",
@@ -472,9 +480,9 @@ describe("McpSettingsSection status list", () => {
       workspaceIdentity: workspaceBKey,
       workspacePath: "/remote/workspace-b",
     });
-    expect(
-      JSON.stringify(workspaceBService.listWorkspaceMcpServerStatuses.mock.calls),
-    ).not.toContain("workspace-a-");
+    expect(JSON.stringify(workspaceBService.listWorkspaceMcpServerStatuses.mock.calls)).not.toContain(
+      "workspace-a-",
+    );
     expect(mergeServerStatusSnapshots).toHaveBeenCalledTimes(1);
     expect(mergeServerStatusSnapshots).toHaveBeenCalledWith(
       {
@@ -553,11 +561,15 @@ describe("McpSettingsSection status list", () => {
 
     expect(deadline).toBe(startedAt + 5 * 60_000);
 
-    expect(isMcpOAuthAuthorizationStatusRefreshExpired(deadline, () => deadline - 1)).toBe(false);
-    expect(isMcpOAuthAuthorizationStatusRefreshExpired(deadline, () => deadline)).toBe(true);
-    expect(isMcpOAuthAuthorizationStatusRefreshExpired(deadline, () => deadline + 30_000)).toBe(
-      true,
-    );
+    expect(
+      isMcpOAuthAuthorizationStatusRefreshExpired(deadline, () => deadline - 1),
+    ).toBe(false);
+    expect(
+      isMcpOAuthAuthorizationStatusRefreshExpired(deadline, () => deadline),
+    ).toBe(true);
+    expect(
+      isMcpOAuthAuthorizationStatusRefreshExpired(deadline, () => deadline + 30_000),
+    ).toBe(true);
   });
 
   it("status list key changes for enable toggles but ignores display status", () => {
@@ -575,7 +587,9 @@ describe("McpSettingsSection status list", () => {
     const connectingKey = buildMcpServerStatusListKey([
       { ...baseServer, status: "connecting" as const },
     ]);
-    const disabledKey = buildMcpServerStatusListKey([{ ...baseServer, enabled: false }]);
+    const disabledKey = buildMcpServerStatusListKey([
+      { ...baseServer, enabled: false },
+    ]);
 
     expect(connectingKey).toBe(enabledKey);
     expect(disabledKey).not.toBe(enabledKey);
@@ -601,10 +615,14 @@ describe("McpSettingsSection status list", () => {
       "zcodeagentmcp-global-figma:2026-07-08T00:00:00.000Z",
     );
     expect(
-      buildPendingMcpOAuthAuthorizationRefreshKey([{ ...pendingServer, authorization: undefined }]),
+      buildPendingMcpOAuthAuthorizationRefreshKey([
+        { ...pendingServer, authorization: undefined },
+      ]),
     ).toBe("");
     expect(
-      buildPendingMcpOAuthAuthorizationRefreshKey([{ ...pendingServer, enabled: false }]),
+      buildPendingMcpOAuthAuthorizationRefreshKey([
+        { ...pendingServer, enabled: false },
+      ]),
     ).toBe("");
     expect(
       buildPendingMcpOAuthAuthorizationRefreshKey([

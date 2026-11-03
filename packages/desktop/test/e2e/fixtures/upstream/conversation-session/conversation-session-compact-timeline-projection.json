@@ -16,9 +16,16 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "lastUserMessageIncludes": ["E2E_COMPACT_TIMELINE_PROJECTION_SEED"],
-        "bodyIncludes": ["E2E_COMPACT_TIMELINE_PROJECTION_SEED"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "lastUserMessageIncludes": [
+          "E2E_COMPACT_TIMELINE_PROJECTION_SEED"
+        ],
+        "bodyIncludes": [
+          "E2E_COMPACT_TIMELINE_PROJECTION_SEED"
+        ],
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -43,9 +50,16 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "lastUserMessageIncludes": ["E2E_COMPACT_TIMELINE_PROJECTION_PENDING"],
-        "bodyIncludes": ["E2E_COMPACT_TIMELINE_PROJECTION_PENDING"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "lastUserMessageIncludes": [
+          "E2E_COMPACT_TIMELINE_PROJECTION_PENDING"
+        ],
+        "bodyIncludes": [
+          "E2E_COMPACT_TIMELINE_PROJECTION_PENDING"
+        ],
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -70,9 +84,16 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "lastUserMessageIncludes": ["E2E_COMPACT_TIMELINE_PROJECTION_MANUAL_SPLIT_SEED"],
-        "bodyIncludes": ["E2E_COMPACT_TIMELINE_PROJECTION_MANUAL_SPLIT_SEED"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "lastUserMessageIncludes": [
+          "E2E_COMPACT_TIMELINE_PROJECTION_MANUAL_SPLIT_SEED"
+        ],
+        "bodyIncludes": [
+          "E2E_COMPACT_TIMELINE_PROJECTION_MANUAL_SPLIT_SEED"
+        ],
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,

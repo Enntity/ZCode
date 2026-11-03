@@ -102,7 +102,9 @@ describe("permissionRequest helpers", () => {
     );
 
     expect(preview.command).toBeNull();
-    expect(preview.filePaths).toEqual(["/Users/dev/workspace/z-code/packages/ui/src/App.tsx"]);
+    expect(preview.filePaths).toEqual([
+      "/Users/dev/workspace/z-code/packages/ui/src/App.tsx",
+    ]);
     expect(preview.scope).toBe("file");
   });
 
@@ -123,7 +125,9 @@ describe("permissionRequest helpers", () => {
     );
 
     expect(preview.command).toBeNull();
-    expect(preview.filePaths).toEqual(["/Users/dev/workspace/z-code/packages/ui/src/App.tsx"]);
+    expect(preview.filePaths).toEqual([
+      "/Users/dev/workspace/z-code/packages/ui/src/App.tsx",
+    ]);
     expect(preview.scope).toBe("file");
   });
 

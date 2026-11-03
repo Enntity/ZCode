@@ -36,11 +36,18 @@ describe("createPatchDiffOptions", () => {
 
 describe("shouldRenderPlainTextDiffPreview", () => {
   it("falls back for created plain text patches on review surfaces", () => {
-    const patch = ["--- /dev/null", "+++ b/demo.txt", "@@ -0,0 +1,2 @@", "+hello", "+world"].join(
-      "\n",
-    );
+    const patch = [
+      "--- /dev/null",
+      "+++ b/demo.txt",
+      "@@ -0,0 +1,2 @@",
+      "+hello",
+      "+world",
+    ].join("\n");
 
-    expect(shouldRenderPlainTextDiffPreview(patch)).toEqual(["+hello", "+world"]);
+    expect(shouldRenderPlainTextDiffPreview(patch)).toEqual([
+      "+hello",
+      "+world",
+    ]);
   });
 
   it("hides unified diff metadata and keeps no-newline markers", () => {
@@ -60,7 +67,12 @@ describe("shouldRenderPlainTextDiffPreview", () => {
   });
 
   it("keeps structured file types on PatchDiff path", () => {
-    const patch = ["--- /dev/null", "+++ b/demo.json", "@@ -0,0 +1,1 @@", "+{}"].join("\n");
+    const patch = [
+      "--- /dev/null",
+      "+++ b/demo.json",
+      "@@ -0,0 +1,1 @@",
+      "+{}",
+    ].join("\n");
 
     expect(shouldRenderPlainTextDiffPreview(patch)).toBeNull();
   });
@@ -68,9 +80,10 @@ describe("shouldRenderPlainTextDiffPreview", () => {
 
 describe("getGitPaneDiffPreviewPlan", () => {
   it("uses patch-only rendering when full before/after content is large", () => {
-    const beforeContent = Array.from({ length: 1_300 }, (_, index) => `line-${index + 1}`).join(
-      "\n",
-    );
+    const beforeContent = Array.from(
+      { length: 1_300 },
+      (_, index) => `line-${index + 1}`,
+    ).join("\n");
     const afterContent = beforeContent.replace("line-10", "line-10 changed");
 
     expect(
@@ -95,34 +108,54 @@ describe("getGitPaneDiffPreviewPlan", () => {
   });
 
   it("uses plain text when a large created structured file would be expensive", () => {
-    const afterLines = Array.from({ length: 1_300 }, (_, index) => `+  "line-${index + 1}": true,`);
+    const afterLines = Array.from(
+      { length: 1_300 },
+      (_, index) => `+  "line-${index + 1}": true,`,
+    );
 
     const plan = getGitPaneDiffPreviewPlan({
       path: "/workspace/demo.json",
       availability: "patch",
-      patch: ["--- /dev/null", "+++ b/demo.json", "@@ -0,0 +1,1300 @@", ...afterLines].join("\n"),
+      patch: [
+        "--- /dev/null",
+        "+++ b/demo.json",
+        "@@ -0,0 +1,1300 @@",
+        ...afterLines,
+      ].join("\n"),
       beforeContent: "",
       afterContent: afterLines.map((line) => line.slice(1)).join("\n"),
       summary: null,
     });
 
     expect(plan.kind).toBe("plain-text");
-    expect(plan.kind === "plain-text" ? plan.lines.at(0) : null).toBe('+  "line-1": true,');
+    expect(plan.kind === "plain-text" ? plan.lines.at(0) : null).toBe(
+      '+  "line-1": true,',
+    );
   });
 
   it("keeps unsafe patches on the lightweight fallback when full contents are unavailable", () => {
-    const afterLines = Array.from({ length: 1_300 }, (_, index) => `+  "line-${index + 1}": true,`);
+    const afterLines = Array.from(
+      { length: 1_300 },
+      (_, index) => `+  "line-${index + 1}": true,`,
+    );
 
     const plan = getGitPaneDiffPreviewPlan({
       path: "/workspace/demo.json",
       availability: "patch",
-      patch: ["--- /dev/null", "+++ b/demo.json", "@@ -0,0 +1,1300 @@", ...afterLines].join("\n"),
+      patch: [
+        "--- /dev/null",
+        "+++ b/demo.json",
+        "@@ -0,0 +1,1300 @@",
+        ...afterLines,
+      ].join("\n"),
       beforeContent: null,
       afterContent: null,
       summary: null,
     });
 
     expect(plan.kind).toBe("plain-text");
-    expect(plan.kind === "plain-text" ? plan.lines.at(0) : null).toBe('+  "line-1": true,');
+    expect(plan.kind === "plain-text" ? plan.lines.at(0) : null).toBe(
+      '+  "line-1": true,',
+    );
   });
 });

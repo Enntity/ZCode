@@ -25,9 +25,7 @@ export class SourceServerOperationLogs {
   read(
     profile: Pick<ConnectionProfile, "profileId" | "sourceServerId">,
   ): SourceServerOperationLog[] {
-    const key = profile.sourceServerId
-      ? `source:${profile.sourceServerId}`
-      : this.profileKeys.get(profile.profileId);
+    const key = profile.sourceServerId ? `source:${profile.sourceServerId}` : this.profileKeys.get(profile.profileId);
     const operation = key ? this.operations.get(key) : undefined;
     return operation?.logs.map((entry) => ({ ...entry })) ?? [];
   }
@@ -46,9 +44,7 @@ export class SourceServerOperationLogs {
     task: (context: TransportContext) => Promise<T>,
   ): Promise<T> {
     const current: Operation = { sequence: ++this.sequence, logs: [] };
-    let key = profile.sourceServerId
-      ? `source:${profile.sourceServerId}`
-      : `profile:${profile.profileId}`;
+    let key = profile.sourceServerId ? `source:${profile.sourceServerId}` : `profile:${profile.profileId}`;
     let ownerProfileId = profile.profileId;
     const previous = this.operations.get(key);
     this.profileKeys.set(ownerProfileId, key);

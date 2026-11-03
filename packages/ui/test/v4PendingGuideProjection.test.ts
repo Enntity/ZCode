@@ -5,7 +5,9 @@ import { projectPendingGuideQueue } from "@/v4/pendingGuideProjection.js";
 function queueItem(
   queueItemId: string,
   admitted: "queue" | "guide",
-  steerState: QueueItem["steer"]["state"] = admitted === "guide" ? "steering" : "notRequested",
+  steerState: QueueItem["steer"]["state"] = admitted === "guide"
+    ? "steering"
+    : "notRequested",
 ): QueueItem {
   return {
     sourceCommandId: `command-${queueItemId}`,
@@ -34,8 +36,12 @@ describe("projectPendingGuideQueue", () => {
 
     const projection = projectPendingGuideQueue(queue);
 
-    expect(projection.pendingGuides.map((item) => item.queueItemId)).toEqual(["2"]);
-    expect(projection.visibleQueue.items.map((item) => item.queueItemId)).toEqual(["1"]);
+    expect(projection.pendingGuides.map((item) => item.queueItemId)).toEqual([
+      "2",
+    ]);
+    expect(
+      projection.visibleQueue.items.map((item) => item.queueItemId),
+    ).toEqual(["1"]);
   });
 
   it("guide 降级为 queue 后只回到普通队列", () => {
@@ -61,9 +67,8 @@ describe("projectPendingGuideQueue", () => {
       items: [queueItem("3", "guide"), queueItem("4", "guide")],
     });
 
-    expect(projection.pendingGuides.map((item) => item.sourceCommandId)).toEqual([
-      "command-3",
-      "command-4",
-    ]);
+    expect(
+      projection.pendingGuides.map((item) => item.sourceCommandId),
+    ).toEqual(["command-3", "command-4"]);
   });
 });

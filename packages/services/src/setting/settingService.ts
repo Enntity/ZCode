@@ -14,12 +14,7 @@ import {
 } from "@zcode/shared";
 import type { ISettingService, WorkspaceSettingsProjection } from "./setting.js";
 import { normalizeSettingsPatch } from "#src/setting/normalizeSettingsPatch.js";
-import {
-  copyDataDirectory,
-  getDataBaseDir,
-  getZCodeDataRootDir,
-  validateDataBaseDirTarget,
-} from "../paths.js";
+import { copyDataDirectory, getDataBaseDir, getZCodeDataRootDir, validateDataBaseDirTarget } from "../paths.js";
 import { isEffectiveDevelopmentNodeEnv } from "../runtime-tools/nodeEnv.js";
 import { maybeThrowInjectedFsFault } from "../fs/fsFaultInjection.js";
 import { atomicWriteText, withAtomicFileLock } from "../fs/atomicFileUtils.js";
@@ -54,6 +49,7 @@ function resolveUserHomeDir() {
     process.env.HOME?.trim() ||
     process.env.USERPROFILE?.trim();
   return envHome && envHome.length > 0 ? envHome : homedir();
+
 }
 
 function defaultSettings(): AppSettings {

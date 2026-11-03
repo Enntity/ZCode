@@ -82,7 +82,13 @@ export function hasChatStartPlanBalance(config: ChatStartPlanBalanceConfig | und
   );
 }
 
-function ChatStartPlanBalanceMeter({ limit, locale }: { limit: UsageQuotaLimit; locale: string }) {
+function ChatStartPlanBalanceMeter({
+  limit,
+  locale,
+}: {
+  limit: UsageQuotaLimit;
+  locale: string;
+}) {
   const total = resolveLimitTotal(limit);
   const remaining = resolveLimitRemaining(limit);
   const remainingRatio = total > 0 ? Math.max(0, Math.min(1, remaining / total)) : 0;
@@ -93,12 +99,16 @@ function ChatStartPlanBalanceMeter({ limit, locale }: { limit: UsageQuotaLimit; 
   return (
     <div className="min-w-0 space-y-1.5">
       <div className="min-w-0 space-y-0.5 text-ui-sm">
-        <div className="min-w-0 truncate text-foreground-subtle">{formatLimitModels(limit)}</div>
+        <div className="min-w-0 truncate text-foreground-subtle">
+          {formatLimitModels(limit)}
+        </div>
         <div className="min-w-0 text-ui-sm tabular-nums">
           <span className="font-mono text-foreground">
             {formatStartPlanRemainingPercentage(remainingRatio, locale)}
           </span>
-          {renewTime ? <span className="text-foreground-subtle"> · {renewTime}</span> : null}
+          {renewTime ? (
+            <span className="text-foreground-subtle"> · {renewTime}</span>
+          ) : null}
         </div>
       </div>
       <div className="h-1.5 overflow-hidden rounded-full bg-surface-hover">
@@ -173,7 +183,9 @@ export function ChatStartPlanBalancePanel({
               ) : null}
             </CodingPlanEntryButton>
             {upgradeButtonHighlighted ? (
-              <CodingPlanBillingDiscountInfoDialog config={billingDiscount.config} />
+              <CodingPlanBillingDiscountInfoDialog
+                config={billingDiscount.config}
+              />
             ) : null}
           </div>
         ) : null}

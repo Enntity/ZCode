@@ -23,18 +23,12 @@ import { getE2EAppDataPaths } from "./desktop-app.js";
 
 export async function readWorkspacePluginConfig(): Promise<Record<string, unknown>> {
   const { workspace } = getE2EAppDataPaths();
-  return JSON.parse(await readFile(join(workspace, ".zcode", "config.json"), "utf8")) as Record<
-    string,
-    unknown
-  >;
+  return JSON.parse(await readFile(join(workspace, ".zcode", "config.json"), "utf8")) as Record<string, unknown>;
 }
 
 export async function readUserPluginConfig(): Promise<Record<string, unknown>> {
   const { storageRoot } = getE2EAppDataPaths();
-  return JSON.parse(await readFile(join(storageRoot, "cli", "config.json"), "utf8")) as Record<
-    string,
-    unknown
-  >;
+  return JSON.parse(await readFile(join(storageRoot, "cli", "config.json"), "utf8")) as Record<string, unknown>;
 }
 
 export async function assertWorkspacePluginRuntime(marker: string): Promise<void> {
@@ -49,9 +43,7 @@ export async function assertWorkspacePluginRuntime(marker: string): Promise<void
   });
   expect(requestRecord).not.toBeNull();
   if (!requestRecord) return;
-  expect(captureArtifactAdvertisesToolName(requestRecord.requestJson, PLUGIN_MCP_TOOL_NAME)).toBe(
-    true,
-  );
+  expect(captureArtifactAdvertisesToolName(requestRecord.requestJson, PLUGIN_MCP_TOOL_NAME)).toBe(true);
 
   await browser.waitUntil(
     async () => {
@@ -73,9 +65,7 @@ export async function assertWorkspacePluginUnavailable(marker: string): Promise<
   const requestRecord = await findUpstreamRequestContaining(marker, 60000);
   expect(requestRecord).not.toBeNull();
   if (!requestRecord) return;
-  expect(captureArtifactAdvertisesToolName(requestRecord.requestJson, PLUGIN_MCP_TOOL_NAME)).toBe(
-    false,
-  );
+  expect(captureArtifactAdvertisesToolName(requestRecord.requestJson, PLUGIN_MCP_TOOL_NAME)).toBe(false);
 }
 
 export function pluginConfigOptions(config: Record<string, unknown>): Record<string, unknown> {

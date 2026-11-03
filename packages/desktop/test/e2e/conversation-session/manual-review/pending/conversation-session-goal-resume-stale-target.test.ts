@@ -117,7 +117,8 @@ describe("会话区 Goal 恢复 stale target 复现", () => {
         snapshot.taskId === taskId &&
         snapshot.queueCount === 0 &&
         snapshot.activeInputId !== null &&
-        (snapshot.runtimeStatus === "running" || snapshot.runtimeStatus === "streaming"),
+        (snapshot.runtimeStatus === "running" ||
+          snapshot.runtimeStatus === "streaming"),
       "队列 item 点立即发送后仍被 stale active goal meta 卡住，没有作为新一轮发送",
       15000,
     );
@@ -143,7 +144,11 @@ async function waitForTaskIndexRow(taskId: string) {
   });
 }
 
-function setSessionTargetForE2E(sessionId: string, objective: string, status: GoalStatusForE2E) {
+function setSessionTargetForE2E(
+  sessionId: string,
+  objective: string,
+  status: GoalStatusForE2E,
+) {
   const dbPath = join(homedir(), ".zcode", "cli", "db", "db.sqlite");
   const db = new DatabaseSync(dbPath);
   const now = Date.now();
@@ -169,16 +174,19 @@ function setSessionTargetForE2E(sessionId: string, objective: string, status: Go
         time_updated = excluded.time_updated
       `,
     ).run(sessionId, targetId, objective, status, now, now);
-    db.prepare("update session set time_updated = max(time_updated, ?) where id = ?").run(
-      now,
-      sessionId,
-    );
+    db.prepare(
+      "update session set time_updated = max(time_updated, ?) where id = ?",
+    ).run(now, sessionId);
   } finally {
     db.close();
   }
 }
 
-function setTaskIndexTargetForE2E(taskId: string, objective: string, status: GoalStatusForE2E) {
+function setTaskIndexTargetForE2E(
+  taskId: string,
+  objective: string,
+  status: GoalStatusForE2E,
+) {
   const meta = readTaskIndexMetaForE2E(taskId);
   if (!meta) {
     throw new Error(`task index 缺少 task: ${taskId}`);
@@ -208,12 +216,14 @@ function setTaskIndexTargetForE2E(taskId: string, objective: string, status: Goa
   }
 }
 
-function readTaskIndexMetaForE2E(taskId: string): TaskIndexMetaForE2E | null {
+function readTaskIndexMetaForE2E(
+  taskId: string,
+): TaskIndexMetaForE2E | null {
   const db = new DatabaseSync(taskIndexDbPath());
   try {
-    const row = db.prepare("select meta_json from tasks where task_id = ?").get(taskId) as
-      | TaskIndexRowForE2E
-      | undefined;
+    const row = db
+      .prepare("select meta_json from tasks where task_id = ?")
+      .get(taskId) as TaskIndexRowForE2E | undefined;
     if (!row?.meta_json) {
       return null;
     }
@@ -258,8 +268,9 @@ async function injectRendererTaskMetaTargetForE2E(
         };
       };
 
-      const storeApi = (window as Window & { __zcodeSessionStoreE2E?: RendererStore })
-        .__zcodeSessionStoreE2E;
+      const storeApi = (
+        window as Window & { __zcodeSessionStoreE2E?: RendererStore }
+      ).__zcodeSessionStoreE2E;
       const state = storeApi?.getState?.();
       if (!state?.upsertOptimisticTaskListItem) {
         return { ok: false, reason: "store-api-missing" };
@@ -268,7 +279,9 @@ async function injectRendererTaskMetaTargetForE2E(
       const workspaceEntry = Object.entries(state.workspaces ?? {}).find(
         ([, workspace]) =>
           Boolean(workspace.optimisticTaskListByTaskId?.[taskIdArg]) ||
-          Boolean(workspace.taskListCache?.some((task) => task.taskId === taskIdArg)),
+          Boolean(
+            workspace.taskListCache?.some((task) => task.taskId === taskIdArg),
+          ),
       );
       if (!workspaceEntry) {
         return { ok: false, reason: "task-workspace-not-found" };
@@ -301,12 +314,18 @@ async function injectRendererTaskMetaTargetForE2E(
         },
         updatedAt: now,
       };
-      state.upsertOptimisticTaskListItem(workspacePath, nextTask, workspaceIdentity);
+      state.upsertOptimisticTaskListItem(
+        workspacePath,
+        nextTask,
+        workspaceIdentity,
+      );
 
       return {
         ok: true,
         previousTargetStatus:
-          typeof task.target === "object" && task.target !== null && "status" in task.target
+          typeof task.target === "object" &&
+          task.target !== null &&
+          "status" in task.target
             ? String(task.target.status)
             : null,
         workspaceIdentity: workspaceIdentity ?? null,
@@ -323,7 +342,10 @@ async function injectRendererTaskMetaTargetForE2E(
   }
 }
 
-async function waitForRendererTaskMetaTargetStatusForE2E(taskId: string, status: GoalStatusForE2E) {
+async function waitForRendererTaskMetaTargetStatusForE2E(
+  taskId: string,
+  status: GoalStatusForE2E,
+) {
   await browser.waitUntil(
     async () => (await readRendererTaskMetaTargetStatusForE2E(taskId)) === status,
     {
@@ -343,8 +365,9 @@ function readRendererTaskMetaTargetStatusForE2E(taskId: string) {
     type RendererStore = {
       getState?: () => { workspaces?: Record<string, RendererWorkspace> };
     };
-    const storeApi = (window as Window & { __zcodeSessionStoreE2E?: RendererStore })
-      .__zcodeSessionStoreE2E;
+    const storeApi = (
+      window as Window & { __zcodeSessionStoreE2E?: RendererStore }
+    ).__zcodeSessionStoreE2E;
     const state = storeApi?.getState?.();
     for (const workspace of Object.values(state?.workspaces ?? {})) {
       const task =
@@ -389,8 +412,9 @@ async function injectRendererQueuedPromptForE2E(taskId: string, content: string)
         };
       };
 
-      const storeApi = (window as Window & { __zcodeSessionStoreE2E?: RendererStore })
-        .__zcodeSessionStoreE2E;
+      const storeApi = (
+        window as Window & { __zcodeSessionStoreE2E?: RendererStore }
+      ).__zcodeSessionStoreE2E;
       const state = storeApi?.getState?.();
       if (!state?.enqueueTaskQueuedPrompt) {
         return { ok: false, reason: "store-api-missing" };
@@ -399,7 +423,9 @@ async function injectRendererQueuedPromptForE2E(taskId: string, content: string)
       const workspaceEntry = Object.entries(state.workspaces ?? {}).find(
         ([, workspace]) =>
           Boolean(workspace.optimisticTaskListByTaskId?.[taskIdArg]) ||
-          Boolean(workspace.taskListCache?.some((task) => task.taskId === taskIdArg)),
+          Boolean(
+            workspace.taskListCache?.some((task) => task.taskId === taskIdArg),
+          ),
       );
       if (!workspaceEntry) {
         return { ok: false, reason: "task-workspace-not-found" };

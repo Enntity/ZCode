@@ -1,5 +1,7 @@
 import { clearAppData } from "./helpers/desktop-app.js";
-import { openBigModelCodingPlanPersonalUpgradePanel } from "./helpers/coding-plan-upgrade.js";
+import {
+  openBigModelCodingPlanPersonalUpgradePanel,
+} from "./helpers/coding-plan-upgrade.js";
 import {
   waitForCodingPlanWebviewBodyTextIncludes,
   waitForCodingPlanWebviewDisplayed,

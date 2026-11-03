@@ -5,7 +5,8 @@ export interface SessionPluginIconProjection {
   iconByPluginId: ReadonlyMap<string, string>;
 }
 
-const PluginReferenceIconContext = createContext<SessionPluginIconProjection | null>(null);
+const PluginReferenceIconContext =
+  createContext<SessionPluginIconProjection | null>(null);
 
 export const PluginReferenceIconProvider = PluginReferenceIconContext.Provider;
 

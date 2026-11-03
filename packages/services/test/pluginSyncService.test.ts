@@ -9,7 +9,10 @@ function makeHome() {
   return mkdtempSync(join(tmpdir(), "zcode-plugin-sync-home-"));
 }
 
-async function writeZcodeUserConfig(home: string, value: Record<string, unknown>): Promise<string> {
+async function writeZcodeUserConfig(
+  home: string,
+  value: Record<string, unknown>,
+): Promise<string> {
   const configPath = join(home, ".zcode", "cli", "config.json");
   await mkdir(join(home, ".zcode", "cli"), { recursive: true });
   await writeFile(configPath, `${JSON.stringify(value, null, 2)}\n`, "utf-8");
@@ -30,16 +33,12 @@ async function writeInlinePlugin(
   await mkdir(join(pluginRoot, ".zcode-plugin"), { recursive: true });
   await writeFile(
     join(pluginRoot, ".zcode-plugin", "plugin.json"),
-    `${JSON.stringify(
-      {
-        name: directoryName,
-        description: `${directoryName} description`,
-        version: "1.0.0",
-        ...manifest,
-      },
-      null,
-      2,
-    )}\n`,
+    `${JSON.stringify({
+      name: directoryName,
+      description: `${directoryName} description`,
+      version: "1.0.0",
+      ...manifest,
+    }, null, 2)}\n`,
     "utf-8",
   );
   await mkdir(join(pluginRoot, "skills", "demo"), { recursive: true });
@@ -108,7 +107,10 @@ describe("plugin sync service", () => {
 
     expect(result).toMatchObject({
       ok: true,
-      path: [join(remoteHome, ".zcode", "plugins"), join(remoteHome, ".zcode", "cli")].join(", "),
+      path: [
+        join(remoteHome, ".zcode", "plugins"),
+        join(remoteHome, ".zcode", "cli"),
+      ].join(", "),
     });
   });
 
@@ -398,20 +400,16 @@ describe("plugin sync service", () => {
     await writeInlinePlugin(marketplaceRoot, "formatter", { name: "formatter" });
     await writeFile(
       join(marketplaceRoot, "marketplace.json"),
-      `${JSON.stringify(
-        {
-          name: "team-market",
-          plugins: [
-            {
-              name: "formatter",
-              version: "1.0.0",
-              source: "./formatter",
-            },
-          ],
-        },
-        null,
-        2,
-      )}\n`,
+      `${JSON.stringify({
+        name: "team-market",
+        plugins: [
+          {
+            name: "formatter",
+            version: "1.0.0",
+            source: "./formatter",
+          },
+        ],
+      }, null, 2)}\n`,
       "utf-8",
     );
     const localService = createPluginSyncService();
@@ -434,9 +432,7 @@ describe("plugin sync service", () => {
       marketplaceId: "team-market",
       status: "synced",
     });
-    expect(
-      imported.path.startsWith(join(remoteHome, ".zcode", "plugins", "marketplace-sources")),
-    ).toBe(true);
+    expect(imported.path.startsWith(join(remoteHome, ".zcode", "plugins", "marketplace-sources"))).toBe(true);
     const mirroredManifest = await readJsonFile(join(imported.path, "marketplace.json"));
     expect(mirroredManifest).toMatchObject({
       name: "team-market",
@@ -465,19 +461,15 @@ describe("plugin sync service", () => {
     await mkdir(marketplaceRoot, { recursive: true });
     await writeFile(
       join(marketplaceRoot, "marketplace.json"),
-      `${JSON.stringify(
-        {
-          name: "team-market",
-          plugins: [
-            {
-              name: "formatter",
-              source: externalPluginRoot,
-            },
-          ],
-        },
-        null,
-        2,
-      )}\n`,
+      `${JSON.stringify({
+        name: "team-market",
+        plugins: [
+          {
+            name: "formatter",
+            source: externalPluginRoot,
+          },
+        ],
+      }, null, 2)}\n`,
       "utf-8",
     );
 
@@ -498,19 +490,15 @@ describe("plugin sync service", () => {
     await writeFile(join(marketplaceRoot, "formatter", "README.md"), "not a plugin\n", "utf-8");
     await writeFile(
       join(marketplaceRoot, "marketplace.json"),
-      `${JSON.stringify(
-        {
-          name: "team-market",
-          plugins: [
-            {
-              name: "formatter",
-              source: "./formatter",
-            },
-          ],
-        },
-        null,
-        2,
-      )}\n`,
+      `${JSON.stringify({
+        name: "team-market",
+        plugins: [
+          {
+            name: "formatter",
+            source: "./formatter",
+          },
+        ],
+      }, null, 2)}\n`,
       "utf-8",
     );
 
@@ -532,14 +520,10 @@ describe("plugin sync service", () => {
     });
     await writeFile(
       join(marketplaceRoot, "marketplace.json"),
-      `${JSON.stringify(
-        {
-          name: "team-market",
-          plugins: [{ name: "formatter", source: "./formatter" }],
-        },
-        null,
-        2,
-      )}\n`,
+      `${JSON.stringify({
+        name: "team-market",
+        plugins: [{ name: "formatter", source: "./formatter" }],
+      }, null, 2)}\n`,
       "utf-8",
     );
     const service = createPluginSyncService();
@@ -579,17 +563,13 @@ describe("plugin sync service", () => {
     await writeInlinePlugin(marketplaceRoot, "helper", { name: "helper" });
     await writeFile(
       join(marketplaceRoot, "marketplace.json"),
-      `${JSON.stringify(
-        {
-          name: "team-market",
-          plugins: [
-            { name: "formatter", dependencies: ["helper"], source: "./formatter" },
-            { name: "helper", source: "./helper" },
-          ],
-        },
-        null,
-        2,
-      )}\n`,
+      `${JSON.stringify({
+        name: "team-market",
+        plugins: [
+          { name: "formatter", dependencies: ["helper"], source: "./formatter" },
+          { name: "helper", source: "./helper" },
+        ],
+      }, null, 2)}\n`,
       "utf-8",
     );
     const exported = await createPluginSyncService().exportMarketplaceSourceArchive({
@@ -622,14 +602,10 @@ describe("plugin sync service", () => {
     const marketplaceFile = join(marketplaceRoot, "marketplace.json");
     await writeFile(
       marketplaceFile,
-      `${JSON.stringify(
-        {
-          name: "team-market",
-          plugins: [{ name: "formatter", source: "./formatter" }],
-        },
-        null,
-        2,
-      )}\n`,
+      `${JSON.stringify({
+        name: "team-market",
+        plugins: [{ name: "formatter", source: "./formatter" }],
+      }, null, 2)}\n`,
       "utf-8",
     );
 

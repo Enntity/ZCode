@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { IZCodeAgentService, ZCodeAgentRunAutomationNowResult } from "@zcode/services";
+import type {
+  IZCodeAgentService,
+  ZCodeAgentRunAutomationNowResult,
+} from "@zcode/services";
 import type { ZCodeAutomation } from "@zcode/shared";
 import { useAutomationManagementStore } from "@/store/automationManagementStore.js";
 
@@ -15,7 +18,10 @@ function deferred<T>() {
 
 describe("automationManagementStore runAutomationNow", () => {
   afterEach(() => {
-    useAutomationManagementStore.setState(useAutomationManagementStore.getInitialState(), true);
+    useAutomationManagementStore.setState(
+      useAutomationManagementStore.getInitialState(),
+      true,
+    );
   });
 
   it("连续立即运行同一 automation 时只发送一次 RPC", async () => {
@@ -58,7 +64,9 @@ describe("automationManagementStore runAutomationNow", () => {
     });
 
     await expect(
-      useAutomationManagementStore.getState().runAutomationNow("automation-1", agentService),
+      useAutomationManagementStore
+        .getState()
+        .runAutomationNow("automation-1", agentService),
     ).resolves.toBe("duplicate");
     expect(agentService.runAutomationNow).toHaveBeenCalledTimes(1);
     expect(agentService.listAllAutomations).not.toHaveBeenCalled();
@@ -79,10 +87,14 @@ describe("automationManagementStore runAutomationNow", () => {
     });
 
     await expect(
-      useAutomationManagementStore.getState().runAutomationNow("automation-1", agentService),
+      useAutomationManagementStore
+        .getState()
+        .runAutomationNow("automation-1", agentService),
     ).resolves.toBe("queued");
     await expect(
-      useAutomationManagementStore.getState().runAutomationNow("automation-1", agentService),
+      useAutomationManagementStore
+        .getState()
+        .runAutomationNow("automation-1", agentService),
     ).resolves.toBe("duplicate");
     expect(agentService.runAutomationNow).toHaveBeenCalledTimes(2);
   });

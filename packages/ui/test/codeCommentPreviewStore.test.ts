@@ -31,7 +31,9 @@ describe("codeCommentPreviewStore", () => {
       comment: baseComment,
     });
 
-    expect(useCodeCommentPreviewStore.getState().getComments(params)).toEqual([baseComment]);
+    expect(useCodeCommentPreviewStore.getState().getComments(params)).toEqual([
+      baseComment,
+    ]);
     expect(
       useCodeCommentPreviewStore.getState().commentsByBucketKey[
         buildCodeCommentPreviewBucketKey(params)

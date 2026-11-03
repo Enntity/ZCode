@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { highspeedDrawResponseSchema, highspeedMessageMetaSchema } from "../src/highspeed.js";
+import {
+  highspeedDrawResponseSchema,
+  highspeedMessageMetaSchema,
+} from "../src/highspeed.js";
 
 describe("Highspeed contracts", () => {
   it("parses draw card and authoritative next_draw_at", () => {
@@ -57,4 +60,5 @@ describe("Highspeed contracts", () => {
     expect(() => highspeedMessageMetaSchema.parse({ ...metadata, savedDurationMs: -1 })).toThrow();
     expect(() => highspeedMessageMetaSchema.parse({ ...metadata, extra: true })).toThrow();
   });
+
 });

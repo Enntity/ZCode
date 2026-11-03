@@ -37,6 +37,8 @@ describe("v4 conversation plans query", () => {
     };
 
     expect(v4ConversationPlansResultSchema.parse(result)).toEqual(result);
-    expect(() => v4ConversationPlansResultSchema.parse({ ...result, atSeq: -1 })).toThrow();
+    expect(() =>
+      v4ConversationPlansResultSchema.parse({ ...result, atSeq: -1 }),
+    ).toThrow();
   });
 });

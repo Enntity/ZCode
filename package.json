@@ -2,7 +2,6 @@
   "name": "zcode",
   "version": "3.16.2",
   "private": true,
-  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "dev:web": "concurrently -k -n server,web -c blue,green \"pnpm --filter @zcode/server dev\" \"pnpm --filter @zcode/web dev\"",
@@ -99,7 +98,7 @@
     "istanbul-lib-instrument": "6.0.3",
     "knip": "^6.0.6",
     "lint-staged": "^17.0.8",
-    "oxfmt": "^0.47.0",
+    "oxfmt": "^0.41.0",
     "oxlint": "^1.57.0",
     "postject": "1.0.0-alpha.6",
     "release-it": "^19.2.4",
@@ -161,5 +160,6 @@
       "@ai-sdk/openai-compatible@2.0.60": "patches/@ai-sdk__openai-compatible@2.0.60.patch",
       "@ai-sdk/anthropic@3.0.81": "patches/@ai-sdk__anthropic@3.0.81.patch"
     }
-  }
+  },
+  "license": "Apache-2.0"
 }

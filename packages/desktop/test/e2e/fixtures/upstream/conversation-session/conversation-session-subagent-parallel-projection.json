@@ -21,7 +21,10 @@
           "E2E_SUBAGENT_PARALLEL_PROJECTION_PARENT",
           "E2E_SUBAGENT_PARALLEL_PROJECTION_PARENT_DONE"
         ],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -106,7 +109,10 @@
         "method": "POST",
         "pathIncludes": "/messages",
         "lastUserMessageIncludes": ["E2E_SUBAGENT_PARALLEL_PROJECTION_CHILD_"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -141,7 +147,10 @@
           "toolu_e2e_parallel_subagent_07",
           "E2E_SUBAGENT_PARALLEL_PROJECTION_CHILD_DONE"
         ],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,

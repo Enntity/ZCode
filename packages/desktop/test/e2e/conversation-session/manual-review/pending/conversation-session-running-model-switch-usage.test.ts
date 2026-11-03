@@ -12,7 +12,10 @@ import {
   ensureUpstreamModelForE2E,
   selectUpstreamModelById,
 } from "../../../helpers/upstream-provider.js";
-import { clearAppData, getE2EAppDataPaths } from "../../../helpers/desktop-app.js";
+import {
+  clearAppData,
+  getE2EAppDataPaths,
+} from "../../../helpers/desktop-app.js";
 import {
   getChatRootSnapshot,
   prepareConversationE2E,

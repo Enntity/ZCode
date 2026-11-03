@@ -16,9 +16,17 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_SLOW_STREAM", "E2E_STOP_EMPTY_RUNNING"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"],
-        "lastUserMessageIncludes": ["E2E_STOP_EMPTY_RUNNING"]
+        "bodyIncludes": [
+          "E2E_SLOW_STREAM",
+          "E2E_STOP_EMPTY_RUNNING"
+        ],
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ],
+        "lastUserMessageIncludes": [
+          "E2E_STOP_EMPTY_RUNNING"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -79,9 +87,16 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_STOP_EMPTY_NEXT"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"],
-        "lastUserMessageIncludes": ["E2E_STOP_EMPTY_NEXT"]
+        "bodyIncludes": [
+          "E2E_STOP_EMPTY_NEXT"
+        ],
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ],
+        "lastUserMessageIncludes": [
+          "E2E_STOP_EMPTY_NEXT"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -106,9 +121,16 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_STOP_EMPTY_TOOLCALL_RUNNING"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"],
-        "lastUserMessageIncludes": ["E2E_STOP_EMPTY_TOOLCALL_RUNNING"]
+        "bodyIncludes": [
+          "E2E_STOP_EMPTY_TOOLCALL_RUNNING"
+        ],
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ],
+        "lastUserMessageIncludes": [
+          "E2E_STOP_EMPTY_TOOLCALL_RUNNING"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -135,9 +157,16 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_STOP_EMPTY_TOOLCALL_NEXT"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"],
-        "lastUserMessageIncludes": ["E2E_STOP_EMPTY_TOOLCALL_NEXT"]
+        "bodyIncludes": [
+          "E2E_STOP_EMPTY_TOOLCALL_NEXT"
+        ],
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ],
+        "lastUserMessageIncludes": [
+          "E2E_STOP_EMPTY_TOOLCALL_NEXT"
+        ]
       },
       "response": {
         "statusCode": 200,

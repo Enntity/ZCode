@@ -51,8 +51,9 @@ describe("EmbeddedBrowserJavaScriptDialogController", () => {
   });
 
   it("uses the trusted frame host and returns the confirm choice synchronously", async () => {
-    const { EmbeddedBrowserJavaScriptDialogController } =
-      await import("../src/main/embeddedBrowserJavaScriptDialog.js");
+    const { EmbeddedBrowserJavaScriptDialogController } = await import(
+      "../src/main/embeddedBrowserJavaScriptDialog.js"
+    );
     const controller = new EmbeddedBrowserJavaScriptDialogController({
       iconPath: "/app/icon.png",
       getLocale: () => "en-US",
@@ -87,8 +88,9 @@ describe("EmbeddedBrowserJavaScriptDialogController", () => {
   });
 
   it("falls back from about:blank to the guest host and localizes alert", async () => {
-    const { EmbeddedBrowserJavaScriptDialogController } =
-      await import("../src/main/embeddedBrowserJavaScriptDialog.js");
+    const { EmbeddedBrowserJavaScriptDialogController } = await import(
+      "../src/main/embeddedBrowserJavaScriptDialog.js"
+    );
     const controller = new EmbeddedBrowserJavaScriptDialogController({
       iconPath: "/app/icon.png",
       getLocale: () => "zh-CN",
@@ -115,8 +117,9 @@ describe("EmbeddedBrowserJavaScriptDialogController", () => {
   });
 
   it("resolves blob origins and only uses a neutral source without any trusted host", async () => {
-    const { resolveEmbeddedBrowserDialogSource } =
-      await import("../src/main/embeddedBrowserJavaScriptDialog.js");
+    const { resolveEmbeddedBrowserDialogSource } = await import(
+      "../src/main/embeddedBrowserJavaScriptDialog.js"
+    );
 
     expect(resolveEmbeddedBrowserDialogSource("blob:https://example.com/id")).toBe(
       "example.com says",
@@ -128,8 +131,9 @@ describe("EmbeddedBrowserJavaScriptDialogController", () => {
 
   it("passes through to native Chromium dialogs during automation and its grace period", async () => {
     vi.useFakeTimers();
-    const { EmbeddedBrowserJavaScriptDialogController } =
-      await import("../src/main/embeddedBrowserJavaScriptDialog.js");
+    const { EmbeddedBrowserJavaScriptDialogController } = await import(
+      "../src/main/embeddedBrowserJavaScriptDialog.js"
+    );
     const controller = new EmbeddedBrowserJavaScriptDialogController({
       iconPath: "/app/icon.png",
       getLocale: () => "en-US",
@@ -161,8 +165,9 @@ describe("EmbeddedBrowserJavaScriptDialogController", () => {
   });
 
   it("rejects browser-use-only tabs and unsupported dialog requests", async () => {
-    const { EmbeddedBrowserJavaScriptDialogController } =
-      await import("../src/main/embeddedBrowserJavaScriptDialog.js");
+    const { EmbeddedBrowserJavaScriptDialogController } = await import(
+      "../src/main/embeddedBrowserJavaScriptDialog.js"
+    );
     const controller = new EmbeddedBrowserJavaScriptDialogController({
       iconPath: "/app/icon.png",
       getLocale: () => "en-US",

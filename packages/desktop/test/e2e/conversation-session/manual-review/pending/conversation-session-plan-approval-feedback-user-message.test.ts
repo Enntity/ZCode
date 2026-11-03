@@ -65,7 +65,12 @@ describe("conversation session plan approval feedback user message", () => {
 
     await waitForUpstreamRequest(
       {
-        includes: [feedback, EXIT_MARKER, EXIT_TOOL_CALL_ID, EXIT_PLAN_DENIED_MESSAGE],
+        includes: [
+          feedback,
+          EXIT_MARKER,
+          EXIT_TOOL_CALL_ID,
+          EXIT_PLAN_DENIED_MESSAGE,
+        ],
         excludes: ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"],
       },
       "plan feedback continuation request",
@@ -75,7 +80,11 @@ describe("conversation session plan approval feedback user message", () => {
     await waitForUserMessageNotContaining(feedback, "Conversation steered");
     await waitForUserMessageNotContaining(feedback, "已引导对话");
 
-    const ordering = await waitForPlanFeedbackProviderOrdering(feedback, EXIT_TOOL_CALL_ID, 10_000);
+    const ordering = await waitForPlanFeedbackProviderOrdering(
+      feedback,
+      EXIT_TOOL_CALL_ID,
+      10_000,
+    );
     expect(ordering.feedbackIndex).toBeGreaterThan(ordering.toolResultIndex);
     expect(ordering.toolResultText).toContain(EXIT_PLAN_DENIED_MESSAGE);
     expect(ordering.toolResultText).not.toContain(feedback);
@@ -111,7 +120,10 @@ async function waitForPlanApprovalDialog(timeoutMs: number) {
   );
 }
 
-async function waitForUserMessageNotContaining(requiredText: string, forbiddenText: string) {
+async function waitForUserMessageNotContaining(
+  requiredText: string,
+  forbiddenText: string,
+) {
   await browser.waitUntil(
     async () => {
       const message = await findUserMessageTextContaining(requiredText);
@@ -140,7 +152,9 @@ async function submitCustomElicitationAnswer(answer: string) {
   await input.waitForDisplayed({ timeout: 30_000 });
   await input.setValue(answer);
 
-  const submitButton = await $("//button[contains(., 'Submit') or contains(., '提交')]");
+  const submitButton = await $(
+    "//button[contains(., 'Submit') or contains(., '提交')]",
+  );
   await submitButton.waitForEnabled({ timeout: 30_000 });
   await submitButton.click();
 }
@@ -160,8 +174,14 @@ async function waitForPlanFeedbackProviderOrdering(
   await browser.waitUntil(
     async () => {
       try {
-        const ordering = await readPlanFeedbackProviderOrdering(feedback, toolCallId);
-        if (ordering.toolResultIndex >= 0 && ordering.feedbackIndex > ordering.toolResultIndex) {
+        const ordering = await readPlanFeedbackProviderOrdering(
+          feedback,
+          toolCallId,
+        );
+        if (
+          ordering.toolResultIndex >= 0 &&
+          ordering.feedbackIndex > ordering.toolResultIndex
+        ) {
           return true;
         }
         latestError = JSON.stringify(ordering);
@@ -199,11 +219,14 @@ async function readPlanFeedbackProviderOrdering(
   }
 
   const blocks = flattenProviderMessageBlocks(matchingRecord.requestJson);
-  const toolResultIndex = blocks.findIndex((block) => block.toolUseId === toolCallId);
+  const toolResultIndex = blocks.findIndex(
+    (block) => block.toolUseId === toolCallId,
+  );
   const feedbackIndex = blocks.findIndex(
     (block) => block.role === "user" && block.text.includes(feedback),
   );
-  const toolResultText = toolResultIndex >= 0 ? (blocks[toolResultIndex]?.text ?? "") : "";
+  const toolResultText =
+    toolResultIndex >= 0 ? blocks[toolResultIndex]?.text ?? "" : "";
 
   return {
     feedbackIndex,

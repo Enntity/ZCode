@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { shouldReportHostConsoleError, stringifyHostLogArg } from "../src/host/hostLog.js";
+import {
+  shouldReportHostConsoleError,
+  stringifyHostLogArg,
+} from "../src/host/hostLog.js";
 
 describe("host log formatting", () => {
   it("serializes Error with message and stack instead of an empty object", () => {

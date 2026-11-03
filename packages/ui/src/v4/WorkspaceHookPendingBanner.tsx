@@ -110,7 +110,14 @@ export const WorkspaceHookPendingBanner = memo(function WorkspaceHookPendingBann
         });
       });
     }
-  }, [admission, commandBindings, openSettingsTab, sessionId, workspaceIdentity, workspacePath]);
+  }, [
+    admission,
+    commandBindings,
+    openSettingsTab,
+    sessionId,
+    workspaceIdentity,
+    workspacePath,
+  ]);
 
   const handleDismiss = useCallback(() => {
     if (admission) {

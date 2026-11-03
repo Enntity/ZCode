@@ -38,9 +38,7 @@ export interface ForceUpdateGuardOptions {
   logger: ForceUpdateGuardLogger;
   endpointOrigin?: string;
   fetchRemoteConfig?: () => Promise<unknown>;
-  requestAutoUpdate?: (
-    onStateChange?: (state: ForceAutoUpdateState) => void,
-  ) => (() => void) | void;
+  requestAutoUpdate?: (onStateChange?: (state: ForceAutoUpdateState) => void) => (() => void) | void;
   onBlocked?: (requirement: ForceUpdateRequirement) => void;
 }
 

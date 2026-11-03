@@ -39,7 +39,9 @@ describe("会话区 Interrupted 后手动 Compact E2E", () => {
       30000,
     );
 
-    const prepPromptTwo = buildReadonlyToolPrompt(`E2E_COMPACT_INTERRUPTED_PREP_TWO_${runId}`);
+    const prepPromptTwo = buildReadonlyToolPrompt(
+      `E2E_COMPACT_INTERRUPTED_PREP_TWO_${runId}`,
+    );
     await sendPrompt(prepPromptTwo);
     await waitForUpstreamNetworkCapture(`E2E_COMPACT_INTERRUPTED_PREP_TWO_${runId}`);
     await waitForChatState(

@@ -65,7 +65,10 @@ describe("Browser Use subagent 会话 E2E", () => {
     await waitForUpstreamRequest(
       {
         includes: [PARENT_MARKER, PARENT_INIT_TOOL_ID, PARENT_INIT_OK],
-        excludes: ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"],
+        excludes: [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY",
+        ],
       },
       "主 Agent 初始化 Browser 后没有进入 Agent delegation continuation",
       90000,
@@ -75,8 +78,18 @@ describe("Browser Use subagent 会话 E2E", () => {
 
     await waitForUpstreamRequest(
       {
-        includes: [CHILD_MARKER, CHILD_CHECK_TOOL_ID, CHILD_CHECKS_OK, "ordinaryValue", "42"],
-        excludes: [PARENT_MARKER, "Generate a concise title", "CRITICAL: Respond with TEXT ONLY"],
+        includes: [
+          CHILD_MARKER,
+          CHILD_CHECK_TOOL_ID,
+          CHILD_CHECKS_OK,
+          "ordinaryValue",
+          "42",
+        ],
+        excludes: [
+          PARENT_MARKER,
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY",
+        ],
       },
       "child 普通 Node REPL 与自有 Browser Tab 检查没有完成",
       90000,
@@ -90,7 +103,10 @@ describe("Browser Use subagent 会话 E2E", () => {
     await waitForUpstreamRequest(
       {
         includes: [PARENT_MARKER, AGENT_TOOL_ID, CHILD_DONE],
-        excludes: ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"],
+        excludes: [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY",
+        ],
       },
       "child 完成后结果没有回到父 Agent continuation",
       90000,
@@ -98,7 +114,10 @@ describe("Browser Use subagent 会话 E2E", () => {
     await waitForUpstreamRequest(
       {
         includes: [PARENT_MARKER, PARENT_RESUME_TOOL_ID, PARENT_RESUME_OK],
-        excludes: ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"],
+        excludes: [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY",
+        ],
       },
       "父 Agent 返回后没有复用缓存 Tab 完成写入",
       90000,
@@ -178,10 +197,14 @@ async function waitForBrowserSurface(
             );
           };
           const addresses = Array.from(
-            document.querySelectorAll<HTMLInputElement>(`[data-testid="${addressTestId}"]`),
+            document.querySelectorAll<HTMLInputElement>(
+              `[data-testid="${addressTestId}"]`,
+            ),
           ).filter(isVisible);
           const webviews = Array.from(
-            document.querySelectorAll<HTMLElement>(`[data-testid="${webviewTestId}"]`),
+            document.querySelectorAll<HTMLElement>(
+              `[data-testid="${webviewTestId}"]`,
+            ),
           )
             .filter(isVisible)
             .map(
@@ -216,7 +239,9 @@ async function waitForCapturedRequest(expected: string[]) {
         artifact?.records.find(
           (record) =>
             record.status === "complete" &&
-            expected.every((text) => captureContainsText(record.requestJson, text)),
+            expected.every((text) =>
+              captureContainsText(record.requestJson, text),
+            ),
         )?.requestJson ?? null;
       return latest !== null;
     },
@@ -232,16 +257,22 @@ async function readCaptureArtifact(): Promise<E2ENetworkCaptureArtifact | null> 
   const capturePath = process.env.E2E_PROVIDER_CAPTURE_PATH?.trim();
   if (!capturePath) return null;
   try {
-    return JSON.parse(await readFile(capturePath, "utf-8")) as E2ENetworkCaptureArtifact;
+    return JSON.parse(
+      await readFile(capturePath, "utf-8"),
+    ) as E2ENetworkCaptureArtifact;
   } catch (error) {
-    if (error instanceof Error && "code" in error && error.code === "ENOENT") return null;
+    if (error instanceof Error && "code" in error && error.code === "ENOENT")
+      return null;
     throw error;
   }
 }
 
 function captureContainsText(value: unknown, expected: string): boolean {
   if (typeof value === "string") return value.includes(expected);
-  if (Array.isArray(value)) return value.some((item) => captureContainsText(item, expected));
+  if (Array.isArray(value))
+    return value.some((item) => captureContainsText(item, expected));
   if (!value || typeof value !== "object") return false;
-  return Object.values(value).some((item) => captureContainsText(item, expected));
+  return Object.values(value).some((item) =>
+    captureContainsText(item, expected),
+  );
 }

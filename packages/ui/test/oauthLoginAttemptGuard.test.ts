@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { shouldApplyOAuthPollingFailure } from "../src/root/oauthLoginAttemptGuard.js";
+import {
+  shouldApplyOAuthPollingFailure,
+} from "../src/root/oauthLoginAttemptGuard.js";
 
 describe("OAuth login attempt guard", () => {
   it("ignores a polling failure after callback success", () => {

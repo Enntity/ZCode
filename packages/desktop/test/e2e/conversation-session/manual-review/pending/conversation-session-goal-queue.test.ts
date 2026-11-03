@@ -63,13 +63,15 @@ describe("会话区 Goal Queue E2E", () => {
     let queue = await waitForQueueCount(3);
     expect(queue.map((item) => item.kind)).toEqual(["goal", "text", "goal"]);
 
-    const compactRequestsBefore = await countUpstreamRequestsContaining(COMPACT_REQUEST_SENTINEL);
+    const compactRequestsBefore = await countUpstreamRequestsContaining(
+      COMPACT_REQUEST_SENTINEL,
+    );
     await sendPrompt("/compact");
     await waitForQueueCount(3);
     await assertVisibleUserMessagesNotContaining("/compact");
-    expect(await countUpstreamRequestsContaining(COMPACT_REQUEST_SENTINEL)).toBe(
-      compactRequestsBefore,
-    );
+    expect(
+      await countUpstreamRequestsContaining(COMPACT_REQUEST_SENTINEL),
+    ).toBe(compactRequestsBefore);
 
     await clickChatStop();
     await waitForChatState(
@@ -93,7 +95,8 @@ describe("会话区 Goal Queue E2E", () => {
     }
 
     const editedGoalMarker = `E2E_GOAL_QUEUE_SECOND_EDITED_${runId}`;
-    const editedGoalRequestsBefore = await countUpstreamRequestsContaining(editedGoalMarker);
+    const editedGoalRequestsBefore =
+      await countUpstreamRequestsContaining(editedGoalMarker);
     await clickQueueEdit(secondId);
     await setQueueEditInputText(secondId, goalObjective(editedGoalMarker));
     await clickQueueEditSave(secondId);
@@ -103,7 +106,9 @@ describe("会话区 Goal Queue E2E", () => {
       editedGoalMarker,
     ]);
     expect(queue.map((item) => item.kind)).toEqual(["goal", "text", "goal"]);
-    expect(await countUpstreamRequestsContaining(editedGoalMarker)).toBe(editedGoalRequestsBefore);
+    expect(await countUpstreamRequestsContaining(editedGoalMarker)).toBe(
+      editedGoalRequestsBefore,
+    );
 
     await dragQueueItemOnto(secondId, firstId);
     queue = await waitForQueueOrderContaining([
@@ -115,7 +120,10 @@ describe("会话区 Goal Queue E2E", () => {
     expect(queue.map((item) => item.kind)).toEqual(["goal", "goal", "text"]);
 
     await clickQueueRemove(firstId);
-    queue = await waitForQueueOrderContaining([editedGoalMarker, `E2E_GOAL_QUEUE_TEXT_${runId}`]);
+    queue = await waitForQueueOrderContaining([
+      editedGoalMarker,
+      `E2E_GOAL_QUEUE_TEXT_${runId}`,
+    ]);
     expect(queue.map((item) => item.id)).toEqual([secondId, textId]);
     expect(queue.map((item) => item.kind)).toEqual(["goal", "text"]);
     expect(queue.map((item) => item.content).join("\n")).not.toContain(
@@ -177,7 +185,11 @@ function goalObjective(marker: string) {
 }
 
 async function stopIfStreaming() {
-  const snapshot = await waitForChatState(() => true, "读取 chat 状态失败", 5000);
+  const snapshot = await waitForChatState(
+    () => true,
+    "读取 chat 状态失败",
+    5000,
+  );
   if (snapshot.state !== "streaming") {
     return;
   }

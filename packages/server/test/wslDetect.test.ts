@@ -40,9 +40,7 @@ describe("WSL discovery cache", () => {
     const executor = vi
       .fn<() => Promise<Buffer>>()
       .mockRejectedValueOnce(new Error("temporary failure"))
-      .mockResolvedValueOnce(
-        Buffer.from("  NAME      STATE      VERSION\n* Ubuntu   Running    2\n"),
-      );
+      .mockResolvedValueOnce(Buffer.from("  NAME      STATE      VERSION\n* Ubuntu   Running    2\n"));
 
     await expect(listWSLDistros(executor)).rejects.toThrow("temporary failure");
     await expect(listWSLDistros(executor)).resolves.toEqual([

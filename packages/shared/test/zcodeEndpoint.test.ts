@@ -216,7 +216,9 @@ describe("zcodeEndpoint", () => {
     expect(buildRuntimeZaiBusinessUrl({ ZCODE_ENV: "test" }, "/api/auth/z/login")).toBe(
       "https://api.z.ai/api/auth/z/login",
     );
-    expect(buildBigModelApiUrl({ ZCODE_ENV: "test" }, "/login")).toBe("https://bigmodel.cn/login");
+    expect(buildBigModelApiUrl({ ZCODE_ENV: "test" }, "/login")).toBe(
+      "https://bigmodel.cn/login",
+    );
   });
 
   it("keeps environment-scoped endpoint overrides centralized", () => {

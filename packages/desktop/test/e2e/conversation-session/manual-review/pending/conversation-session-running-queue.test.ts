@@ -29,7 +29,8 @@ describe("会话区 Running Queue E2E", () => {
     await prepareConversationE2E();
 
     const runId = Date.now();
-    const firstPrompt = `E2E_SLOW_STREAM E2E_RUNNING_QUEUE_FIRST_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
+    const firstPrompt =
+      `E2E_SLOW_STREAM E2E_RUNNING_QUEUE_FIRST_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
     await sendPrompt(firstPrompt);
     await waitForComposerText("", "首轮发送后输入框没有清空");
     await waitForUserMessageContaining(firstPrompt);
@@ -39,14 +40,16 @@ describe("会话区 Running Queue E2E", () => {
       30000,
     );
 
-    const secondPrompt = `E2E_RUNNING_QUEUE_SECOND_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
+    const secondPrompt =
+      `E2E_RUNNING_QUEUE_SECOND_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
     await sendPrompt(secondPrompt);
     await waitForComposerText("", "running 中第二条发送后输入框没有清空");
     await waitForQueueContaining(`E2E_RUNNING_QUEUE_SECOND_${runId}`);
     let queue = await waitForQueueCount(1);
     expect(queue[0]?.kind).toBe("text");
 
-    const thirdPrompt = `E2E_RUNNING_QUEUE_THIRD_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
+    const thirdPrompt =
+      `E2E_RUNNING_QUEUE_THIRD_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
     await sendPrompt(thirdPrompt);
     await waitForQueueContaining(`E2E_RUNNING_QUEUE_THIRD_${runId}`);
     queue = await waitForQueueCount(2);
@@ -57,7 +60,8 @@ describe("会话区 Running Queue E2E", () => {
       `E2E_RUNNING_QUEUE_THIRD_${runId}`,
     );
 
-    const fourthPrompt = `E2E_RUNNING_QUEUE_FOURTH_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
+    const fourthPrompt =
+      `E2E_RUNNING_QUEUE_FOURTH_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
     await sendPrompt(fourthPrompt);
     await waitForQueueContaining(`E2E_RUNNING_QUEUE_FOURTH_${runId}`);
     queue = await waitForQueueCount(3);
@@ -66,7 +70,8 @@ describe("会话区 Running Queue E2E", () => {
     );
     expect(queue.map((item) => item.kind)).toEqual(["text", "text", "text"]);
 
-    const fifthPrompt = `E2E_RUNNING_QUEUE_FIFTH_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
+    const fifthPrompt =
+      `E2E_RUNNING_QUEUE_FIFTH_${runId}: Reply with exactly "${E2E_REPLY_TOKEN}" and no other text.`;
     await sendPrompt(fifthPrompt);
     await waitForQueueContaining(`E2E_RUNNING_QUEUE_FIFTH_${runId}`);
     queue = await waitForQueueCount(4);
@@ -80,10 +85,13 @@ describe("会话区 Running Queue E2E", () => {
     );
     await typeChatPrompt("/compact");
     await clickChatSend();
-    await expectNoUpstreamRequestForTextWithin("CRITICAL: Respond with TEXT ONLY", 500);
-    expect(await countUpstreamRequestsContaining("CRITICAL: Respond with TEXT ONLY")).toBe(
-      compactRequestsBefore,
+    await expectNoUpstreamRequestForTextWithin(
+      "CRITICAL: Respond with TEXT ONLY",
+      500,
     );
+    expect(
+      await countUpstreamRequestsContaining("CRITICAL: Respond with TEXT ONLY"),
+    ).toBe(compactRequestsBefore);
     expect(await getQueueItems()).toHaveLength(4);
     await assertVisibleUserMessagesNotContaining("/compact");
 
@@ -106,11 +114,16 @@ describe("会话区 Running Queue E2E", () => {
         timeoutMsg: "队列没有同时保留 running 中发送的普通消息和 /goal",
       },
     );
-    const goalItem = queue.find((item) => item.content.includes(`E2E_RUNNING_QUEUE_GOAL_${runId}`));
+    const goalItem = queue.find((item) =>
+      item.content.includes(`E2E_RUNNING_QUEUE_GOAL_${runId}`),
+    );
     expect(goalItem?.kind).toBe("goal");
 
     await browser.waitUntil(
-      async () => (await countUpstreamRequestsContaining(`E2E_RUNNING_QUEUE_FIRST_${runId}`)) >= 1,
+      async () =>
+        (await countUpstreamRequestsContaining(
+          `E2E_RUNNING_QUEUE_FIRST_${runId}`,
+        )) >= 1,
       {
         timeout: 10000,
         timeoutMsg: "没有捕获到首轮 running 请求",

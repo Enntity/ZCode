@@ -16,7 +16,9 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_BACKGROUND_GUIDE_STEER_LAUNCH"],
+        "bodyIncludes": [
+          "E2E_BACKGROUND_GUIDE_STEER_LAUNCH"
+        ],
         "bodyExcludes": [
           "Async agent launched successfully",
           "agentId: agent_",
@@ -24,7 +26,9 @@
           "CRITICAL: Respond with TEXT ONLY",
           "Verify whether the active session goal"
         ],
-        "lastUserMessageIncludes": ["E2E_BACKGROUND_GUIDE_STEER_LAUNCH"]
+        "lastUserMessageIncludes": [
+          "E2E_BACKGROUND_GUIDE_STEER_LAUNCH"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -53,14 +57,18 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_BACKGROUND_GUIDE_STEER_CHILD"],
+        "bodyIncludes": [
+          "E2E_BACKGROUND_GUIDE_STEER_CHILD"
+        ],
         "bodyExcludes": [
           "Generate a concise title",
           "CRITICAL: Respond with TEXT ONLY",
           "Verify whether the active session goal"
         ],
         "lastUserMessageExcludes": ["<task-notification>"],
-        "lastUserMessageIncludes": ["E2E_BACKGROUND_GUIDE_STEER_CHILD"]
+        "lastUserMessageIncludes": [
+          "E2E_BACKGROUND_GUIDE_STEER_CHILD"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -117,13 +125,18 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["<task-notification>", "E2E_BACKGROUND_GUIDE_STEER_CHILD_DONE"],
+        "bodyIncludes": [
+          "<task-notification>",
+          "E2E_BACKGROUND_GUIDE_STEER_CHILD_DONE"
+        ],
         "bodyExcludes": [
           "Generate a concise title",
           "CRITICAL: Respond with TEXT ONLY",
           "Verify whether the active session goal"
         ],
-        "lastUserMessageIncludes": ["<task-notification>"]
+        "lastUserMessageIncludes": [
+          "<task-notification>"
+        ]
       },
       "response": {
         "statusCode": 200,

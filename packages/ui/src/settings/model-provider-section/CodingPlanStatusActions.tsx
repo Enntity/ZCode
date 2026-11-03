@@ -107,7 +107,9 @@ export function CodingPlanUpgradeAction({
         <RocketIcon className="size-3.5" />
       )}
       {intl.formatMessage({
-        id: upgradePlansVisible ? "settings.modelProvider.codingPlan.cancelUpgrade" : actionLabelId,
+        id: upgradePlansVisible
+          ? "settings.modelProvider.codingPlan.cancelUpgrade"
+          : actionLabelId,
       })}
       {billingDiscountButtonActive ? (
         <CodingPlanBillingDiscountBadgePill

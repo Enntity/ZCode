@@ -28,7 +28,10 @@ describe("desktop cron scheduler manual claim release", () => {
     await settleManualClaimForDispatchResult({ ...params, ok: false });
 
     expect(repo.releaseManualClaim).toHaveBeenCalledTimes(1);
-    expect(repo.releaseManualClaim).toHaveBeenCalledWith("automation-1", "run-workspace");
+    expect(repo.releaseManualClaim).toHaveBeenCalledWith(
+      "automation-1",
+      "run-workspace",
+    );
   });
 
   it("inFlight 丢失时从 run 台账恢复 workspaceKey 并释放 manual claim", async () => {
@@ -67,7 +70,10 @@ describe("desktop cron scheduler manual claim release", () => {
       logError,
     });
 
-    expect(repo.releaseManualClaim).toHaveBeenCalledWith("automation-1", "automation-workspace");
+    expect(repo.releaseManualClaim).toHaveBeenCalledWith(
+      "automation-1",
+      "automation-workspace",
+    );
     expect(logError).not.toHaveBeenCalled();
 
     repo.get.mockResolvedValueOnce(null);

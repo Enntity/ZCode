@@ -40,7 +40,9 @@ describe("Plugin Store try prompt", () => {
         locale: "en-US",
         prompt: "  Summarize this workspace.  ",
       }),
-    ).toBe("[@Demo \\[Plugin\\]](plugin://demo-plugin@demo-market) Summarize this workspace.");
+    ).toBe(
+      "[@Demo \\[Plugin\\]](plugin://demo-plugin@demo-market) Summarize this workspace.",
+    );
   });
 
   it("uses the localized display label without changing the stable destination", () => {
@@ -50,7 +52,9 @@ describe("Plugin Store try prompt", () => {
         locale: "zh-CN",
         prompt: "帮我检查配置",
       }),
-    ).toBe("[@演示插件](plugin://demo-plugin@demo-market) 帮我检查配置");
+    ).toBe(
+      "[@演示插件](plugin://demo-plugin@demo-market) 帮我检查配置",
+    );
   });
 
   it("builds the same structured Plugin mention used by the @ picker", () => {

@@ -70,7 +70,8 @@ describe("usePptxFileWatch", () => {
     });
 
     const hook = renderHook(
-      ({ filePath, fileWatcherService }) => usePptxFileWatch({ filePath, fileWatcherService }),
+      ({ filePath, fileWatcherService }) =>
+        usePptxFileWatch({ filePath, fileWatcherService }),
       {
         initialProps: {
           filePath: "/workspace/first.pptx",
@@ -86,7 +87,9 @@ describe("usePptxFileWatch", () => {
     });
     expect(hook.result.current.ready).toBe(false);
     await waitFor(() => expect(hook.result.current.ready).toBe(true));
-    await waitFor(() => expect(first.unwatch).toHaveBeenCalledWith({ id: "watch-1" }));
+    await waitFor(() =>
+      expect(first.unwatch).toHaveBeenCalledWith({ id: "watch-1" }),
+    );
 
     hook.unmount();
     expect(second.service.unwatch).not.toHaveBeenCalled();
@@ -133,7 +136,10 @@ describe("shouldReloadPptxPreviewForWatchEvent", () => {
       ),
     ).toBe(true);
     expect(
-      shouldReloadPptxPreviewForWatchEvent({ dirPath: "/workspace" }, "/workspace/deck.pptx"),
+      shouldReloadPptxPreviewForWatchEvent(
+        { dirPath: "/workspace" },
+        "/workspace/deck.pptx",
+      ),
     ).toBe(true);
   });
 });

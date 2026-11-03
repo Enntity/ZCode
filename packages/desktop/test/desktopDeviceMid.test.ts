@@ -63,10 +63,7 @@ describe("ensureDesktopDeviceMidSync", () => {
     const dir = makeTempDir();
     writeFileSync(
       join(dir, "telemetry-state.json"),
-      JSON.stringify({
-        lastDailyActiveDate: "2026-06-23",
-        dailyActiveInFlight: { date: "x", startedAt: 1 },
-      }),
+      JSON.stringify({ lastDailyActiveDate: "2026-06-23", dailyActiveInFlight: { date: "x", startedAt: 1 } }),
       "utf-8",
     );
 

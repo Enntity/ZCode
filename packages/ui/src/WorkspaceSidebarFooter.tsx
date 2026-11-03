@@ -174,10 +174,12 @@ export const WorkspaceSidebarFooter = memo(function WorkspaceSidebarFooterCompon
               <Loader2 className="size-4 animate-spin" />
               <span className="sr-only">{intl.formatMessage({ id: "common.loading" })}</span>
             </>
-          ) : ZCODE_PRODUCT_FLAVOR === "enntity" ? (
-            <Bot className="size-4" />
           ) : (
-            <User className="size-4" />
+            ZCODE_PRODUCT_FLAVOR === "enntity" ? (
+              <Bot className="size-4" />
+            ) : (
+              <User className="size-4" />
+            )
           )}
         </AvatarFallback>
       </Avatar>

@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import type { PptxElementReference } from "@/lib/pptxElementReference.js";
 import { createPptxElementReferencePreviewSource } from "@/lib/pptxElementReferencePreview.js";
 
-function makeReference(overrides: Partial<PptxElementReference> = {}): PptxElementReference {
+function makeReference(
+  overrides: Partial<PptxElementReference> = {},
+): PptxElementReference {
   return {
     bounds: { x: 10, y: 20, width: 300, height: 80 },
     capturedAt: 1,
@@ -30,8 +32,14 @@ describe("PPTX element reference preview source", () => {
       workspaceIdentity: "ssh:user@host:/workspace",
       remoteSessionId: "remote-1",
     };
-    const first = createPptxElementReferencePreviewSource(makeReference(), scope);
-    const second = createPptxElementReferencePreviewSource(makeReference(), scope);
+    const first = createPptxElementReferencePreviewSource(
+      makeReference(),
+      scope,
+    );
+    const second = createPptxElementReferencePreviewSource(
+      makeReference(),
+      scope,
+    );
 
     expect(first).toMatchObject({
       type: "pptx",
@@ -45,7 +53,9 @@ describe("PPTX element reference preview source", () => {
         expectedSourceFingerprint: `sha256:${"a".repeat(64)}`,
       },
     });
-    expect(first?.referenceNavigation.requestId).not.toBe(second?.referenceNavigation.requestId);
+    expect(first?.referenceNavigation.requestId).not.toBe(
+      second?.referenceNavigation.requestId,
+    );
   });
 
   it("rejects references outside the current workspace, remote session, or path", () => {

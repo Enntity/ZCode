@@ -9,7 +9,11 @@ type CapturedButtonProps = {
 
 type CapturedInputProps = {
   onChange?: (event: { target: { value: string } }) => void;
-  onKeyDown?: (event: { key: string; preventDefault: () => void; shiftKey: boolean }) => void;
+  onKeyDown?: (event: {
+    key: string;
+    preventDefault: () => void;
+    shiftKey: boolean;
+  }) => void;
 };
 
 const { capturedButtonProps, capturedInputProps } = vi.hoisted(() => ({
@@ -32,14 +36,12 @@ type TestEvent = {
 
 type TestEventHandler = (event: TestEvent) => void;
 
-type TestNode =
-  | TestElement
-  | {
-      nodeType: 3;
-      nodeValue: string;
-      ownerDocument: Document;
-      parentNode: TestElement | null;
-    };
+type TestNode = TestElement | {
+  nodeType: 3;
+  nodeValue: string;
+  ownerDocument: Document;
+  parentNode: TestElement | null;
+};
 
 type TestElement = Element & {
   __attrs: Map<string, string>;
@@ -66,7 +68,9 @@ vi.mock("lucide-react", () => {
 });
 
 vi.mock("react/jsx-runtime", async () => {
-  const actual = await vi.importActual<typeof import("react/jsx-runtime")>("react/jsx-runtime");
+  const actual = await vi.importActual<typeof import("react/jsx-runtime")>(
+    "react/jsx-runtime",
+  );
   const capture =
     (factory: typeof actual.jsx) =>
     (type: Parameters<typeof actual.jsx>[0], props: Record<string, unknown>, key?: string) => {
@@ -83,8 +87,9 @@ vi.mock("react/jsx-runtime", async () => {
 });
 
 vi.mock("react/jsx-dev-runtime", async () => {
-  const actual =
-    await vi.importActual<typeof import("react/jsx-dev-runtime")>("react/jsx-dev-runtime");
+  const actual = await vi.importActual<typeof import("react/jsx-dev-runtime")>(
+    "react/jsx-dev-runtime",
+  );
   return {
     ...actual,
     jsxDEV: (
@@ -157,7 +162,9 @@ function createMinimalElement(ownerDocument: Document, tagName = "div") {
     getAttribute: (name: string) => element.__attrs.get(name) ?? null,
     insertBefore: (child: TestNode, beforeChild?: TestNode | null) => {
       child.parentNode = element as unknown as TestElement;
-      const beforeIndex = beforeChild ? element.childNodes.indexOf(beforeChild) : -1;
+      const beforeIndex = beforeChild
+        ? element.childNodes.indexOf(beforeChild)
+        : -1;
       if (beforeIndex >= 0) {
         element.childNodes.splice(beforeIndex, 0, child);
       } else {
@@ -354,7 +361,8 @@ describe("TaskFindDialog navigation", () => {
     capturedInputProps.length = 0;
     delete (globalThis as { document?: unknown }).document;
     delete (globalThis as { window?: unknown }).window;
-    delete (globalThis as { IS_REACT_ACT_ENVIRONMENT?: unknown }).IS_REACT_ACT_ENVIRONMENT;
+    delete (globalThis as { IS_REACT_ACT_ENVIRONMENT?: unknown })
+      .IS_REACT_ACT_ENVIRONMENT;
   });
 
   it("routes both buttons and Enter shortcuts through conversation navigate", async () => {

@@ -407,7 +407,9 @@ interface RemoteWorkspaceBridgeRuntime {
   disposeBridge?: () => void;
 }
 
-type WorkspaceBridgeRuntime = LocalWorkspaceBridgeRuntime | RemoteWorkspaceBridgeRuntime;
+type WorkspaceBridgeRuntime =
+  | LocalWorkspaceBridgeRuntime
+  | RemoteWorkspaceBridgeRuntime;
 ```
 
 `start(windowId)` 行为：

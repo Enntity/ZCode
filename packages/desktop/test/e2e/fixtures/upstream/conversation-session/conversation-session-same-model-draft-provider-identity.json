@@ -40,7 +40,11 @@
         "method": "POST",
         "pathIncludes": "/chat/completions",
         "lastUserMessageIncludes": ["E2E_GLM52_PROVIDER_IDENTITY_PRIMARY"],
-        "bodyIncludes": ["E2E_GLM52_PROVIDER_IDENTITY_PRIMARY", "upstream-e2e-ok", "glm-5.2"],
+        "bodyIncludes": [
+          "E2E_GLM52_PROVIDER_IDENTITY_PRIMARY",
+          "upstream-e2e-ok",
+          "glm-5.2"
+        ],
         "bodyExcludes": ["Generate a concise title"]
       },
       "response": {
@@ -66,7 +70,11 @@
         "method": "POST",
         "pathIncludes": "/chat/completions",
         "lastUserMessageIncludes": ["E2E_GLM52_PROVIDER_IDENTITY_ALTERNATE"],
-        "bodyIncludes": ["E2E_GLM52_PROVIDER_IDENTITY_ALTERNATE", "upstream-e2e-ok", "glm-5.2"],
+        "bodyIncludes": [
+          "E2E_GLM52_PROVIDER_IDENTITY_ALTERNATE",
+          "upstream-e2e-ok",
+          "glm-5.2"
+        ],
         "bodyExcludes": ["Generate a concise title"]
       },
       "response": {

@@ -24,7 +24,11 @@ describe("taskFindNavigationState", () => {
   });
 
   it("preserves the request id for ordinary query and selection changes", () => {
-    const navigated = navigateTaskFindSelection(createTaskFindNavigationState(), "needle", 0);
+    const navigated = navigateTaskFindSelection(
+      createTaskFindNavigationState(),
+      "needle",
+      0,
+    );
 
     expect(changeTaskFindSelection(navigated, "other", 2)).toEqual({
       activeIndex: 2,

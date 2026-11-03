@@ -49,7 +49,10 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_GOAL_VERIFIER_STOP", "Verify whether the active session goal"],
+        "bodyIncludes": [
+          "E2E_GOAL_VERIFIER_STOP",
+          "Verify whether the active session goal"
+        ],
         "bodyExcludes": [
           "E2E_GOAL_VERIFIER_STOP_NEXT",
           "Generate a concise title",
@@ -78,13 +81,17 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_GOAL_VERIFIER_STOP_NEXT"],
+        "bodyIncludes": [
+          "E2E_GOAL_VERIFIER_STOP_NEXT"
+        ],
         "bodyExcludes": [
           "Generate a concise title",
           "CRITICAL: Respond with TEXT ONLY",
           "Verify whether the active session goal"
         ],
-        "lastUserMessageIncludes": ["E2E_GOAL_VERIFIER_STOP_NEXT"]
+        "lastUserMessageIncludes": [
+          "E2E_GOAL_VERIFIER_STOP_NEXT"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -114,7 +121,10 @@
           "E2E_GOAL_VERIFIER_STOP_NEXT",
           "Verify whether the active session goal"
         ],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -170,7 +180,10 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["E2E_GOAL_VERIFIER_COMPACT", "Verify whether the active session goal"],
+        "bodyIncludes": [
+          "E2E_GOAL_VERIFIER_COMPACT",
+          "Verify whether the active session goal"
+        ],
         "bodyExcludes": [
           "E2E_GOAL_VERIFIER_COMPACT_NEXT",
           "Generate a concise title",
@@ -237,7 +250,9 @@
           "CRITICAL: Respond with TEXT ONLY",
           "Verify whether the active session goal"
         ],
-        "lastUserMessageIncludes": ["E2E_GOAL_VERIFIER_COMPACT_NEXT"]
+        "lastUserMessageIncludes": [
+          "E2E_GOAL_VERIFIER_COMPACT_NEXT"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -267,7 +282,10 @@
           "E2E_GOAL_VERIFIER_COMPACT_NEXT",
           "Verify whether the active session goal"
         ],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,

@@ -35,7 +35,11 @@ describe("assistant presentation", () => {
   });
 
   it("suppresses latestPart while streaming, interrupted, or settling", () => {
-    for (const state of [{ streaming: true }, { interrupted: true }, { settling: true }]) {
+    for (const state of [
+      { streaming: true },
+      { interrupted: true },
+      { settling: true },
+    ]) {
       expect(
         buildZCodeAssistantPresentation({
           content: "正文",

@@ -30,7 +30,10 @@ function makeAutomation(index: number): ZCodeAutomation {
 
 describe("automationManagementStore create limit", () => {
   afterEach(() => {
-    useAutomationManagementStore.setState(useAutomationManagementStore.getInitialState(), true);
+    useAutomationManagementStore.setState(
+      useAutomationManagementStore.getInitialState(),
+      true,
+    );
   });
 
   it("全状态任务合计达到 20 条后不发送创建 RPC", async () => {

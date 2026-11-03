@@ -6,7 +6,10 @@ import {
   dispatchWebElementContextAddToChat,
   type WebElementContextPayload,
 } from "@/lib/webElementContext.js";
-import { dispatchCodeCommentAddToChat, type CodeCommentPayload } from "@/lib/codeCommentContext.js";
+import {
+  dispatchCodeCommentAddToChat,
+  type CodeCommentPayload,
+} from "@/lib/codeCommentContext.js";
 import { ConversationComposer } from "@/v4/ConversationComposer.js";
 import { ZCodeIntlProvider } from "@/i18n/IntlProvider.js";
 

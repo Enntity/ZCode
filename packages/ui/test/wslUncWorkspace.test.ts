@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { isWslUncWorkspacePath, parseWslUncWorkspacePath } from "../src/lib/wslUncWorkspace.js";
+import {
+  isWslUncWorkspacePath,
+  parseWslUncWorkspacePath,
+} from "../src/lib/wslUncWorkspace.js";
 
 describe("wslUncWorkspace", () => {
   it("parses wsl.localhost UNC workspace paths", () => {
-    const parsed = parseWslUncWorkspacePath(String.raw`\\wsl.localhost\Ubuntu\home\user\project`);
+    const parsed = parseWslUncWorkspacePath(
+      String.raw`\\wsl.localhost\Ubuntu\home\user\project`,
+    );
 
     expect(parsed).toEqual({
       distro: "Ubuntu",

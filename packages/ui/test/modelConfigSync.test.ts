@@ -159,4 +159,5 @@ describe("model config sync helpers", () => {
       supplierKey: buildNativeSupplierKey("claude"),
     });
   });
+
 });

@@ -15,7 +15,10 @@
       "match": {
         "method": "POST",
         "pathIncludes": "/messages",
-        "bodyIncludes": ["Generate a concise title", "E2E_PV4_18_ATTACHMENT_ORIGINAL"]
+        "bodyIncludes": [
+          "Generate a concise title",
+          "E2E_PV4_18_ATTACHMENT_ORIGINAL"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -41,7 +44,10 @@
         "method": "POST",
         "pathIncludes": "/messages",
         "lastUserMessageIncludes": ["E2E_PV4_18_ATTACHMENT_ORIGINAL"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -148,7 +154,10 @@
         "method": "POST",
         "pathIncludes": "/messages",
         "lastUserMessageIncludes": ["E2E_PV4_19_FIRST"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -179,7 +188,10 @@
           "CRITICAL: Respond with TEXT ONLY",
           "\"stream\":true"
         ],
-        "bodyExcludes": ["Generate a concise title", "E2E_PV4_19_SECOND_ORIGINAL"]
+        "bodyExcludes": [
+          "Generate a concise title",
+          "E2E_PV4_19_SECOND_ORIGINAL"
+        ]
       },
       "response": {
         "statusCode": 200,
@@ -205,7 +217,10 @@
         "method": "POST",
         "pathIncludes": "/messages",
         "lastUserMessageIncludes": ["E2E_PV4_19_SECOND_ORIGINAL"],
-        "bodyExcludes": ["Generate a concise title", "CRITICAL: Respond with TEXT ONLY"]
+        "bodyExcludes": [
+          "Generate a concise title",
+          "CRITICAL: Respond with TEXT ONLY"
+        ]
       },
       "response": {
         "statusCode": 200,

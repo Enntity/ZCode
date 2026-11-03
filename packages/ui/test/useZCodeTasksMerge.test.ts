@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { ZCodeTaskMeta } from "@zcode/shared";
-import { mergeTaskMetaCandidates, mergeTaskWithOptimisticMeta } from "@/lib/zcodeTaskMetaMerge.js";
+import {
+  mergeTaskMetaCandidates,
+  mergeTaskWithOptimisticMeta,
+} from "@/lib/zcodeTaskMetaMerge.js";
 
 function createTaskMeta(overrides: Partial<ZCodeTaskMeta> = {}): ZCodeTaskMeta {
   return {
@@ -90,7 +93,9 @@ describe("mergeTaskWithOptimisticMeta", () => {
       updatedAt: 30,
     });
 
-    expect(mergeTaskMetaCandidates(rawSnapshotTask, indexedRenamedTask)).toMatchObject({
+    expect(
+      mergeTaskMetaCandidates(rawSnapshotTask, indexedRenamedTask),
+    ).toMatchObject({
       title: "airline-1",
       titleOverridden: true,
       updatedAt: 30,

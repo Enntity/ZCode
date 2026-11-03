@@ -113,10 +113,7 @@ describe("webhook bot provider", () => {
         }),
       }),
     );
-    const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body)) as {
-      type?: string;
-      text?: string;
-    };
+    const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body)) as { type?: string; text?: string };
     expect(body).toMatchObject({ type: "zcode.bot.message", text: "hello" });
   });
 

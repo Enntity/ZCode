@@ -107,7 +107,8 @@ describe("PlanGuidanceToolCallBlock", () => {
       kind: "other",
       title: "EnterPlanMode",
       input: {},
-      output: "Entered plan mode.\n\n1. Thoroughly explore the codebase\n2. Consider trade-offs",
+      output:
+        "Entered plan mode.\n\n1. Thoroughly explore the codebase\n2. Consider trade-offs",
       status: "completed",
       raw: {
         _meta: {

@@ -8,7 +8,9 @@ import {
 } from "@/lib/pptxElementReference.js";
 import { usePptxElementReferences } from "@/v4/composer/usePptxElementReferences.js";
 
-function makeReference(overrides: Partial<PptxElementReference> = {}): PptxElementReference {
+function makeReference(
+  overrides: Partial<PptxElementReference> = {},
+): PptxElementReference {
   return {
     bounds: { x: 0, y: 0, width: 100, height: 40 },
     capturedAt: 1,
@@ -43,7 +45,9 @@ describe("usePptxElementReferences", () => {
     );
 
     act(() => {
-      dispatchPptxElementReferenceAddToChat(makeReference({ remoteSessionId: "remote-2" }));
+      dispatchPptxElementReferenceAddToChat(
+        makeReference({ remoteSessionId: "remote-2" }),
+      );
     });
     expect(hook.result.current.references).toHaveLength(0);
 

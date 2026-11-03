@@ -1,5 +1,9 @@
 import { access } from "node:fs/promises";
-import { DEFAULT_WORKSPACE, clearAppData, waitForWorkspaceApp } from "./helpers/desktop-app.js";
+import {
+  DEFAULT_WORKSPACE,
+  clearAppData,
+  waitForWorkspaceApp,
+} from "./helpers/desktop-app.js";
 
 interface WindowInfo {
   title: string;
