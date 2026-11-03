@@ -764,7 +764,7 @@ function shouldApplyLogExportRetention(archivePath: string): boolean {
   const normalizedArchivePath = normalizeArchivePath(archivePath);
   if (
     normalizedArchivePath.startsWith("logs/") ||
-    normalizedArchivePath.startsWith(".zcode/cli/log/")
+    normalizedArchivePath.startsWith(".enntity-zcode/cli/log/")
   ) {
     return true;
   }
@@ -1144,21 +1144,21 @@ export async function createFeedbackLogArchiveFromExportLogs(
   return createFeedbackDiagnosticArchive({
     sources: [
       { directory: join(sourceDir, "logs"), archivePrefix: "logs" },
-      { directory: getZCodeCliLogDir(), archivePrefix: ".zcode/cli/log" },
+      { directory: getZCodeCliLogDir(), archivePrefix: ".enntity-zcode/cli/log" },
       {
         directory: getZCodeCliDir(),
-        archivePrefix: ".zcode/cli",
+        archivePrefix: ".enntity-zcode/cli",
         includeFileNames: ["config.json"],
         onlyCurrentDay: false,
         contentPolicy: "cli-config",
       },
       {
         directory: join(getZCodeCliDir(), "rollout"),
-        archivePrefix: ".zcode/cli/rollout",
+        archivePrefix: ".enntity-zcode/cli/rollout",
       },
       {
         directory: getCuaHelperRunDir(),
-        archivePrefix: ".zcode/computer-use/run",
+        archivePrefix: ".enntity-zcode/computer-use/run",
         exitLogsOnly: true,
       },
     ],

@@ -49,7 +49,6 @@ function resolveUserHomeDir() {
     process.env.HOME?.trim() ||
     process.env.USERPROFILE?.trim();
   return envHome && envHome.length > 0 ? envHome : homedir();
-
 }
 
 function defaultSettings(): AppSettings {
