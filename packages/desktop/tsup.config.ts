@@ -215,8 +215,9 @@ function createMainDefines() {
     ...createSharedDefines(),
     // 正式安装包无法继承 GitLab Runner 或开发终端环境。这里只把 CI 提供的低权限写入配置
     // 编译进 Desktop Main，再由既有 Main -> Host -> Agent 安全边界定向传递。
+    // Enntity fork: no packaged agent telemetry export, whatever the build environment holds.
     __ZCODE_PACKAGED_AGENT_TELEMETRY_ENV__: JSON.stringify(
-      resolveBuildPackagedAgentTelemetryEnv(process.env),
+      zcodeProductFlavor === "enntity" ? {} : resolveBuildPackagedAgentTelemetryEnv(process.env),
     ),
   };
 }

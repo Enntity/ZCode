@@ -85,6 +85,7 @@ import {
   PlatformChannels,
   ZCODE_ENV,
   ZCODE_PRODUCT_FLAVOR,
+  ZCODE_TELEMETRY_ENABLED,
   DEFAULT_ZCODE_ENDPOINT_ORIGIN,
   DEFAULT_LOCALE,
   TEST_ZCODE_ENDPOINT_ORIGIN,
@@ -901,8 +902,10 @@ const rendererActionTraceRollout = createRendererActionTraceRollout({
   fetchConfig: electronClientConfigsFetcher,
   logger,
 });
+// Enntity fork: OTLP exporters get no endpoint configuration while telemetry is disabled.
+const telemetryExportEnv = ZCODE_TELEMETRY_ENABLED ? { ...hostProcessLocalEnv, ...process.env } : {};
 const localTtftExporter = createLocalTtftExporter({
-  env: { ...hostProcessLocalEnv, ...process.env },
+  env: telemetryExportEnv,
   version: ZCODE_VERSION || app.getVersion(),
   logger,
 });
@@ -910,10 +913,7 @@ ipcMain.on(PlatformChannels.ReportLocalTtftBatch, (_event, batch: unknown) =>
   localTtftExporter.enqueue(batch),
 );
 const rendererActionTraceBroker = createRendererActionTraceBroker({
-  exporter: createRendererActionTraceExporter({
-    ...hostProcessLocalEnv,
-    ...process.env,
-  }),
+  exporter: createRendererActionTraceExporter(telemetryExportEnv),
   logger,
 });
 let disposeRendererActionTraceIpc: (() => void) | undefined;

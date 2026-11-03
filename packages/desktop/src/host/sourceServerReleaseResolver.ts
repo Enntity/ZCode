@@ -1,4 +1,4 @@
-import { normalizeRemoteConnectionError } from "@zcode/shared";
+import { isBlockedVendorUrl, normalizeRemoteConnectionError } from "@zcode/shared";
 import { createHash, randomUUID } from "node:crypto";
 import { createReadStream, createWriteStream } from "node:fs";
 import { access, mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
@@ -17,6 +17,7 @@ import {
 import {
   buildReleaseAssetUrlCandidates,
   buildReleaseBaseCandidates,
+  resolveRemoteCdnBaseUrls,
 } from "@zcode/server/remote/remoteAssetCdn.js";
 import {
   resolveRemoteAssetFetch,
@@ -70,7 +71,10 @@ function findArchive(
 }
 
 function resolveArchiveUrls(releaseBases: string[], archive: SourceServerReleaseArchive): string[] {
-  const absolute = archive.urls.filter((url) => /^https?:\/\//u.test(url));
+  // Enntity fork: a descriptor's absolute archive URLs must not point at vendor hosts.
+  const absolute = archive.urls.filter(
+    (url) => /^https?:\/\//u.test(url) && !isBlockedVendorUrl(url),
+  );
   const relative = archive.urls.filter((url) => !/^https?:\/\//u.test(url));
   return Array.from(
     new Set([...absolute, ...buildReleaseAssetUrlCandidates(releaseBases, relative)]),
@@ -109,8 +113,10 @@ async function resolveRemoteDescriptor(
   remoteAssetNetwork?: RemoteAssetNetworkPort,
 ): Promise<ResolvedDescriptor> {
   const releaseBases = buildReleaseBaseCandidates(
-    remoteAssets.remoteCdnBaseUrls ??
-      (remoteAssets.remoteCdnBaseUrl ? [remoteAssets.remoteCdnBaseUrl] : []),
+    resolveRemoteCdnBaseUrls({
+      remoteCdnBaseUrl: remoteAssets.remoteCdnBaseUrl,
+      remoteCdnBaseUrls: remoteAssets.remoteCdnBaseUrls,
+    }),
     ZCODE_VERSION,
   );
   const descriptorUrls = buildReleaseAssetUrlCandidates(releaseBases, [
@@ -133,7 +139,8 @@ async function resolveRemoteDescriptor(
       lastError = error;
     }
   }
-  if (cachedDescriptorPath && (await pathExists(cachedDescriptorPath))) {
+  // Enntity fork: without a configured release source, a cached descriptor is not trusted.
+  if (releaseBases.length > 0 && cachedDescriptorPath && (await pathExists(cachedDescriptorPath))) {
     return {
       descriptor: readDescriptor(await readFile(cachedDescriptorPath, "utf8")),
       releaseBases,
