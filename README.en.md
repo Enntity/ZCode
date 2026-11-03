@@ -2,7 +2,7 @@
 
 Enntity fork of zai-org/ZCode for local coding on macOS. The default provider is MacBook LLooM at `http://127.0.0.1:8100/v1`, using OpenRouter `z-ai/glm-5.3-flashx`. Product telemetry, upstream login/sync/updates, and managed requests to known Z.ai vendor domains are disabled. Data uses `~/.enntity-zcode`. See [fork behavior and feature limits](docs/enntity-fork.md) and [dependency review](docs/dependency-safety-rationale.md).
 
-Apple silicon builds use Electron 44.5.1 and require macOS 13+. The public source omits working Computer Use and several vendor document/image plugins; this fork does not claim those features are available.
+Apple silicon builds use Electron 44.7.0 and require macOS 13+. The public source omits working Computer Use and several vendor document/image plugins; this fork does not claim those features are available.
 
 <div align="center">
   <img src="public/logo/icons/1024x1024.png" alt="ZCode" width="128" height="128" />

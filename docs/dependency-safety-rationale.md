@@ -2,12 +2,12 @@
 
 ## Scope and acceptance
 
-This note records the production dependency audit and focused dependency adjustments for the Enntity ZCode fork. The goal is to remove advisory-bearing tooling paths from the shipped/runtime dependency closure where their packages are only needed during development, while retaining explicit exceptions for unresolved runtime paths. Electron is pinned to 44.5.1, with native ABI metadata pinned to 4.36.0 and parent-owned native-module rebuild and packaged-app checks.
+This note records the production dependency audit and focused dependency adjustments for the Enntity ZCode fork. The goal is to remove advisory-bearing tooling paths from the shipped/runtime dependency closure where their packages are only needed during development, while retaining explicit exceptions for unresolved runtime paths. Electron is pinned to 44.7.0, with native ABI metadata pinned to 4.37.0 and parent-owned native-module rebuild and packaged-app checks.
 
 ## Resolution policy
 
 - Prefer published patched versions confirmed in the npm registry.
-- Pin Electron 44.5.1 and use the same exact version in its desktop manifest and electron-builder configuration.
+- Pin Electron 44.7.0 and use the same exact version in its desktop manifest and electron-builder configuration.
 - Raise direct dependencies where their declared semver permits the patched release; use root pnpm overrides for vulnerable transitive dependencies, scoped to compatible majors when multiple majors are in use.
 - Preserve the existing AI SDK patches and constrain `@ai-sdk/provider-utils` only within each compatible major.
 - Keep `shadcn` as a `packages/ui` development dependency: it is used by Tailwind while building private UI CSS, and has no runtime JavaScript imports. This keeps its CLI, MCP/Express, and minimatch tree out of the production closure without removing CSS build support.
