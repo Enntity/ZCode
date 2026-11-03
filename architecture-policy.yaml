@@ -763,9 +763,10 @@ modules:
     owner: conversation
 
 global:
-  # 临时时间戳（2026-09-10）：unmanaged-new-file 只约束此日期之后首次入库的文件。
-  # 基于领先 staging 很多的分支开工时，merge-base 之前的"新增"文件不应被追溯。
-  newFilesEnforcedSince: "2026-09-10"
+  # Enntity fork：上游 sync（v3.16.2）整批引入的文件落在未受管模块，且公开导出内容
+  # 与内部 snapshot blob 天然不同（导出重写），无法逐文件准入；将追溯日期推到本次
+  # sync 之后（2026-11-01），后续 fork 侧新增代码仍按日期受 unmanaged-new-file 约束。
+  newFilesEnforcedSince: "2026-11-01"
   acceptedUpstreamCommits: []
   maxFileLines: 800
   maxContractLines: 300
