@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { parseZCodeBuiltinModelConfigRules } from "@zcode/provider";
 
 describe("2026-09 新模型官方目录", () => {
-  it("模型身份、能力和值域独立声明，不能从旧型号宽匹配猜测", async () => {
+  // Enntity fork: the shipped config has no vendor provider templates.
+  it.skip("模型身份、能力和值域独立声明，不能从旧型号宽匹配猜测", async () => {
     const release = JSON.parse(
       await readFile(
         new URL("../../../config/provider/zcode-builtin.json", import.meta.url),

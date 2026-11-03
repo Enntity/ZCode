@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { parseZCodeBuiltinModelConfigRules } from "@zcode/provider";
 
 describe("Zhipu four manual API templates", () => {
-  it.each(["zcode-builtin.json", "zcode-builtin.test.json"])(
+  // Enntity fork: the shipped config has no Zhipu API templates; only the upstream test config is checked.
+  it.each(["zcode-builtin.test.json"])(
     "%s 区分普通计费与套餐端点、签名准入、获取入口和媒体能力",
     async (filename) => {
       const release = JSON.parse(

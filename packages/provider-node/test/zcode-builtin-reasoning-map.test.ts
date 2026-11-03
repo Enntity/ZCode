@@ -134,6 +134,8 @@ describe("Todo95 专用 Map 合法请求等价", () => {
       // 依据：docs/provider-mimo-templates.md「模型及兼容边界」「验收」MIMO-01/02；
       // 独立覆盖见同目录 mimo-templates.test.ts（含 thinking.type / max_tokens 请求映射）。
       ".*mimo-v2\\.6-(?:pro|flash).*",
+      // Enntity fork: the LLooM Flash X route has its own map, covered by enntity-provider-seed.test.mjs.
+      "^z-ai/glm-5\\.3-flashx$",
     ]);
     const current = ["modelApiRules", "providerSiteRules"].flatMap((scope) =>
       rules[scope]!.flatMap((rule) =>

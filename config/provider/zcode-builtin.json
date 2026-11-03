@@ -5254,6 +5254,13 @@
           "config": {
             "enabled": false
           }
+        },
+        {
+          "templateId": "enntity-lloom",
+          "modelId": "z-ai/glm-5.3-flashx",
+          "config": {
+            "enabled": true
+          }
         }
       ],
       "builtinProviderModelRules": [
@@ -5463,6 +5470,13 @@
         {
           "providerId": "account:bigmodel-highspeed-card",
           "modelId": "GLM-5.3",
+          "config": {
+            "enabled": true
+          }
+        },
+        {
+          "providerId": "enntity-lloom",
+          "modelId": "z-ai/glm-5.3-flashx",
           "config": {
             "enabled": true
           }

@@ -11,7 +11,8 @@ let snapshot: Awaited<ReturnType<typeof source.read>>;
 let modelIds: string[];
 beforeAll(async () => {
   snapshot = await source.read();
-  const file = JSON.parse(await readFile(path, "utf8"));
+  // Enntity fork: the shipped config has no OpenRouter template; its members come from the upstream test config.
+  const file = JSON.parse(await readFile(path.replace(/\.json$/, ".test.json"), "utf8"));
   modelIds = file.config.providerConfigRules.templateRules.find(
     (rule: { templateId: string }) => rule.templateId === "openrouter",
   ).config.builtinModelIds;
@@ -34,7 +35,8 @@ function body(config: ModelConfig, reasoningLevel: string, maxOutputTokens = 500
 }
 
 describe("OpenRouter Messages 推理请求契约", () => {
-  it.each(["zcode-builtin.json", "zcode-builtin.test.json"])(
+  // Enntity fork: only the upstream test config ships the OpenRouter template.
+  it.each(["zcode-builtin.test.json"])(
     "%s 模板仅简化名称，不改变请求协议",
     async (filename) => {
       const release = JSON.parse(

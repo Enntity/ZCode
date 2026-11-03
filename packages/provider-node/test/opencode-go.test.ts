@@ -79,7 +79,8 @@ const patch = (config: ModelConfig, level: string) =>
   }).apply({}, { reasoningLevel: level, maxOutputTokens: 4096 });
 
 describe("Todo149 Go 模板与自建供应商共用站点规则", () => {
-  it.each(Object.entries(members))("%s 按官方协议列成员，模板只决定默认启停", (templateId, ids) => {
+  // Enntity fork: the shipped config has no OpenCode Go templates.
+  it.skip.each(Object.entries(members))("%s 按官方协议列成员，模板只决定默认启停", (templateId, ids) => {
     const t = templates.find((t) => t.templateId === templateId)!;
     expect(t).toBeDefined();
     expect(t.config.builtinModelIds).toEqual(

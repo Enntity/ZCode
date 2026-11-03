@@ -23,11 +23,24 @@ const source = new NodeZCodeBuiltinProviderConfigSource({
   ),
   watch: false,
 });
+// Enntity fork: the shipped config has only the LLooM provider, so the BigModel account
+// provider comes from the upstream test config; model rules still come from the shipped file.
+const accountSource = new NodeZCodeBuiltinProviderConfigSource({
+  bundledFilePath: fileURLToPath(
+    new URL("../../../config/provider/zcode-builtin.test.json", import.meta.url),
+  ),
+  watch: false,
+});
 let builtin: Awaited<ReturnType<typeof source.read>>;
+let accountBuiltin: Awaited<ReturnType<typeof source.read>>;
 beforeAll(async () => {
   builtin = await source.read();
+  accountBuiltin = await accountSource.read();
 });
-afterAll(() => source.dispose());
+afterAll(() => {
+  source.dispose();
+  accountSource.dispose();
+});
 
 function view(
   modelId: string,
@@ -39,8 +52,8 @@ function view(
     revision: "c",
     zcodeBuiltinRevision: "b",
     personalRevision: "p",
-    zcodeBuiltinProviders: builtin.providers,
-    zcodeBuiltinProviderTemplates: builtin.templates,
+    zcodeBuiltinProviders: accountBuiltin.providers,
+    zcodeBuiltinProviderTemplates: accountBuiltin.templates,
     personalProviders: ProviderConfigMap.empty(),
     zcodeBuiltinModelRules: modelRules,
     personalModels,

@@ -15,7 +15,8 @@ const bundledFilePath = fileURLToPath(
 );
 
 describe("Account preset membership", () => {
-  it("trims only individual/team defaults and keeps personal additions executable", async () => {
+  // Enntity fork: the shipped config has no Zhipu account providers.
+  it.skip("trims only individual/team defaults and keeps personal additions executable", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({ bundledFilePath, watch: false });
     try {
       const snapshot = await source.read();

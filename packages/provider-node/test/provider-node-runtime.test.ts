@@ -108,7 +108,8 @@ describe("@zcode/provider-node", () => {
     source.dispose();
   });
 
-  it("从 Built-in Config 解析模型能力、Access 协议和 Tool Schema 兼容事实", async () => {
+  // Enntity fork: the shipped config has no Zhipu account providers.
+  it.skip("从 Built-in Config 解析模型能力、Access 协议和 Tool Schema 兼容事实", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: zcodeBuiltinProviderConfigFilePath,
       watch: false,

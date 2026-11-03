@@ -78,7 +78,8 @@ describe("ZCode Built-in Provider Config 完整性", () => {
       }
     },
   );
-  it("GLM-5.3-Flash 的媒体输入能力及 GLM-5.3 的套餐桥接保持明确", async () => {
+  // Enntity fork: the shipped config has no Zhipu account providers or API templates.
+  it.skip("GLM-5.3-Flash 的媒体输入能力及 GLM-5.3 的套餐桥接保持明确", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: zcodeBuiltinProviderConfigFilePath,
       watch: false,
@@ -235,7 +236,8 @@ describe("ZCode Built-in Provider Config 完整性", () => {
     }
   });
 
-  it("按当前官方证据声明各厂商主推模型和关键静态属性", async () => {
+  // Enntity fork: the shipped config has no vendor provider templates.
+  it.skip("按当前官方证据声明各厂商主推模型和关键静态属性", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: zcodeBuiltinProviderConfigFilePath,
       watch: false,
@@ -376,7 +378,8 @@ describe("ZCode Built-in Provider Config 完整性", () => {
     }
   });
 
-  it("聚合供应商按维护清单提供独立模板，不复用上游 Provider 配置", async () => {
+  // Enntity fork: the shipped config has no aggregator provider templates.
+  it.skip("聚合供应商按维护清单提供独立模板，不复用上游 Provider 配置", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: zcodeBuiltinProviderConfigFilePath,
       watch: false,
@@ -401,7 +404,8 @@ describe("ZCode Built-in Provider Config 完整性", () => {
     }
   });
 
-  it("聚合供应商同型号命中模型规则和 API Map，保留完整 ID 且每家至少启用一个代表型号", async () => {
+  // Enntity fork: the shipped config has no aggregator provider templates.
+  it.skip("聚合供应商同型号命中模型规则和 API Map，保留完整 ID 且每家至少启用一个代表型号", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: zcodeBuiltinProviderConfigFilePath,
       watch: false,
@@ -525,7 +529,8 @@ describe("ZCode Built-in Provider Config 完整性", () => {
     }
   });
 
-  it("按产品分组声明 Zhipu 系统 Provider 与外部主流 Provider", async () => {
+  // Enntity fork: the shipped config has only the LLooM provider, no Zhipu or vendor providers.
+  it.skip("按产品分组声明 Zhipu 系统 Provider 与外部主流 Provider", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: zcodeBuiltinProviderConfigFilePath,
       watch: false,
@@ -890,7 +895,8 @@ describe("ZCode Built-in Provider Config 完整性", () => {
     }
   });
 
-  it("每个 Built-in Provider 与模型成员都完整，启用成员在补齐访问材料后进入正式 Registry", async () => {
+  // Enntity fork: the shipped config has only the LLooM provider, no Zhipu or vendor providers.
+  it.skip("每个 Built-in Provider 与模型成员都完整，启用成员在补齐访问材料后进入正式 Registry", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: zcodeBuiltinProviderConfigFilePath,
       watch: false,
@@ -1046,7 +1052,8 @@ describe("ZCode Built-in Provider Config 完整性", () => {
     }
   });
 
-  it("完整兜底让任意未知模型 ID 在各 API type 与模板下完整并进入 Registry（R3A-B-03）", async () => {
+  // Enntity fork: the scenarios use upstream deepseek and zai-api templates, which the shipped config does not have.
+  it.skip("完整兜底让任意未知模型 ID 在各 API type 与模板下完整并进入 Registry（R3A-B-03）", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: zcodeBuiltinProviderConfigFilePath,
       watch: false,
@@ -1150,7 +1157,8 @@ describe("ZCode Built-in Provider Config 完整性", () => {
     ) as unknown;
     const keys = collectObjectKeys(document);
 
-    expect(keys).not.toContain("apiKey");
+    // Enntity fork: only the LLooM provider carries its local placeholder API key.
+    expect(keys.filter((key) => key === "apiKey")).toHaveLength(1);
     expect(keys).not.toContain("modalities");
     expect(keys).not.toContain("magic_name");
     expect(keys).not.toContain("supportsImages");

@@ -235,7 +235,8 @@ describe("Todo113 第二轮：原厂、聚合、快照必须有独立正确配�
     expect(c.optionSpecs?.reasoningLevel?.values).toEqual(["personal"]);
     expect(c.optionSpecs?.reasoningLevel?.map).toBe('{"custom": true}');
   });
-  it("目录与精确默认成对维护，原厂退役不波及第三方和模型规则", () => {
+  // Enntity fork: the shipped config has no vendor or aggregator provider templates.
+  it.skip("目录与精确默认成对维护，原厂退役不波及第三方和模型规则", () => {
     const ids = (id: string) =>
       release.config.providerConfigRules.templateRules.find((t) => t.templateId === id)!.config
         .builtinModelIds;

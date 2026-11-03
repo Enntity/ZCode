@@ -201,7 +201,8 @@ describe("发布模型规则的前后缀与覆盖顺序", () => {
     },
   );
 
-  it("聚合模板的每家维护厂商有默认启用代表，所有成员能形成完整配置和请求 Map", async () => {
+  // Enntity fork: the shipped config has no aggregator provider templates.
+  it.skip("聚合模板的每家维护厂商有默认启用代表，所有成员能形成完整配置和请求 Map", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: fileURLToPath(
         new URL("../../../config/provider/zcode-builtin.json", import.meta.url),

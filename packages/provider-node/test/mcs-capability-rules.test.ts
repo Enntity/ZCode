@@ -49,6 +49,8 @@ describe("MCS published capability boundaries", () => {
       }
     }
     for (const provider of release.config.providerConfigRules.providerRules) {
+      // Enntity fork: the local LLooM route is not a Zhipu plan site, so it has no MCS grant.
+      if (provider.providerId === "enntity-lloom") continue;
       const { api } = provider.config;
       const config = rules.resolve({
         providerId: provider.providerId,
