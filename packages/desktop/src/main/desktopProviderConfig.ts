@@ -1,6 +1,5 @@
 import { app } from "electron";
 import { join } from "node:path";
-import { ZCODE_ENV } from "@zcode/shared";
 
 export function resolveZCodeBuiltinProviderConfigFilePath(options?: {
   readonly appPath?: string;
@@ -17,6 +16,6 @@ export function resolveZCodeBuiltinProviderConfigFilePath(options?: {
     );
   }
   // 开发态没有 resources 复制步骤，必须与构建注入的产品环境读取同一份源文件。
-  const filename = ZCODE_ENV === "production" ? "zcode-builtin.json" : "zcode-builtin.test.json";
-  return join(options?.appPath ?? app.getAppPath(), "../../config/provider", filename);
+  // Enntity fork: development reads the same LLooM-only catalog; the upstream test catalog lists vendor providers.
+  return join(options?.appPath ?? app.getAppPath(), "../../config/provider/zcode-builtin.json");
 }

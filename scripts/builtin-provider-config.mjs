@@ -41,7 +41,8 @@ export async function resolveBuiltinProviderBuildEnvironment({
 /** @param {{root?: string, env?: Record<string, string | undefined>}} options */
 export async function loadBuiltinProviderConfig({ root = repositoryRoot, env = process.env } = {}) {
   const environment = await resolveBuiltinProviderBuildEnvironment({ root, env });
-  const filename = environment === "production" ? "zcode-builtin.json" : "zcode-builtin.test.json";
+  // Enntity fork: every build ships the LLooM-only catalog; the upstream test catalog lists vendor providers.
+  const filename = "zcode-builtin.json";
   const sourcePath = resolve(root, "config/provider", filename);
   try {
     const content = await readFile(sourcePath, "utf8");
