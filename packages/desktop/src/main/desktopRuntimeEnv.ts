@@ -30,7 +30,6 @@ import { resolvePlatformKeyForPackagedApp } from "../../scripts/target-platform.
 import {
   getAppConfigDir,
   getDataBaseDir,
-  getZCodeDataRootDir,
   ZCODE_CUA_BUNDLED_HELPER_APP_PATH_ENV,
   ZCODE_WINDOWS_APP_INSTALL_DIR_ENV,
 } from "@zcode/services/node";
@@ -526,7 +525,7 @@ export function buildHostProcessEnv(hostProcessLocalEnv: Record<string, string>)
             )
           ? rawInheritedEnv.ZCODE_CUA_BUNDLED_HELPER_APP_PATH?.trim() ||
             join(
-              rawInheritedEnv.ZCODE_HOME?.trim() || getZCodeDataRootDir(),
+              rawInheritedEnv.ZCODE_HOME?.trim() || join(homedir(), ".enntity-zcode"),
               "computer-use",
               "dev",
               DEV_HELPER_APP_NAME,

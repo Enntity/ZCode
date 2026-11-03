@@ -28,13 +28,14 @@ import { createGenUiService } from "./gen-ui/node.js";
 // Node.js service implementations — NOT safe to import in browser code
 import { randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { homedir } from "node:os";
 import { join } from "node:path";
 import {
   createNodeProviderRuntimePathEnv,
   NodeModelSelectionConfigRepository,
   PERSONAL_PROVIDER_CONFIG_FILE_NAME,
 } from "@zcode/provider-node";
-import { getAppConfigDir as resolveAppConfigDir, getZCodeDataRootDir } from "./paths.js";
+import { getAppConfigDir as resolveAppConfigDir } from "./paths.js";
 import {
   createHasExistingLocalTask,
   hasAnyAgentSessionRow,
@@ -1145,7 +1146,8 @@ export function resolveBundledCuaHelperAppPath(
 export { isOfficialCuaPluginEnabledForWorkspace };
 
 export function hasGlobalCliZCodeCuaServer(env: NodeJS.ProcessEnv = process.env): boolean {
-  const configPath = join(getZCodeDataRootDir(), "cli", "config.json");
+  const home = env.HOME?.trim() || homedir();
+  const configPath = join(home, ".enntity-zcode", "cli", "config.json");
   let parsed: unknown;
   try {
     parsed = JSON.parse(readFileSync(configPath, "utf8"));

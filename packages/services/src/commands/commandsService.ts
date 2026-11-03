@@ -20,7 +20,6 @@ import {
   type ZCodeCommand,
 } from "@zcode/shared";
 import { DEFAULT_ENABLED_OFFICIAL_PLUGIN_IDS } from "@zcode/shared";
-import { getZCodeDataRootDir } from "#src/paths.js";
 import type { ICommandsService } from "./commands.js";
 import { CommandFileParser, type CommandFileFormat } from "./commandFileParser.js";
 import { readInstalledPluginRoots } from "#src/plugins/installedPluginRoots.js";
@@ -84,12 +83,12 @@ function getCommandSourceDescriptor(
 
 function getUserCommandsRoot(agentSource?: CommandAgentSource): string {
   const descriptor = getCommandSourceDescriptor(agentSource);
-  if (descriptor.directorySource === "zcode") return join(getZCodeDataRootDir(), "commands");
+  if (descriptor.directorySource === "zcode") return join(resolveUserHomeDir(), ".enntity-zcode", "commands");
   return join(resolveUserHomeDir(), ...descriptor.userDirectorySegments);
 }
 
 function getUserCliConfigPath(): string {
-  return join(getZCodeDataRootDir(), "cli", "config.json");
+  return join(resolveUserHomeDir(), ".enntity-zcode", "cli", "config.json");
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -225,7 +224,7 @@ function readStorageDirFromConfig(config: Record<string, unknown>): string {
   const storage = isRecord(config.storage) ? config.storage : {};
   return typeof storage.dir === "string" && storage.dir.trim().length > 0
     ? storage.dir
-    : join(getZCodeDataRootDir(), "cli");
+    : "~/.enntity-zcode";
 }
 
 function readPluginConfigFromConfig(config: Record<string, unknown>): PluginConfigSummary {
@@ -439,7 +438,7 @@ async function resolvePluginCommandRootDescriptors(): Promise<PluginCommandRootD
 }
 
 function getUserCommandsRootForDescriptor(descriptor: CommandAgentSourceDescriptor): string {
-  if (descriptor.directorySource === "zcode") return join(getZCodeDataRootDir(), "commands");
+  if (descriptor.directorySource === "zcode") return join(resolveUserHomeDir(), ".enntity-zcode", "commands");
   return join(resolveUserHomeDir(), ...descriptor.userDirectorySegments);
 }
 
