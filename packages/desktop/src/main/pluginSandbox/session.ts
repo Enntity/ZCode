@@ -1,4 +1,5 @@
 import { webContents, type Session } from "electron";
+import { isBlockedVendorUrl } from "@zcode/shared";
 import type { PluginSandboxRegistryPort } from "./contract.js";
 import type { PluginSandboxPermissionGate } from "./permissionGate.js";
 import { createGenUiVendorResources, resolveGenUiVendorRedirect } from "./genUiVendor.js";
@@ -38,9 +39,18 @@ export function preparePluginSandboxSession(input: {
     }),
   );
   // 稳定 origin 不能授予跨实例资源访问；以 Electron 提供的实际 guest 与路径登记交叉验证。
+  // Enntity fork: Electron keeps one listener per session, so this one also carries the vendor block.
   session.webRequest.onBeforeRequest(
-    { urls: ["zcode-sandbox://*/*", "https://*/*"] },
+    { urls: ["zcode-sandbox://*/*", "https://*/*", "http://*/*", "ws://*/*", "wss://*/*"] },
     (details, callback) => {
+      if (isBlockedVendorUrl(details.url)) {
+        callback({ cancel: true });
+        return;
+      }
+      if (!/^(?:zcode-sandbox|https):/u.test(details.url)) {
+        callback({});
+        return;
+      }
       const target = parsePluginSandboxUrl(details.url);
       const guest =
         details.webContentsId === undefined ? undefined : webContents.fromId(details.webContentsId);

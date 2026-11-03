@@ -49,17 +49,22 @@ export const RUNTIME_ZCODE_DEBUG =
   typeof process !== "undefined" ? process.env.ZCODE_DEBUG : undefined;
 
 // ── 构建期可选能力（见 docs/desktop/build-time-optional-capabilities.md），未注入时一律关闭 ──
+// Enntity fork: these build-time switches stay off whatever the build environment injects.
 /** ARMS RUM 上报地址；为空时 SDK 以 enable=false 初始化，不产生上报。 */
 export const ZCODE_ARMS_RUM_ENDPOINT: string =
-  typeof __ZCODE_ARMS_RUM_ENDPOINT__ !== "undefined" ? __ZCODE_ARMS_RUM_ENDPOINT__ : "";
+  ZCODE_PRODUCT_FLAVOR !== "enntity" && typeof __ZCODE_ARMS_RUM_ENDPOINT__ !== "undefined"
+    ? __ZCODE_ARMS_RUM_ENDPOINT__
+    : "";
 /** 事件上报（数仓）地址；为空时不上报。 */
 export const ZCODE_TELEMETRY_REPORT_ENDPOINT: string =
-  typeof __ZCODE_TELEMETRY_REPORT_ENDPOINT__ !== "undefined"
+  ZCODE_PRODUCT_FLAVOR !== "enntity" && typeof __ZCODE_TELEMETRY_REPORT_ENDPOINT__ !== "undefined"
     ? __ZCODE_TELEMETRY_REPORT_ENDPOINT__
     : "";
 /** 桌面自动更新是否启用。 */
 export const ZCODE_AUTO_UPDATE_ENABLED: boolean =
-  typeof __ZCODE_AUTO_UPDATE_ENABLED__ !== "undefined" ? __ZCODE_AUTO_UPDATE_ENABLED__ : false;
+  ZCODE_PRODUCT_FLAVOR !== "enntity" && typeof __ZCODE_AUTO_UPDATE_ENABLED__ !== "undefined"
+    ? __ZCODE_AUTO_UPDATE_ENABLED__
+    : false;
 
 // Enntity fork：运行时已配置的数仓/ARMS 端点保持可用；enntity 构建不出网由端点为空兜底。
 export const ZCODE_TELEMETRY_ENABLED: boolean = ZCODE_PRODUCT_FLAVOR !== "enntity";

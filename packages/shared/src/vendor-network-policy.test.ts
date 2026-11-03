@@ -11,6 +11,7 @@ test("blocks vendor domains, subdomains, case variants, and trailing dots", () =
     "foo.zhipuai.com",
     "chatglm.cn",
     "cdn.aminer.cn",
+    "cdn.codegeex.cn",
   ]) {
     assert.equal(isBlockedVendorHost(host), true, host);
   }

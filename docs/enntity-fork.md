@@ -24,7 +24,7 @@ verified `z-ai/glm-5.3-flashx` route. Its selection starts with reasoning effort
 no cloud or alternate-model fallback. Users may choose another model exposed by
 LLooM.
 
-The fork sends no managed requests to Z.ai, BigModel, Zhipu, ChatGLM, or Aminer
+The fork sends no managed requests to Z.ai, BigModel, Zhipu, ChatGLM, CodeGeeX, or Aminer
 hosts. A centralized, early outbound guard blocks those vendor host suffixes
 across application-managed desktop and Node networking, including explicit
 endpoint overrides and redirects. Managed CLI Chromium uses direct networking

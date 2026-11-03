@@ -168,14 +168,17 @@ Write-Host ""
 
 # ── Step 2d: Font Installation (from CDN) ──
 Write-Host "--- [4/5] Font Installation ---"
-$FontCdnBase = "https://z-cdn.chatglm.cn/office-skill/fonts"
+# Enntity fork: no vendor font CDN; set OFFICE_SKILL_FONT_CDN_BASE to download fonts.
+$FontCdnBase = $env:OFFICE_SKILL_FONT_CDN_BASE
 $FontList = Join-Path $ScriptDir "font_list.txt"
 
 $UserFontDir = Join-Path $env:LOCALAPPDATA "Microsoft\Windows\Fonts"
 if (-not (Test-Path $UserFontDir)) { New-Item -ItemType Directory -Path $UserFontDir -Force | Out-Null }
 
 $Marker = Join-Path $UserFontDir ".office-skill-fonts-installed"
-if (Test-Path $Marker) {
+if (-not $FontCdnBase) {
+    Write-Info "Font download skipped (OFFICE_SKILL_FONT_CDN_BASE not set); install fonts from font_list.txt manually if needed."
+} elseif (Test-Path $Marker) {
     Write-Ok "Fonts already installed (marker found). To re-install, delete $Marker"
 } else {
     if (-not (Test-Path $FontList)) {

@@ -1,3 +1,4 @@
+import { installNodeVendorNetworkGuard } from "@zcode/shared/node";
 import {
   createServerHostServices,
   createTopicResourcePeers,
@@ -8,6 +9,8 @@ import {
   readBundledZCodeBuiltinProviderConfig,
 } from "./bundledZCodeBuiltinProviderConfig.js";
 import { createHttpServer, resolveHttpServerId } from "./http.js";
+// Enntity fork: install the vendor host guard before this entry makes any request.
+installNodeVendorNetworkGuard();
 
 async function main(): Promise<void> {
   const zcodeBuiltinProviderConfigFilePath = await materializeBundledZCodeBuiltinProviderConfig({

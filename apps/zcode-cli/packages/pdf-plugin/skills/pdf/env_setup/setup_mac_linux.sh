@@ -271,7 +271,8 @@ echo ""
 
 # ── Step 2i: Font Installation (from CDN) ──
 echo "--- [9/10] Font Installation ---"
-FONT_CDN_BASE="https://z-cdn.chatglm.cn/office-skill/fonts"
+# Enntity fork: no vendor font CDN; set OFFICE_SKILL_FONT_CDN_BASE to download fonts.
+FONT_CDN_BASE="${OFFICE_SKILL_FONT_CDN_BASE:-}"
 FONT_LIST="$SCRIPT_DIR/font_list.txt"
 
 if [ "$PLATFORM" = "mac" ]; then
@@ -282,7 +283,9 @@ fi
 mkdir -p "$USER_FONT_DIR"
 
 MARKER="$USER_FONT_DIR/.office-skill-fonts-installed"
-if [ -f "$MARKER" ]; then
+if [ -z "$FONT_CDN_BASE" ]; then
+    info "Font download skipped (OFFICE_SKILL_FONT_CDN_BASE not set); install fonts from font_list.txt manually if needed."
+elif [ -f "$MARKER" ]; then
     ok "Fonts already installed (marker found). To re-install, delete $MARKER"
 else
     if [ ! -f "$FONT_LIST" ]; then

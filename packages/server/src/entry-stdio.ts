@@ -1,3 +1,4 @@
+import { installNodeVendorNetworkGuard } from "@zcode/shared/node";
 import { migrateApplicationStorage, createSettingService } from "@zcode/services/node";
 import { disposeServiceResourcesAndWait, getAppConfigDir } from "@zcode/services/node";
 import type { IChannel } from "@zcode/rpc";
@@ -18,6 +19,8 @@ import {
   materializeBundledZCodeBuiltinProviderConfig,
   readBundledZCodeBuiltinProviderConfig,
 } from "./bundledZCodeBuiltinProviderConfig.js";
+// Enntity fork: install the vendor host guard before this entry makes any request.
+installNodeVendorNetworkGuard();
 
 // In stdio mode, all logging goes to stderr
 const log = (...args: unknown[]) =>

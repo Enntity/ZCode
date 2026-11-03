@@ -1,3 +1,4 @@
+import { installNodeVendorNetworkGuard } from "@zcode/shared/node";
 import { STORAGE_MIGRATION_COMMAND } from "@zcode/shared/sqlite-migrations";
 import { interceptTuiStderr, isTuiInvocation } from "./tui-stderr.js";
 import { interceptKnownRuntimeWarnings } from "./runtime-warnings.js";
@@ -11,6 +12,8 @@ import { installCliProcessErrorBoundary } from "./process-errors.js";
 import { installProtocolStderrBoundary } from "./protocol-stderr.js";
 import { createProtocolProcessLifecycle } from "./protocol-lifecycle.js";
 import { isProtocolServerInvocation } from "./arguments.js";
+// Enntity fork: install the vendor host guard before this entry makes any request.
+installNodeVendorNetworkGuard();
 
 void main();
 

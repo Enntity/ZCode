@@ -2582,7 +2582,7 @@ const zhCN: Record<string, string> = {
   "remote.connectingConfirmTitle": "要中止当前连接吗？",
   "remote.sourceServerInstallTitle": "需要安装 ZCode Server",
   "remote.sourceServerInstallDescription":
-    "ZCode 将上传匹配的发行包，安装到 ~/.zcode/server 并启动远端服务；现有旧远程文件会保留。",
+    "ZCode 将上传匹配的发行包，安装到 ~/.enntity-zcode/server 并启动远端服务；现有旧远程文件会保留。",
   "remote.sourceServerInstallConfirm": "安装并继续",
   "remote.installTarget": "目标账号",
   "remote.installVersion": "安装版本",

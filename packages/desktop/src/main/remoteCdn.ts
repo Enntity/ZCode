@@ -1,4 +1,4 @@
-import { ZCODE_VERSION, type ZCodeEnv } from "@zcode/shared";
+import { ZCODE_PRODUCT_FLAVOR, ZCODE_VERSION, type ZCodeEnv } from "@zcode/shared";
 
 declare const __ZCODE_REMOTE_CDN_RELEASE_ROOTS__: readonly string[] | undefined;
 
@@ -47,6 +47,10 @@ export function resolveRemoteCdnBaseUrls(options: ResolveRemoteCdnOptions = {}):
   const overrideBaseUrl = options.overrideBaseUrl?.trim();
   if (overrideBaseUrl) {
     return [normalizeBaseUrl(overrideBaseUrl)];
+  }
+  // Enntity fork: vendor CDNs serve upstream builds, so remote assets need an explicit override.
+  if (ZCODE_PRODUCT_FLAVOR === "enntity") {
+    return [];
   }
 
   const orderedReleaseRoots = shouldPreferDomesticRemoteCdn(options)

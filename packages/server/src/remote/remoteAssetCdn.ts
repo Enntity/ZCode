@@ -1,4 +1,5 @@
 import { posix } from "node:path";
+import { isBlockedVendorUrl } from "@zcode/shared";
 
 export interface RemoteCdnBaseOptions {
   remoteCdnBaseUrl?: string;
@@ -8,7 +9,9 @@ export interface RemoteCdnBaseOptions {
 export function resolveRemoteCdnBaseUrls(options: RemoteCdnBaseOptions): string[] {
   const candidates = [...(options.remoteCdnBaseUrls ?? []), options.remoteCdnBaseUrl ?? ""]
     .map((value) => value.trim())
-    .filter((value) => value.length > 0);
+    .filter((value) => value.length > 0)
+    // Enntity fork: never fetch or install remote assets from vendor hosts.
+    .filter((value) => !isBlockedVendorUrl(value));
   return Array.from(new Set(candidates));
 }
 
