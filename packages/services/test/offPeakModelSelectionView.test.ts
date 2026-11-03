@@ -12,7 +12,8 @@ import { describe, expect, it } from "vitest";
 import { buildOffPeakModelSelectionView } from "../src/model-provider/offPeakModelSelectionView.js";
 
 describe("buildOffPeakModelSelectionView", () => {
-  it("只投影 Registry 中固定的隐藏闲时 Provider", async () => {
+  // Enntity fork: zcode-builtin.json ships only the local enntity-lloom provider, not the vendor off-peak account providers.
+  it.skip("只投影 Registry 中固定的隐藏闲时 Provider", async () => {
     const source = new NodeZCodeBuiltinProviderConfigSource({
       bundledFilePath: join(process.cwd(), "config/provider/zcode-builtin.json"),
       watch: false,

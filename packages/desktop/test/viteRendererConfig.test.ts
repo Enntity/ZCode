@@ -76,7 +76,7 @@ describe("desktop renderer Vite dependency aliases", () => {
 
     expect(result?.config.define).toMatchObject({
       __ZCODE_ENV__: JSON.stringify("production"),
-      __ZCODE_PRODUCT_FLAVOR__: JSON.stringify("production"),
+      __ZCODE_PRODUCT_FLAVOR__: JSON.stringify("enntity"),
       __ZCODE_LOCAL_DEVELOPMENT_RUNTIME__: JSON.stringify(true),
       "import.meta.env.VITE_ZCODE_E2E_STORE_BRIDGE": JSON.stringify(""),
     });
@@ -121,7 +121,7 @@ describe("desktop renderer Vite dependency aliases", () => {
 
     expect(result?.config.define).toMatchObject({
       __ZCODE_ENV__: JSON.stringify("test"),
-      __ZCODE_PRODUCT_FLAVOR__: JSON.stringify("preview"),
+      __ZCODE_PRODUCT_FLAVOR__: JSON.stringify("enntity"),
       "import.meta.env.VITE_ZCODE_E2E_STORE_BRIDGE": JSON.stringify("1"),
     });
   });
@@ -143,9 +143,10 @@ describe("desktop renderer Vite dependency aliases", () => {
       "silent",
     );
 
+    // Enntity fork: the product flavor is fixed to enntity, so ZCODE_PREVIEW_IDENTITY cannot switch it.
     expect(result?.config.define).toMatchObject({
       __ZCODE_ENV__: JSON.stringify("production"),
-      __ZCODE_PRODUCT_FLAVOR__: JSON.stringify("preview"),
+      __ZCODE_PRODUCT_FLAVOR__: JSON.stringify("enntity"),
     });
   });
 });

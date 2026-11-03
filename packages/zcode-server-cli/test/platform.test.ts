@@ -27,7 +27,7 @@ describe("user service descriptors", () => {
         expect(descriptor.content).toContain(layout.serverRoot);
       }
       expect(descriptor.content).not.toContain("server-cli.js");
-      expect(descriptor.name).toBe(`com.zhipu.zcode.server.${stablePathId(layout.serverRoot)}`);
+      expect(descriptor.name).toBe(`com.enntity.zcode.server.${stablePathId(layout.serverRoot)}`);
     },
   );
 

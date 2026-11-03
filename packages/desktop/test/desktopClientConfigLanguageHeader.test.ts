@@ -36,7 +36,8 @@ import { createElectronDesktopContextPromptConfigFetcher } from "../src/main/des
 import { createDesktopHelpConfigReader } from "../src/main/desktopHelpConfig.js";
 
 describe("Desktop main client/configs 的 X-Client-Language", () => {
-  it("灰度配置请求按当前界面语言发送，切换后下一次请求生效", async () => {
+  // Enntity fork: the vendor client/configs rollout is disabled; the fetcher returns {} without a request.
+  it.skip("灰度配置请求按当前界面语言发送，切换后下一次请求生效", async () => {
     let locale = "zh-CN";
     const fetchConfig = createElectronDesktopContextPromptConfigFetcher({
       appVersion: "3.0.0",

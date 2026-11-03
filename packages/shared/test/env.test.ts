@@ -34,7 +34,7 @@ describe("shared runtime env", () => {
 
     const env = await importFreshEnvModule();
 
-    expect(env.ZCODE_PRODUCT_FLAVOR).toBe("production");
+    expect(env.ZCODE_PRODUCT_FLAVOR).toBe("enntity");
     expect(env.normalizeZCodeProductFlavor(undefined, "test")).toBe("preview");
     expect(env.normalizeZCodeProductFlavor("bogus", "production")).toBe("production");
   });
@@ -46,7 +46,7 @@ describe("shared runtime env", () => {
     const env = await importFreshEnvModule();
 
     expect(env.ZCODE_ENV).toBe("production");
-    expect(env.ZCODE_PRODUCT_FLAVOR).toBe("preview");
+    expect(env.ZCODE_PRODUCT_FLAVOR).toBe("enntity");
   });
 
   it("mapZCodeEnvToArmsRumEnv 将非本地 production 映射为 prod", async () => {

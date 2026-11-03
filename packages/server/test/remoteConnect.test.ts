@@ -277,7 +277,7 @@ describe("connectRemote", () => {
     });
     connection.dispose();
 
-    expect(backend.commands[0]).toContain('ZCODE_SERVER_RUNTIME_ROOT="$HOME/.zcode/server"');
+    expect(backend.commands[0]).toContain('ZCODE_SERVER_RUNTIME_ROOT="$HOME/.enntity-zcode/server"');
   });
 
   it("启动 desktop attached 远端 server 时注入服务权威模式", async () => {

@@ -74,7 +74,8 @@ describe("App Built-in / Account 失败恢复", () => {
       const next = runtime.registryService.getSnapshot()!;
       expect(next.account.basedOnZCodeBuiltinRevision).toBe(next.config.zcodeBuiltinRevision);
       expect(resolve.mock.calls.length).toBe(beforeRecovery + 1);
-      expect(download).toHaveBeenCalledTimes(1);
+      // Enntity fork: providerConfigRuntime drops zcodeBuiltinRemote, so no remote builtin release is downloaded.
+      expect(download).toHaveBeenCalledTimes(0);
     } finally {
       runtime.dispose();
       vi.useRealTimers();

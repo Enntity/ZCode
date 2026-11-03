@@ -135,7 +135,8 @@ describe("desktopCommandHandlers resolveFeedbackUrl", () => {
     stubProcessPlatform(originalPlatform);
   });
 
-  it("优先使用远端 JSON 里的 feedback_url", async () => {
+  // Enntity fork: the vendor remote help config is disabled (fetchRemoteAppConfig returns undefined), so only local JSON is read.
+  it.skip("优先使用远端 JSON 里的 feedback_url", async () => {
     const logger = {
       warn: vi.fn(),
     };
@@ -157,7 +158,8 @@ describe("desktopCommandHandlers resolveFeedbackUrl", () => {
     expect(feedbackUrl).toBe("https://remote.example.com/feedback");
   });
 
-  it("远端不可用时回退到本地 JSON", async () => {
+  // Enntity fork: the vendor remote help config is disabled (fetchRemoteAppConfig returns undefined), so only local JSON is read.
+  it.skip("远端不可用时回退到本地 JSON", async () => {
     const logger = {
       warn: vi.fn(),
     };
@@ -195,7 +197,8 @@ describe("desktopCommandHandlers resolveFeedbackUrl", () => {
     expect(feedbackUrl).toBeUndefined();
   });
 
-  it("中文界面只打开中文社群入口，缺失时不跨语言回退", async () => {
+  // Enntity fork: the vendor remote help config is disabled (fetchRemoteAppConfig returns undefined), so only local JSON is read.
+  it.skip("中文界面只打开中文社群入口，缺失时不跨语言回退", async () => {
     const logger = {
       warn: vi.fn(),
     };

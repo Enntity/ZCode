@@ -389,6 +389,7 @@ describe("createLocalServices remote authority", () => {
     const [{ createLocalServices, disposeServiceResources }, { IClientScenesService }] =
       await Promise.all([import("../src/node.js"), import("../src/index.js")]);
     const services = createLocalServices({
+      zcodeBuiltinProviderConfigFilePath: writeZCodeBuiltinProviderConfig(home),
       hostApiNetworkTransport: transport,
       serviceAuthorityMode: "desktop-attached-remote",
     });
@@ -398,7 +399,8 @@ describe("createLocalServices remote authority", () => {
         code: 0,
         data: [],
       });
-      expect(transport.fetch).toHaveBeenCalledOnce();
+      // Enntity fork: client scenes answer locally without a vendor request.
+      expect(transport.fetch).not.toHaveBeenCalled();
     } finally {
       disposeServiceResources(services);
     }

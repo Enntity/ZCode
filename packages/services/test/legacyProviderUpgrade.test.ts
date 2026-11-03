@@ -24,7 +24,8 @@ afterEach(async () => {
 });
 
 describe("Todo 72 已发布 config.json 首次升级", () => {
-  it.each([
+  // Enntity fork: the bundled builtin config ships only the local LLooM template (no bigmodel-api/zai-api), and node.ts skips the legacy config.json import.
+  it.skip.each([
     { label: "外层禁用优先", fields: { enabled: false, zcode: { enabled: true } }, enabled: false },
     { label: "外层启用优先", fields: { enabled: true, zcode: { enabled: false } }, enabled: true },
     { label: "扩展禁用", fields: { zcode: { enabled: false } }, enabled: false },

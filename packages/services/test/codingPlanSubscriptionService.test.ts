@@ -581,7 +581,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     expect(apiClient.request).not.toHaveBeenCalled();
   });
 
-  describe.each(["bigmodel", "zai"] as const)("%s 静态套餐配置 ID 兼容", (family) => {
+  // Enntity fork: the fork ships no vendor client config, so there is no static coding-plan product catalog to read.
+  describe.skip.each(["bigmodel", "zai"] as const)("%s 静态套餐配置 ID 兼容", (family) => {
     it.each(["legacy", "current", "both", "empty", "missing"] as const)(
       "%s 同时覆盖个人与团队目录",
       async (scenario) => {
@@ -644,7 +645,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     );
   });
 
-  it("getStaticProducts 从 ZCode client config 读取套餐配置且不需要 OAuth", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("getStaticProducts 从 ZCode client config 读取套餐配置且不需要 OAuth", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () =>
         createJsonResponse({
@@ -698,7 +700,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     );
   });
 
-  it("getStaticTeamProducts 按 provider 读取团队套餐静态配置", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("getStaticTeamProducts 按 provider 读取团队套餐静态配置", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () =>
         createJsonResponse({
@@ -740,7 +743,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     });
   });
 
-  it("getStaticTeamProducts 拒绝非数组 provider 配置", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("getStaticTeamProducts 拒绝非数组 provider 配置", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () =>
         createJsonResponse({
@@ -765,7 +769,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     );
   });
 
-  it("getStaticTeamProducts 拒绝字段或枚举无效的商品", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("getStaticTeamProducts 拒绝字段或枚举无效的商品", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () =>
         createJsonResponse({
@@ -800,7 +805,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     );
   });
 
-  it("getStaticTeamProducts 拒绝无效的团队文案条目", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("getStaticTeamProducts 拒绝无效的团队文案条目", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () =>
         createJsonResponse({
@@ -850,7 +856,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     ).toBe("https://runtime.example.com/api/v1/client/configs");
   });
 
-  it("getForceUpdateConfig 从 ZCode client config 读取强制升级配置", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("getForceUpdateConfig 从 ZCode client config 读取强制升级配置", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () =>
         createJsonResponse({
@@ -932,7 +939,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     await expect(provider.getForceUpdateConfig()).resolves.toBeNull();
   });
 
-  it("getStartPlanPreview 从 ZCode client config 读取未登录 Start Plan 预览", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("getStartPlanPreview 从 ZCode client config 读取未登录 Start Plan 预览", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () =>
         createJsonResponse({
@@ -988,7 +996,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     );
   });
 
-  it("getBillingDiscount 仅在字段存在时返回活动配置", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("getBillingDiscount 仅在字段存在时返回活动配置", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () =>
         createJsonResponse({
@@ -1056,7 +1065,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     await expect(provider.getBillingDiscount()).resolves.toBeUndefined();
   });
 
-  it("getStartPlanPreview、getStaticProducts 和 getBillingDiscount 共享同一次 client config 请求", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("getStartPlanPreview、getStaticProducts 和 getBillingDiscount 共享同一次 client config 请求", async () => {
     let resolveRequest: ((response: Response) => void) | undefined;
     const apiClient: ApiClient = {
       request: vi.fn(
@@ -1144,7 +1154,8 @@ describe("BigModelCodingPlanSubscriptionProvider", () => {
     expect(apiClient.request).toHaveBeenCalledTimes(1);
   });
 
-  it("client configs 缓存 1 小时后重新请求", async () => {
+  // Enntity fork: the fork ships no vendor client config (no coding-plan catalog, force-update, start-plan or billing metadata); getClientConfigs returns empty configs.
+  it.skip("client configs 缓存 1 小时后重新请求", async () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-06-12T00:00:00.000Z"));
     const apiClient: ApiClient = {

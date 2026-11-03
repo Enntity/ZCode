@@ -23,7 +23,7 @@ import { AccountProviderApiKeyResolver } from "../src/model-provider/accountProv
 import { createAccountProjectTokenClient } from "../src/model-provider/accountProjectTokenClient.js";
 import { resolveAccountTeamPlanRuntimeApiKey } from "../src/model-provider/accountProviderTeamPlanRequestKey.js";
 
-const DESKTOP_OAUTH_CALLBACK_URI = "zcode://oauth/callback";
+const DESKTOP_OAUTH_CALLBACK_URI = "enntity-zcode://oauth/callback";
 
 function buildDesktopOAuthLoginRedirectUri(origin: string): string {
   const url = new URL("/app/oauth/login", origin);
@@ -285,7 +285,7 @@ describe("oauthService", () => {
 
     expect(authorizeUrl.searchParams.get("state")).toBe(started.state);
     expect(redirectUrl.origin + redirectUrl.pathname).toBe("https://zcode.z.ai/app/oauth/login");
-    expect(redirectUrl.searchParams.get("redirect")).toBe("zcode://oauth/callback");
+    expect(redirectUrl.searchParams.get("redirect")).toBe("enntity-zcode://oauth/callback");
     expect(redirectUrl.searchParams.get("app_version")).toBe(ZCODE_VERSION);
     expect(result).toEqual({
       kind: "session",
@@ -402,7 +402,7 @@ describe("oauthService", () => {
       });
       expect(authorizeUrl.origin + authorizeUrl.pathname).toBe("https://bigmodel.cn/login");
       expect(redirectUrl.origin + redirectUrl.pathname).toBe("https://zcode.z.ai/app/oauth/login");
-      expect(redirectUrl.searchParams.get("redirect")).toBe("zcode://oauth/callback");
+      expect(redirectUrl.searchParams.get("redirect")).toBe("enntity-zcode://oauth/callback");
       expect(redirectUrl.searchParams.get("app_version")).toBe(ZCODE_VERSION);
       expect(result).toEqual({
         kind: "session",

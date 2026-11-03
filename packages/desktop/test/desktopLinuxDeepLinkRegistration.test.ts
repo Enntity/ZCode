@@ -31,11 +31,11 @@ describe("desktop Linux deep link registration helpers", () => {
       env: { APPIMAGE: "/home/alice/Downloads/ZCode-2.8.0-linux-x64.AppImage" },
       executablePath: "/tmp/.mount_ZCode/zcode",
     });
-    const entry = createLinuxDeepLinkDesktopEntry(command);
+    const entry = createLinuxDeepLinkDesktopEntry({ ...command, scheme: "enntity-zcode" });
 
     expect(command.executablePath).toBe("/home/alice/Downloads/ZCode-2.8.0-linux-x64.AppImage");
     expect(entry).toContain('Exec="/home/alice/Downloads/ZCode-2.8.0-linux-x64.AppImage" %U');
-    expect(entry).toContain("MimeType=x-scheme-handler/zcode;");
+    expect(entry).toContain("MimeType=x-scheme-handler/enntity-zcode;");
   });
 
   it("keeps AppImage sandbox and GPU launch switches for protocol callbacks", async () => {
@@ -105,12 +105,13 @@ describe("desktop Linux deep link registration helpers", () => {
     const entry = createLinuxDeepLinkDesktopEntry({
       executablePath: "/opt/ZCode Preview/zcode-preview",
       productName: "ZCode Preview",
+      scheme: "enntity-zcode",
     });
 
     expect(entry).toContain("Name=ZCode Preview");
     expect(entry).toContain("StartupWMClass=ZCode Preview");
     expect(entry).toContain('Exec="/opt/ZCode Preview/zcode-preview" %U');
-    expect(entry).toContain("MimeType=x-scheme-handler/zcode;");
+    expect(entry).toContain("MimeType=x-scheme-handler/enntity-zcode;");
   });
 
   it("escapes AppImage callback switches before writing desktop Exec", async () => {
@@ -287,7 +288,7 @@ describe("desktop Linux deep link registration helpers", () => {
         [
           "[Desktop Entry]",
           "Name=ZCode",
-          "Comment=ZCode Desktop App",
+          "Comment=ZCode App",
           'Exec="/home/alice/Downloads/ZCode-2.8.0-linux-x64.AppImage" %U',
           "MimeType=x-scheme-handler/zcode;",
           "",
@@ -565,7 +566,7 @@ describe("desktop Linux deep link registration helpers", () => {
         [
           "[Desktop Entry]",
           "Name=ZCode",
-          "Comment=ZCode Desktop App",
+          "Comment=ZCode App",
           'Exec="/home/alice/Downloads/ZCode.AppImage" %U',
           "MimeType=x-scheme-handler/zcode;",
           "",
@@ -622,7 +623,7 @@ describe("desktop Linux deep link registration helpers", () => {
         mkdirSync(applicationsDir, { recursive: true });
         writeFileSync(
           desktopFilePath,
-          '[Desktop Entry]\nComment=ZCode Desktop App\nExec="/old/ZCode.AppImage" %U\n',
+          '[Desktop Entry]\nComment=ZCode App\nExec="/old/ZCode.AppImage" %U\n',
           "utf8",
         );
         // 目录去掉写权限后 rmSync 失败（EPERM）：删除失败必须只降级，不得抛出或阻断注册。

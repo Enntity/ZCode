@@ -82,7 +82,8 @@ async function setup(active = false) {
 }
 
 describe("Builtin 远端失败不阻断有效本地配置的业务刷新", () => {
-  it.each([
+  // Enntity fork: zcode-builtin.json has no bigmodel Team/Start account providers and the remote builtin download is disabled.
+  it.skip.each([
     ["HTTP 地址校验失败", false, "invalid-url"],
     ["下载服务 503", true, "http-error"],
     ["下载正文不是 JSON", false, "invalid-json"],

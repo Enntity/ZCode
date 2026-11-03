@@ -52,7 +52,8 @@ describe("getDynamicWorkflowClientConfig", () => {
     expect(apiClient.request).not.toHaveBeenCalled();
   });
 
-  it("覆盖值非法时忽略覆盖，仍读远端", async () => {
+  // Enntity fork: dynamic workflows are local (alwaysOn default) and never read the vendor client/configs rollout.
+  it.skip("覆盖值非法时忽略覆盖，仍读远端", async () => {
     vi.stubEnv(ZCODE_DYNAMIC_WORKFLOW_MODE_ENV, "on");
     const apiClient: ApiClient = {
       request: vi.fn(async () => createConfigsResponse({ mode: "onDemand" })),
@@ -67,7 +68,8 @@ describe("getDynamicWorkflowClientConfig", () => {
     expect(apiClient.request).toHaveBeenCalledTimes(1);
   });
 
-  it("远端下发合法 mode 时按远端裁决", async () => {
+  // Enntity fork: dynamic workflows are local (alwaysOn default) and never read the vendor client/configs rollout.
+  it.skip("远端下发合法 mode 时按远端裁决", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () => createConfigsResponse({ mode: "alwaysOn" })),
     };
@@ -80,7 +82,8 @@ describe("getDynamicWorkflowClientConfig", () => {
     });
   });
 
-  it("远端成功但没有该 key 时视为关闭", async () => {
+  // Enntity fork: dynamic workflows are local (alwaysOn default) and never read the vendor client/configs rollout.
+  it.skip("远端成功但没有该 key 时视为关闭", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () => createConfigsResponse(undefined)),
     };
@@ -93,7 +96,8 @@ describe("getDynamicWorkflowClientConfig", () => {
     });
   });
 
-  it("命中 1h 快照缓存，forceRefresh 绕过并看到新值", async () => {
+  // Enntity fork: dynamic workflows are local (alwaysOn default) and never read the vendor client/configs rollout.
+  it.skip("命中 1h 快照缓存，forceRefresh 绕过并看到新值", async () => {
     const apiClient: ApiClient = {
       request: vi
         .fn()
@@ -116,7 +120,8 @@ describe("getDynamicWorkflowClientConfig", () => {
     expect(apiClient.request).toHaveBeenCalledTimes(2);
   });
 
-  it("远端请求失败时 fail-closed 返回 default，不抛给调用方", async () => {
+  // Enntity fork: dynamic workflows are local (alwaysOn default) and never read the vendor client/configs rollout.
+  it.skip("远端请求失败时 fail-closed 返回 default，不抛给调用方", async () => {
     const apiClient: ApiClient = {
       request: vi.fn(async () => {
         throw new Error("network down");
@@ -148,7 +153,8 @@ describe("getDynamicWorkflowClientConfig", () => {
     expect(apiClient.request).not.toHaveBeenCalled();
   });
 
-  it("service 把 options 原样委托给 bigmodel provider", async () => {
+  // Enntity fork: dynamic workflows are local (alwaysOn default) and never read the vendor client/configs rollout.
+  it.skip("service 把 options 原样委托给 bigmodel provider", async () => {
     const apiClient: ApiClient = {
       request: vi
         .fn()

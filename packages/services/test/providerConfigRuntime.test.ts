@@ -48,7 +48,8 @@ function emptyBuiltinRelease(revision = 1) {
 }
 
 describe("ProviderConfigRuntime", () => {
-  it.each(["io", "json", "schema"] as const)(
+  // Enntity fork: providerConfigRuntime disables legacy provider import (provider-registry sync/import is off).
+  it.skip.each(["io", "json", "schema"] as const)(
     "旧配置 %s 失败不能提交空迁移，源文件恢复后仍可导入",
     async (stage) => {
       const root = await mkdtemp(join(tmpdir(), "zcode-provider-import-failure-"));
@@ -138,9 +139,10 @@ describe("ProviderConfigRuntime", () => {
       await runtime.start();
       expect((await runtime.configService.read()).personalProviders.keys()).toEqual([]);
       expect(recovery).not.toHaveBeenCalled();
+      // Enntity fork: legacy import is disabled, so a missing Personal file stays absent until the first update.
       await expect(
-        readFile(join(root, ".zcode/v2/provider_config.json"), "utf8"),
-      ).resolves.toContain('"schemaVersion": 1');
+        readFile(join(root, ".enntity-zcode/v2/provider_config.json"), "utf8"),
+      ).rejects.toMatchObject({ code: "ENOENT" });
     } finally {
       runtime.dispose();
       setDataBaseDir(null);
@@ -205,7 +207,8 @@ describe("ProviderConfigRuntime", () => {
     }
   });
 
-  it("从旧 config.json 导入同目录 provider_config.json，不改写旧文件且不备份", async () => {
+  // Enntity fork: providerConfigRuntime disables legacy provider import (provider-registry sync/import is off).
+  it.skip("从旧 config.json 导入同目录 provider_config.json，不改写旧文件且不备份", async () => {
     const root = await mkdtemp(join(tmpdir(), "zcode-provider-runtime-"));
     const zcodeBuiltinFilePath = join(root, "zcodeBuiltin.json");
     const configDir = join(root, ".zcode", "v2");
@@ -244,7 +247,8 @@ describe("ProviderConfigRuntime", () => {
     }
   });
 
-  it("用注入的 ZCode Built-in Source 初始化，并在 Personal 文件缺失时单向导入旧配置", async () => {
+  // Enntity fork: providerConfigRuntime disables legacy provider import (provider-registry sync/import is off).
+  it.skip("用注入的 ZCode Built-in Source 初始化，并在 Personal 文件缺失时单向导入旧配置", async () => {
     const root = await mkdtemp(join(tmpdir(), "zcode-provider-runtime-"));
     const zcodeBuiltinFilePath = join(root, "zcodeBuiltin.json");
     const personalFilePath = join(root, "personal.json");
@@ -306,7 +310,8 @@ describe("ProviderConfigRuntime", () => {
     runtime.dispose();
   });
 
-  it("本地候选 ready 后后台同步远端 Release，并把 Active 路径暴露给 Worker", async () => {
+  // Enntity fork: providerConfigRuntime drops zcodeBuiltinRemote, so remote builtin Release sync is off.
+  it.skip("本地候选 ready 后后台同步远端 Release，并把 Active 路径暴露给 Worker", async () => {
     const root = await mkdtemp(join(tmpdir(), "zcode-provider-runtime-"));
     const bundledFilePath = join(root, "bundled.json");
     const activeFilePath = join(root, "cache", "active.json");

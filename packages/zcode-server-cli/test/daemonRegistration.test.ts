@@ -199,7 +199,7 @@ describe("daemon service registration", () => {
       expect(commands).toEqual(["status", "stop"]);
       const canonicalLayout = await resolveCanonicalServerLayout(layout.serverRoot);
       expect(serviceMocks.unregisterService).toHaveBeenCalledWith(
-        expect.objectContaining({ name: "com.zhipu.zcode.server" }),
+        expect.objectContaining({ name: "com.enntity.zcode.server" }),
         join(canonicalLayout.serviceDir, `${kind}.service`),
       );
       expect(serviceMocks.registerService).toHaveBeenCalledOnce();
