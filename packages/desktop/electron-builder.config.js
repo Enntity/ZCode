@@ -867,7 +867,6 @@ export default {
     minimumSystemVersion: "13.0.0",
     target: ["dmg", "zip"],
     category: "public.app-category.developer-tools",
-    minimumSystemVersion: "13.0",
     type: process.env.ZCODE_MAC_SIGNING_TYPE === "development" ? "development" : "distribution",
     artifactName: buildDesktopArtifactName("mac"),
     // macOS 语言包是 en.lproj / zh_CN.lproj，沿用顶层 "en-US" 会一个都匹配不上被全部删掉，
