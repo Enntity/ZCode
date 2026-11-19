@@ -1543,7 +1543,8 @@ modules:
     roots:
       - packages/shared/src/managed-worktree
     managed: true
-    requires: []
+    # Enntity fork: the managed root follows the fork data-root name (ZCODE_DATA_ROOT_DIR_NAME in shared/env).
+    requires: [shared]
     publicEntrypoints:
       - packages/shared/src/managed-worktree/index.ts
       - packages/shared/src/managed-worktree/contract.ts
@@ -1662,6 +1663,8 @@ modules:
       - mcp-apps-protocol
       - rpc
       - desktop
+      # Enntity fork: the extension host installs the shared vendor network guard (docs/enntity-fork.md).
+      - shared
     publicEntrypoints:
       - packages/desktop/src/extension-host/index.ts
       - packages/desktop/src/extension-host/contract.ts

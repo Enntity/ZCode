@@ -4,7 +4,7 @@
  */
 export const extensionHostModule = {
   id: "extension-host",
-  requires: ["extension-host-protocol", "mcp-apps-protocol", "rpc", "desktop"],
+  requires: ["extension-host-protocol", "mcp-apps-protocol", "rpc", "desktop", "shared"],
   provides: ["extension-host-process", "extension-host-supervisor"],
   publicEntrypoints: ["index.ts", "contract.ts", "../main/extensionHostSupervisor.ts"],
 } as const;
