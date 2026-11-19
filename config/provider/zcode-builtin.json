@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "revision": 43,
+  "revision": 44,
   "config": {
     "providerConfigRules": {
       "templateRules": [
@@ -5300,6 +5300,31 @@
               },
               "maxOutputTokens": {
                 "map": "{\"max_output_tokens\": maxOutputTokens}"
+              }
+            }
+          }
+        },
+        {
+          "templateId": "openai",
+          "modelId": "gpt-6.1-terra",
+          "config": {
+            "enabled": true,
+            "properties": {
+              "contextWindow": 1050000,
+              "inputFormat": {
+                "supportsImage": true,
+                "supportsPdf": true
+              },
+              "supportsJsonSchemaOutput": true
+            },
+            "optionSpecs": {
+              "reasoningLevel": {
+                "values": ["none", "low", "medium", "high", "xhigh", "max"],
+                "map": "{\n  \"reasoning\": {\n    \"effort\": reasoningLevel\n  }\n}"
+              },
+              "maxOutputTokens": {
+                "map": "{\"max_output_tokens\": maxOutputTokens}",
+                "max": 128000
               }
             }
           }

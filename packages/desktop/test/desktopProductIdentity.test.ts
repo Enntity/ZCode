@@ -10,6 +10,7 @@ import {
   resolveWindowsAppUserModelIdForFlavor,
   resolveDesktopProductIdentity,
 } from "../scripts/desktop-product-identity.mjs";
+import { resolveApplicationLocaleBootstrapSettingsFile } from "../src/main/desktopApplicationLocaleBootstrap.js";
 
 describe("desktop product identity", () => {
   it("根锁文件的发布版本与构建版本一致", () => {
@@ -75,5 +76,10 @@ describe("desktop product identity", () => {
 
   it("开发态继续使用独立 AUMID，避免污染打包版 Shell 身份", () => {
     expect(resolveWindowsAppUserModelId({}, { isPackaged: false })).toBe("com.enntity.zcode");
+  });
+  it("Enntity 冷启动只读 fork 数据根里的界面语言，不读上游 ~/.zcode", () => {
+    expect(resolveApplicationLocaleBootstrapSettingsFile("/home/u")).toBe(
+      resolve("/home/u", ".enntity-zcode", "v2", "setting.json"),
+    );
   });
 });

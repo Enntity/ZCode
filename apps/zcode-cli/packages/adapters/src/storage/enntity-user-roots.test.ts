@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { ZCODE_DATA_ROOT_DIR_NAME } from "@zcode/shared";
+import { resolveManagedWorktreeRoot } from "@zcode/shared/managed-worktree";
 import { resolveDefaultSkillRoots } from "../skills/roots.js";
 import { resolveDefaultCustomCommandRoots } from "../commands/roots.js";
 import { getDefaultSessionDbPath } from "./session-store/paths.js";
@@ -24,4 +26,10 @@ test("user skill and command defaults are isolated while workspace .zcode remain
   assert.ok(skills.some((root) => root.path === join(workspace, ".zcode", "skills")));
   assert.ok(commands.some((root) => root.path === join(homeDirectory, ".enntity-zcode", "commands")));
   assert.ok(commands.some((root) => root.path === join(workspace, ".zcode", "commands")));
+});
+
+test("per-user folders added upstream in v3.18 resolve under the fork root", () => {
+  assert.equal(ZCODE_DATA_ROOT_DIR_NAME, ".enntity-zcode");
+  const base = join(homedir(), "enntity-root-test-base");
+  assert.equal(resolveManagedWorktreeRoot(base), join(base, ".enntity-zcode", "worktrees"));
 });
