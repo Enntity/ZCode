@@ -14,6 +14,7 @@ function createProvider(): BigModelCodingPlanSubscriptionProvider {
   ) as ApiClient;
   return new BigModelCodingPlanSubscriptionProvider({
     apiClient,
+    loadOAuthAccountMaterial: async () => null,
     credentialService: { load: async () => null },
   });
 }

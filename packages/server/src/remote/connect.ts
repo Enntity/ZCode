@@ -405,5 +405,5 @@ function buildRemoteServerCommand(
       );
     }
   }
-  return `${envParts.join(" ")} ~/.enntity-zcode/server/node ~/.enntity-zcode/server/zcode-server.cjs`;
+  return `${envParts.join(" ")} ~/.enntity-zcode/server/node ~/.enntity-zcode/server/zcode-server.cjs --prepare-credentials`;
 }
